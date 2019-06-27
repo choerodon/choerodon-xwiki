@@ -125,6 +125,9 @@ function configure() {
   file_env 'OIDC_WIKI_TOKEN' 'Choerodon'
   file_env 'CHOERODON_REQUEST_API_URL' 'http://localhost:8080'
   file_env 'CHOERODON_REQUEST_FRONT_URL' 'http://localhost:8090'
+  file_env 'MINIO_ENDPOINT' 'http://localhost:8080' 
+  file_env 'MINIO_ACCESSKEY' 'admin' 
+  file_env 'MINIO_SECRETKEY' 'choerodon' 
 
   echo 'Replacing environment variables in files'
   safesed "replaceuser" $DB_USER /usr/local/tomcat/webapps/ROOT/WEB-INF/hibernate.cfg.xml
@@ -171,6 +174,9 @@ function configure() {
   xwiki_set_properties 'oidc.wiki.token' "$OIDC_WIKI_TOKEN"
   xwiki_set_properties 'choerodon.request.api.url' "$CHOERODON_REQUEST_API_URL"
   xwiki_set_properties 'choerodon.request.front.url' "$CHOERODON_REQUEST_FRONT_URL"
+  xwiki_set_properties 'minio.endpoint' "$MINIO_ENDPOINT"
+  xwiki_set_properties 'minio.accessKey' "$MINIO_ACCESSKEY"
+  xwiki_set_properties 'minio.secretKey' "$MINIO_SECRETKEY"
 
   if [ $INDEX_HOST != 'localhost' ]; then
     echo '  Configuring remote Solr Index'

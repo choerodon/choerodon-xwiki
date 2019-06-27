@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: registry.cn-hangzhou.aliyuncs.com/choerodon-tools/xwiki
+  imageRepository: registry.cn-hangzhou.aliyuncs.com/choerodon-tools/xwiki
   tag: 10.4-mysql-tomcat-0.16.0
   pullPolicy: IfNotPresent
 
@@ -32,6 +32,9 @@ env:
   OIDC_WIKI_TOKEN: Choerodon
   CHOERODON_REQUEST_API_URL: http://api.choerodon.com
   CHOERODON_REQUEST_FRONT_URL: http://choerodon.com
+  MINIO_ENDPOINT: http://minio.example.choerodon.io
+  MINIO_ACCESSKEY: accessKey
+  MINIO_SECRETKEY: secretKey
 
 strategy:
   type: RollingUpdate

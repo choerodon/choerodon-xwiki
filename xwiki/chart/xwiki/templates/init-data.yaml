@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: init
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: {{ .Values.image.imageRepository }}:{{ .Values.image.tag }}
         command: ['/bin/sh', '-c', 'cp -rf /root/data/* /data && rm -rf /data/data/hibernate.cfg.xml && rm -rf /data/data/xwiki.cfg && rm -rf /data/data/xwiki.properties']
         volumeMounts:
         - name: xwiki-data
