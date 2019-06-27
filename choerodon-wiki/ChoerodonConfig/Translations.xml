@@ -6,12 +6,12 @@
   <defaultLanguage>zh_CN</defaultLanguage>
   <translation>0</translation>
   <creator>XWiki.admin</creator>
-  <creationDate>1538119158000</creationDate>
-  <author>XWiki.9999</author>
-  <contentAuthor>XWiki.9999</contentAuthor>
-  <date>1547733318000</date>
-  <contentUpdateDate>1547733318000</contentUpdateDate>
-  <version>9.1</version>
+  <creationDate>1555470367000</creationDate>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1555509196000</date>
+  <contentUpdateDate>1555509196000</contentUpdateDate>
+  <version>1.1</version>
   <title/>
   <comment/>
   <minorEdit>false</minorEdit>
@@ -620,7 +620,7 @@ XWiki.XWikiPreferences_showRightPanels=显示右面板栏
 core.create.space.hint=新空间名称
 web.history.changes.attachment.size=大小
 imgtext=JPG
-core.viewers.history.showMinorEdits=显示镜面编辑
+core.viewers.history.showMinorEdits=显示详细版本记录
 watchlist.staytuned.info=从列表中选择接受的通知
 xe.blog.migration.inspace=空间中
 xe.pagination.page.next.title=下一页
@@ -1954,7 +1954,7 @@ xe.monitor.startdate=开始日期：
 xe.index.trash.documents.actions=
 core.viewers.diff.metadata.web=空间
 core.viewers.comments.permalink.goto=跳转到复制的链接
-core.viewers.history.hideMinorEdits=隐藏镜像编辑
+core.viewers.history.hideMinorEdits=隐藏详细版本记录
 core.comment.updateObject=更新的对象
 core.create.name.hint=新页面的标题
 XWiki.XWikiPreferences_xwiki.title.mandatory=将文档标题设为必选项
@@ -4106,7 +4106,7 @@ XWiki.XWikiPreferences_ldap_bind_DN.hint=LDAP登录。为匿名访问留空，�
 baseskin=基本皮肤
 rendering.macro.tagcloud.name=标签云
 Invitation.InvitationMailClass_messageGroupID=邮件组标识
-core.viewers.history.rollback=回执
+core.viewers.history.rollback=回滚
 resetversions=版本复位
 rendering.macro.attachmentSelector.parameter.displayImage.name=显示图像
 extensions.info.status.remote-installed=版本{0}已安装

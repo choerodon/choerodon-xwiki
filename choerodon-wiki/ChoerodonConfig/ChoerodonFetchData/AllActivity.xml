@@ -5,14 +5,14 @@
   <language/>
   <defaultLanguage>zh_CN</defaultLanguage>
   <translation>0</translation>
-  <creator>XWiki.superadmin</creator>
-  <creationDate>1540872249000</creationDate>
+  <creator>XWiki.admin</creator>
+  <creationDate>1555470362000</creationDate>
   <parent>xwiki:ChoerodonConfig.ChoerodonFetchData.WebHome</parent>
-  <author>XWiki.15616</author>
-  <contentAuthor>XWiki.15616</contentAuthor>
-  <date>1544690480000</date>
-  <contentUpdateDate>1544690480000</contentUpdateDate>
-  <version>4.1</version>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1555470596000</date>
+  <contentUpdateDate>1555470596000</contentUpdateDate>
+  <version>1.1</version>
   <title>AllActivity</title>
   <comment/>
   <minorEdit>false</minorEdit>
@@ -20,7 +20,14 @@
   <hidden>false</hidden>
   <content>{{velocity}}&#xd;
 #set($showMore = $request.more)&#xd;
-#if($showMore==true)&#xd;
+#set($space = $request.currentSpace)&#xd;
+&#xd;
+&#xd;
+#if($space)&#xd;
+&#xd;
+{{activity subentries="4" entries="5" spaces=$space/}}&#xd;
+&#xd;
+#elseif($showMore==true)&#xd;
 &#xd;
 {{activity subentries="5" entries="20"/}}&#xd;
 &#xd;
@@ -29,8 +36,5 @@
 {{activity subentries="5" entries="5"/}}&#xd;
 &#xd;
 #end&#xd;
-{{velocity}}&#xd;
-{{/velocity}}&#xd;
-{{/velocity}}&#xd;
-</content>
+{{/velocity}}</content>
 </xwikidoc>

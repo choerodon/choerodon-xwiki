@@ -6,13 +6,13 @@
   <defaultLanguage>zh</defaultLanguage>
   <translation>0</translation>
   <creator>XWiki.admin</creator>
-  <creationDate>1538119026000</creationDate>
+  <creationDate>1555470363000</creationDate>
   <parent>ChoerodonConfig.WebHome</parent>
-  <author>XWiki.superadmin</author>
-  <contentAuthor>XWiki.superadmin</contentAuthor>
-  <date>1550477906000</date>
-  <contentUpdateDate>1548666904000</contentUpdateDate>
-  <version>22.1</version>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1555508869000</date>
+  <contentUpdateDate>1555470363000</contentUpdateDate>
+  <version>1.1</version>
   <title>ChoerodonScript</title>
   <comment/>
   <minorEdit>false</minorEdit>
@@ -4318,18 +4318,240 @@ if (renameCancel) {&#xd;
 renameCancel.onclick = function () {&#xd;
    renameModalContainer.style.display = "none";&#xd;
 }&#xd;
-}  &#xd;
+}&#xd;
+  &#xd;
+var commentCancel = document.getElementById("comment-cancel-button");&#xd;
+var commentModalContainer = document.getElementById("comment-modal-container");&#xd;
+if (commentCancel) {&#xd;
+commentCancel.onclick = function () {&#xd;
+   commentModalContainer.style.display = "none";&#xd;
+}&#xd;
+}&#xd;
   &#xd;
 });</code>
     </property>
     <property>
-      <name>空间重命名</name>
+      <name>空间重命名 评论提示框</name>
     </property>
     <property>
       <parse/>
     </property>
     <property>
-      <use>currentPage</use>
+      <use>always</use>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.ChoerodonScript.WebHome</name>
+    <number>30</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>7985e570-abee-47b3-80dd-1e01304cd2e4</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>var XWiki = (function (XWiki) {&#xd;
+    // Start XWiki augmentation.&#xd;
+    XWiki.Activity = Class.create({&#xd;
+        initialize: function () {&#xd;
+            this.initHandlers();&#xd;
+            this.attachDeleteHandlers();&#xd;
+        },&#xd;
+        initHandlers: function () {&#xd;
+            $$('.activityHeader').each(function (activityHeader) {&#xd;
+                if (activityHeader.up().hasClassName('collapsed')) {&#xd;
+                    activityHeader.observe('click', this.toggle.bind(this, activityHeader.up()));&#xd;
+                }&#xd;
+            }.bind(this));&#xd;
+&#xd;
+            document.observe('xwiki:activity:newActivity', function (event) {&#xd;
+                // Update all activity streams to display the new message&#xd;
+                $$('.activity').each(this.updateActivity.bind(this));&#xd;
+            }.bind(this));&#xd;
+        },&#xd;
+        toggle: function () {&#xd;
+            var collapsable = arguments[0];&#xd;
+            if (collapsable.hasClassName('collapsed')) {&#xd;
+                collapsable.removeClassName('collapsed');&#xd;
+                collapsable.down('.toolExpand').update('&amp;#9650;');&#xd;
+            } else {&#xd;
+                collapsable.addClassName('collapsed');&#xd;
+                collapsable.down('.toolExpand').update('&amp;#9660;');&#xd;
+            }&#xd;
+        },&#xd;
+        updateActivity: function (activityContainer) {&#xd;
+            var updateURL = activityContainer.down('.updateURL').value;&#xd;
+            new Ajax.Updater(&#xd;
+                { success: activityContainer },&#xd;
+                updateURL, {&#xd;
+                    onCreate: function () {&#xd;
+                        // NOTE: Do we need any progress/success notification at this level or do we do it only in the "calling" component?&#xd;
+                        //activityContainer._notification = new XWiki.widgets.Notification("$services.localization.render('core.widgets.confirmationBox.notification.inProgress')", 'inprogress');&#xd;
+                    },&#xd;
+                    onSuccess: function () {&#xd;
+                        if (activityContainer &amp;&amp; activityContainer._notification) {&#xd;
+                            activityContainer._notification.hide();&#xd;
+                        }&#xd;
+                    },&#xd;
+                    onFailure: function (response) {&#xd;
+                        var failureReason = '';&#xd;
+                        if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {&#xd;
+                            failureReason = 'Server not responding';&#xd;
+                        } else {&#xd;
+                            failureReason = response.statusText;&#xd;
+                        }&#xd;
+                        if (activityContainer) {&#xd;
+                            if (activityContainer._notification) {&#xd;
+                                activityContainer._notification.hide();&#xd;
+                            }&#xd;
+                            activityContainer._notification = new XWiki.widgets.Notification("$services.localization.render('core.widgets.confirmationBox.notification.failed')" + failureReason, 'error');&#xd;
+                        }&#xd;
+                    },&#xd;
+                    on1223: function (response) { /*SUCCESS*/&#xd;
+                        response.request.options.onSuccess(response);&#xd;
+                    },&#xd;
+                    on0: function (response) {  /*FAILURE*/&#xd;
+                        response.request.options.onFailure(response);&#xd;
+                    },&#xd;
+                    onComplete: function (response) {&#xd;
+                        // The newly retrieved activity element is inserted after onSuccess is called, so we must handle it here instead of in onSuccess.&#xd;
+                        if (response.request.success()) {&#xd;
+                            // The remplacement activity has a default updateURL. We discard that and replace it with the updateURL of the original activity so that, at each update, the URL stays the same.&#xd;
+                            var newActivity = activityContainer.next();&#xd;
+                            if (newActivity) {&#xd;
+                                newActivity.down('.updateURL').value = updateURL;&#xd;
+                            }&#xd;
+&#xd;
+                            // Remove the old activity element.&#xd;
+                            activityContainer.remove();&#xd;
+&#xd;
+                            this.attachDeleteHandlers();&#xd;
+                        }&#xd;
+                    }.bind(this),&#xd;
+                    insertion: 'after'&#xd;
+                }&#xd;
+            );&#xd;
+        },&#xd;
+        attachDeleteHandlers: function () {&#xd;
+            $$('.activity .activityItem .toolDelete').invoke('observe', 'click', function (event) {&#xd;
+                event.stop();&#xd;
+                var trigger = event.element();&#xd;
+                trigger.blur();&#xd;
+                if (trigger.disabled) {&#xd;
+                    // Do nothing if the button was already clicked and it's waiting for a response from the server.&#xd;
+                    return;&#xd;
+                } else {&#xd;
+                    new XWiki.widgets.ConfirmedAjaxRequest(&#xd;
+                        /* Ajax request URL */&#xd;
+                        trigger.href.replace(/xredirect=.*$/, 'xpage=plain&amp;confirm=1'),&#xd;
+                        /* Ajax request parameters */&#xd;
+                        {&#xd;
+                            onCreate: function () {&#xd;
+                                // Disable the button, to avoid a cascade of clicks from impatient users&#xd;
+                                trigger.disabled = true;&#xd;
+                            },&#xd;
+                            onSuccess: function () {&#xd;
+                                // Remove the corresponding HTML element from the UI&#xd;
+                                trigger.up("li").remove();&#xd;
+                            },&#xd;
+                            onComplete: function () {&#xd;
+                                // In the end: re-enable the button&#xd;
+                                trigger.disabled = false;&#xd;
+                            }&#xd;
+                        },&#xd;
+                        /* Interaction parameters */&#xd;
+                        {&#xd;
+                            confirmationText: "$services.localization.render('xe.activity.messages.delete.confirm')"&#xd;
+                        }&#xd;
+                    );&#xd;
+                }&#xd;
+            });&#xd;
+        }&#xd;
+    });&#xd;
+    // End XWiki augmentation.&#xd;
+    return XWiki;&#xd;
+}(XWiki || {}));</code>
+    </property>
+    <property>
+      <name>Activity</name>
+    </property>
+    <property>
+      <parse/>
+    </property>
+    <property>
+      <use>always</use>
     </property>
   </object>
   <object>
@@ -5415,8 +5637,13 @@ text-align: left;&#xd;
      min-height:calc(100vh - 193px);&#xd;
 }&#xd;
 &#xd;
-.tme{&#xd;
+.tme,#mainEditArea > div.row > hr{&#xd;
   display: none;&#xd;
+}&#xd;
+&#xd;
+#mainContentArea > div.xcontent.job-status{&#xd;
+  margin-left: 24px;&#xd;
+  margin-top: -28px !important;&#xd;
 }</code>
     </property>
     <property>
@@ -7961,7 +8188,7 @@ display:none;&#xd;
 &#xd;
 #xwikieditor #xwikidoctitleinput {&#xd;
     text-align: center;&#xd;
-    width: 770px;&#xd;
+    width: 78%;&#xd;
     margin: auto;&#xd;
     display: block;&#xd;
     box-shadow: none;&#xd;
@@ -8113,7 +8340,7 @@ display:none;&#xd;
     cursor: auto;&#xd;
     font-size: 14px !important;&#xd;
     line-height: 24px;&#xd;
-    width: 816px;&#xd;
+    width: 80%;&#xd;
     height: unset !important;&#xd;
     min-height: 1154px;&#xd;
     padding: 99px 100px 100px !important;&#xd;
@@ -8127,7 +8354,7 @@ display:none;&#xd;
 #cke_1_contents > textarea{&#xd;
     box-sizing: border-box;&#xd;
     cursor: auto;&#xd;
-    width: 816px!important;&#xd;
+    width: 80% !important;&#xd;
     margin: 0 auto 10px auto;&#xd;
     border: 1px #d3d3d3 solid;&#xd;
     border-top: none;&#xd;
@@ -12081,7 +12308,7 @@ a.sort-item {&#xd;
       <cache>long</cache>
     </property>
     <property>
-      <code>#share-content,#rename-content{&#xd;
+      <code>#share-content,#rename-content,#comment-content{&#xd;
 text-align: left;&#xd;
     top: 35%;&#xd;
     margin: auto;&#xd;
@@ -12100,7 +12327,7 @@ border-bottom: 1px solid #D3D3D3;&#xd;
  height: 46px;&#xd;
 }&#xd;
 &#xd;
-#rename-header{&#xd;
+#rename-header,#comment-header{&#xd;
  height: 46px;&#xd;
 }&#xd;
 &#xd;
@@ -12109,6 +12336,13 @@ border-bottom: 1px solid #D3D3D3;&#xd;
     padding-left: 20px;&#xd;
     padding-top: 14px;&#xd;
     font-size: 14px;&#xd;
+    color: #000000;&#xd;
+}&#xd;
+&#xd;
+#comment-title{&#xd;
+    padding-left: 20px;&#xd;
+    padding-top: 14px;&#xd;
+    font-size: 16px;&#xd;
     color: #000000;&#xd;
 }&#xd;
 &#xd;
@@ -12148,6 +12382,11 @@ border-bottom: 1px solid #D3D3D3;&#xd;
     text-align:  right;&#xd;
 }&#xd;
 &#xd;
+#comment-button{&#xd;
+   height: 36px;&#xd;
+   text-align: right;&#xd;
+}&#xd;
+&#xd;
 #share-cancel-button,#rename-cancel-button{&#xd;
     font-size: 14px;&#xd;
     color: #000000;&#xd;
@@ -12156,7 +12395,14 @@ border-bottom: 1px solid #D3D3D3;&#xd;
     padding: 10px 6px;&#xd;
 }&#xd;
 &#xd;
-#share-cancel-button:hover,#rename-cancel-button:hover{&#xd;
+#comment-cancel-button{&#xd;
+    font-size: 14px;&#xd;
+    color: #000000;&#xd;
+    cursor: pointer;&#xd;
+    padding: 10px 6px;&#xd;
+}&#xd;
+&#xd;
+#share-cancel-button:hover,#rename-cancel-button:hover,#comment-cancel-button:hover{&#xd;
       background: #ddd;&#xd;
 }&#xd;
 &#xd;
@@ -14031,6 +14277,7 @@ align-items:center;&#xd;
 {{html clean="false"}}&#xd;
 &lt;li  style="display:none">&#xd;
 &lt;span id="currentPage">$doc.getDocumentReference()&lt;/span>&#xd;
+&lt;span id="currentSpace">$doc.getSpace()&lt;/span>&#xd;
 &lt;span id="docViewUrl">$doc.getURL("view")&lt;/span>&#xd;
 &lt;span id="getDataUrl">$doc.getURL("get")&lt;/span>&#xd;
 &lt;span id="autoSaveDataUrl">$doc.getURL("preview")&lt;/span>&#xd;
@@ -15523,6 +15770,108 @@ window.location = '$logoutUrl';&#xd;
     </property>
     <property>
       <name>重命名弹出框</name>
+    </property>
+    <property>
+      <parameters></parameters>
+    </property>
+    <property>
+      <scope>wiki</scope>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.ChoerodonScript.WebHome</name>
+    <number>13</number>
+    <className>XWiki.UIExtensionClass</className>
+    <guid>d78644f6-a928-4081-961d-f94332b93d3f</guid>
+    <class>
+      <name>XWiki.UIExtensionClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>content</name>
+        <number>3</number>
+        <prettyName>Extension Content</prettyName>
+        <rows>10</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <extensionPointId>
+        <disabled>0</disabled>
+        <name>extensionPointId</name>
+        <number>1</number>
+        <prettyName>Extension Point ID</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </extensionPointId>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>2</number>
+        <prettyName>Extension ID</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parameters>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>parameters</name>
+        <number>4</number>
+        <prettyName>Extension Parameters</prettyName>
+        <rows>10</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </parameters>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>5</number>
+        <prettyName>Extension Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>wiki=Current Wiki|user=Current User|global=Global</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <content>{{velocity}}&#xd;
+{{html}}&#xd;
+&lt;div class="xdialog-modal-container" id="comment-modal-container" style="text-align: center;display:none">&#xd;
+&lt;div class="xdialog-screen" style="opacity: 0.5;">&lt;/div>&#xd;
+&lt;div class="xdialog-box xdialog-box-confirmation" id="comment-content">&#xd;
+  &lt;div id="comment-header">&#xd;
+    &lt;div id="comment-title">评论不能为空&lt;/div>&#xd;
+  &lt;/div>&#xd;
+  &lt;div style="margin: 0 20px;">&#xd;
+&lt;div id="comment-button">&lt;span id="comment-cancel-button">确定&lt;/span>&#xd;
+&lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;/div>&#xd;
+{{/html}}&#xd;
+{{/velocity}}</content>
+    </property>
+    <property>
+      <extensionPointId>org.xwiki.platform.template.header.after</extensionPointId>
+    </property>
+    <property>
+      <name>评论提示框</name>
     </property>
     <property>
       <parameters></parameters>

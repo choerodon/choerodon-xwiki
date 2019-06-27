@@ -23,3 +23,7 @@ ADD xwiki-platform-legacy-oldcore-10.4.jar /usr/local/tomcat/webapps/ROOT/WEB-IN
 ADD agent /agent
 
 ADD save /usr/local/tomcat/webapps/ROOT/resources/save
+
+ADD comments.js /usr/local/tomcat/webapps/ROOT/resources/uicomponents/viewers
+
+ADD logback.xml /usr/local/tomcat/webapps/ROOT/WEB-INF/classes

@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: registry.cn-shanghai.aliyuncs.com/choerodon/xwiki
-  tag: 10.4-mysql-tomcat-0.15.1
+  repository: registry.cn-hangzhou.aliyuncs.com/choerodon-tools/xwiki
+  tag: 10.4-mysql-tomcat-0.16.0
   pullPolicy: IfNotPresent
 
 

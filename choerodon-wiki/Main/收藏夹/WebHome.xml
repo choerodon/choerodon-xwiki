@@ -5,68 +5,71 @@
   <language/>
   <defaultLanguage>zh_CN</defaultLanguage>
   <translation>0</translation>
-  <creator>XWiki.superadmin</creator>
-  <creationDate>1540872326000</creationDate>
+  <creator>XWiki.admin</creator>
+  <creationDate>1542373841000</creationDate>
   <parent>Main.所有更新.WebHome</parent>
-  <author>XWiki.superadmin</author>
-  <contentAuthor>XWiki.superadmin</contentAuthor>
-  <date>1547196227000</date>
-  <contentUpdateDate>1547196166000</contentUpdateDate>
-  <version>10.1</version>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1554259148000</date>
+  <contentUpdateDate>1554259148000</contentUpdateDate>
+  <version>1.1</version>
   <title>收藏夹</title>
   <comment/>
-  <minorEdit>false</minorEdit>
+  <minorEdit>true</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
   <hidden>false</hidden>
-  <content>{{velocity}}&#xd;
-{{html clean="false"}}&#xd;
+  <content> {{velocity}}  {{html clean="false"}}&#xd;
   &lt;div id="collect-search">&lt;span class="icon icon-search" style="&#xd;
     font-size: 24px;&#xd;
     margin-left: 16px;&#xd;
-  ">&lt;/span>&lt;input&#xd;
-      type="text" name="text" id="collect-search-input" placeholder="搜索收藏内容" autocomplete="off" />&#xd;
+  ">&lt;/span>&lt;input type="text" name="text" id="collect-search-input" placeholder="搜索收藏内容" autocomplete="off" />&#xd;
   &lt;/div>&#xd;
   #set($folderId = $request.folderId)&#xd;
+  #set($folderName = $request.folderName)&#xd;
   #set($currentUser = $xcontext.getUser())&#xd;
   &lt;ul class="collect-list" id="collect_list">&#xd;
-     #if($folderId != 0)&#xd;
-        #set ($query = $xwiki.queryManager.createQuery("select doc.page from ChoerodonConfig.ChoerodonTables.CollectClass.WebHome doc where doc.user = '$currentUser' and doc.folder_id='$folderId' order by doc.date asc ","hql"))&#xd;
-     #else&#xd;
-        #set ($query = $xwiki.queryManager.createQuery("select doc.page from ChoerodonConfig.ChoerodonTables.CollectClass.WebHome doc where doc.user = '$currentUser' and doc.folder_id is null order by doc.date asc ","hql"))&#xd;
-     #end&#xd;
-     #set ($collects = $query.execute())&#xd;
-     #if ($collects.size() > 0 || $showEmptyPanels)&#xd;
+    #if($folderId != 0)&#xd;
+    #set ($query = $xwiki.queryManager.createQuery("select doc.page from&#xd;
+    ChoerodonConfig.ChoerodonTables.CollectClass.WebHome doc where doc.user = '$currentUser' and&#xd;
+    doc.folder_id='$folderId' order by doc.date asc ","hql"))&#xd;
+    #else&#xd;
+    #set ($query = $xwiki.queryManager.createQuery("select doc.page from&#xd;
+    ChoerodonConfig.ChoerodonTables.CollectClass.WebHome doc where doc.user = '$currentUser' and doc.folder_id is null&#xd;
+    order by doc.date asc ","hql"))&#xd;
+    #end&#xd;
+    #set ($collects = $query.execute())&#xd;
+    #if ($collects.size() > 0 || $showEmptyPanels)&#xd;
 &#xd;
-       &lt;li class = "group-wrapper stickable">&#xd;
-         &lt;ul class = "group-container-period-today">&#xd;
-             #foreach ($docName in $collects)&#xd;
-                #if ($xwiki.hasAccessLevel('view', $docName))&#xd;
-                  #set ($recentDoc = $xwiki.getDocument($docName).getTranslatedDocument())&#xd;
-                  #if(!$recentDoc.isNew())&#xd;
-                  &lt;li class="item">&#xd;
-                     &lt;div class="item-block" title="$escapetool.xml($recentDoc.plainTitle)">&#xd;
-                       &lt;a href="$recentDoc.getURL()" class="item-clickable">&#xd;
-                         &lt;div class="item-content">&#xd;
-                           &lt;span class="icon icon-description" style="color: #5266D4;">&lt;/span>&#xd;
-                         &lt;/div>&#xd;
-                         &lt;div class = "item-content" style="margin-left: 4px;">&#xd;
-                           &lt;div class="item-text">&#xd;
-                             &lt;span class="item-title">$escapetool.xml($recentDoc.plainTitle)&lt;/span>&#xd;
-                           &lt;/div>&#xd;
-                         &lt;/div>&#xd;
-                       &lt;/a>&#xd;
-                       &lt;div class="item-actions" title="$docName">&#xd;
-                          &lt;span style="margin-top:-5px;color:white;" class="icon icon-close close-notify-btn" title="取消收藏">&lt;/span>     &#xd;
-                       &lt;/div>&#xd;
-                     &lt;/div>&#xd;
-                   &lt;/li>   &#xd;
-                #end&#xd;
-               #end&#xd;
-              #end               &#xd;
-           &lt;/ul>&#xd;
-         &lt;/li>&#xd;
+    &lt;li class="group-wrapper stickable">&#xd;
+      &lt;ul class="group-container-period-today">&#xd;
+        #foreach ($docName in $collects)&#xd;
+        #if ($xwiki.hasAccessLevel('view', $docName))&#xd;
+        #set ($recentDoc = $xwiki.getDocument($docName).getTranslatedDocument())&#xd;
+        #if(!$recentDoc.isNew())&#xd;
+        &lt;li class="item">&#xd;
+          &lt;div class="item-block" title="$escapetool.xml($recentDoc.plainTitle)">&#xd;
+            &lt;a href="$recentDoc.getURL()" class="item-clickable">&#xd;
+              &lt;div class="item-content">&#xd;
+                &lt;span class="icon icon-description" style="color: #5266D4;">&lt;/span>&#xd;
+              &lt;/div>&#xd;
+              &lt;div class="item-content" style="margin-left: 4px;">&#xd;
+                &lt;div class="item-text">&#xd;
+                  &lt;span class="item-title">$escapetool.xml($recentDoc.plainTitle)&lt;/span>&#xd;
+                &lt;/div>&#xd;
+              &lt;/div>&#xd;
+            &lt;/a>&#xd;
+            &lt;div class="item-actions" title="$docName">&#xd;
+              &lt;span style="margin-top:-5px;color:white;" class="icon icon-close close-notify-btn" title="取消收藏">&lt;/span>&#xd;
+            &lt;/div>&#xd;
+          &lt;/div>&#xd;
+        &lt;/li>&#xd;
         #end&#xd;
-   &#xd;
+        #end&#xd;
+        #end&#xd;
+      &lt;/ul>&#xd;
+    &lt;/li>&#xd;
+    #end&#xd;
+&#xd;
   &lt;/ul>&#xd;
   &lt;div id="delete-collect-pop">&#xd;
     &lt;div class="ant-modal-mask ant-modal-mask-hidden">&lt;/div>&#xd;
@@ -75,9 +78,43 @@
         &lt;div class="ant-modal-content">&#xd;
           &lt;div style="font-weight: 400;font-size: 20px;line-height:32px;">确定删除收藏夹吗？&#xd;
           &lt;/div>&#xd;
+          &lt;div style="margin:10px 0">&#xd;
+            当前收藏夹: $folderName&#xd;
+          &lt;/div>&#xd;
+          &lt;div>&#xd;
+            注意：默认将会删除此收藏夹和里面的所有文档，你也可以选择把收藏夹内的文档移动到其他收藏夹。&#xd;
+          &lt;/div>&#xd;
+          &lt;div class="radio">&#xd;
+            &lt;input id="radio-1" name="isMove" type="radio" checked value="notmove">&#xd;
+            &lt;label for="radio-1" class="radio-label">删除收藏夹和文档&lt;/label>&#xd;
+          &lt;/div>&#xd;
+&#xd;
+          &lt;div class="radio">&#xd;
+            &lt;input id="radio-2" name="isMove" type="radio" value="move">&#xd;
+            &lt;label for="radio-2" class="radio-label">删除收藏夹，文档移动到其他收藏夹&lt;/label>&#xd;
+          &lt;/div>&#xd;
+&#xd;
+         &#xd;
+          &lt;div style="line-height:34px;margin-top:10px">           &#xd;
+            &lt;select style="width:100%" id="targetCollect">&#xd;
+              &lt;option value="0">我的收藏&lt;/option>&#xd;
+              ##查询用户的收藏夹&#xd;
+              #set ($query = $xwiki.queryManager.createQuery("select doc.id,doc.name from&#xd;
+              ChoerodonConfig.ChoerodonTables.FolderClass doc where doc.user = '$currentUser' and doc.id != '$folderId'&#xd;
+              order by doc.date asc ","hql"))&#xd;
+              #set ($folders = $query.execute())&#xd;
+              #if ($folders.size() > 0 || $showEmptyPanels)&#xd;
+              #foreach ($folder in $folders )&#xd;
+              &lt;option value="$folder.get(0)">$folder.get(1)&lt;/option>&#xd;
+              #end&#xd;
+              #end&#xd;
+            &lt;/select>&#xd;
+          &lt;/div>&#xd;
+        &#xd;
+&#xd;
           &lt;div style="margin-top:15px;text-align:right;">&#xd;
             &lt;button class="ant-btn ant-btn-flat btn-close" onclick="closeModal('delete-collect-pop')">取消&lt;/button>&#xd;
-            &lt;button class="ant-btn ant-btn-flat btn-ok" onclick="handleFolderDeleteClick()">删除&lt;/button>&#xd;
+            &lt;button class="ant-btn ant-btn-flat btn-ok" onclick="handleFolderDeleteClick()">确定&lt;/button>&#xd;
           &lt;/div>&#xd;
         &lt;/div>&#xd;
 &#xd;
@@ -109,10 +146,10 @@
               &lt;div class="ant-input-wrapper" style="width:512px;">&#xd;
                 &lt;label for="collect_name" class="ant-input-label">收藏夹名称&lt;/label>&#xd;
                 &lt;input class="ant-input" name="collect_name" type="text" maxlength="30" style="width:521px" />&#xd;
-&lt;span class="ant-input-icon">&#xd;
- &lt;span class="ant-input-icon-copy ant-input-length-info">&lt;/span>&#xd;
-&lt;/span>&#xd;
-              &lt;/div>              &#xd;
+                &lt;span class="ant-input-icon">&#xd;
+                  &lt;span class="ant-input-icon-copy ant-input-length-info">&lt;/span>&#xd;
+                &lt;/span>&#xd;
+              &lt;/div>&#xd;
             &lt;/form>&#xd;
           &lt;/div>&#xd;
           &lt;div class="ant-modal-footer">&#xd;
@@ -125,8 +162,11 @@
       &lt;/div>&#xd;
     &lt;/div>&#xd;
   &lt;/div>&#xd;
-{{/html}}&#xd;
-{{/velocity}}</content>
+  {{/html}}&#xd;
+  {{/velocity}}&#xd;
+&#xd;
+&#xd;
+ </content>
   <object>
     <name>Main.收藏夹.WebHome</name>
     <number>0</number>
@@ -267,6 +307,8 @@ function renderLi(title) {&#xd;
          &lt;/li>`&#xd;
 }&#xd;
 require(['jquery'], function ($) {&#xd;
+  //监听删除选项&#xd;
+  listenRadioChange();&#xd;
     var circle = `&lt;div id="waite" style="height: 46px;width: 46px;margin: 200px 0 30px calc(50vw - 175px);">&#xd;
             &lt;svg viewBox="0 0 50 50">&#xd;
                 &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
@@ -382,6 +424,16 @@ require(['jquery'], function ($) {&#xd;
         }&#xd;
     }&#xd;
 });&#xd;
+function listenRadioChange(){&#xd;
+  jQuery('#targetCollect').hide();&#xd;
+  jQuery('input[type=radio][name=isMove]').change(function() {&#xd;
+       if (this.value == 'move') {&#xd;
+          jQuery('#targetCollect').show();&#xd;
+         } else{&#xd;
+           jQuery('#targetCollect').hide();&#xd;
+          }&#xd;
+     });&#xd;
+}&#xd;
 function handleEditClick() {&#xd;
     var folderName = getParams(location.search).folderName;&#xd;
     var ele = jQuery("#edit-collect-pop-form input[name=collect_name]");&#xd;
@@ -392,10 +444,25 @@ function handleEditClick() {&#xd;
     openModal("edit-collect-pop")&#xd;
 }&#xd;
 function handleFolderDeleteClick() {&#xd;
+  var toFolderId = null;&#xd;
+  var redirectUrl=`/bin/view/Main/收藏夹/?folderId=0&amp;folderName=我的收藏`&#xd;
+  if(jQuery('#targetCollect').length > 0) {&#xd;
+    //元素存在时执行的代码&#xd;
+    //&#xd;
+    var targetCollect=jQuery('#targetCollect').val()&#xd;
+    var isMove=jQuery('input:radio[name=isMove]:checked').val()==='move';&#xd;
+    if(isMove){&#xd;
+      toFolderId=targetCollect;&#xd;
+      var folderName=jQuery("#targetCollect").find("option:selected").text();&#xd;
+      redirectUrl=`/bin/view/Main/收藏夹/?folderId=${toFolderId}&amp;folderName=${folderName}`&#xd;
+    }    &#xd;
+} &#xd;
+  &#xd;
     var curruser = '$xcontext.getUser()';&#xd;
     var da = {&#xd;
         "user": curruser,&#xd;
-        "id": getParams(location.search).folderId&#xd;
+        "id": getParams(location.search).folderId,&#xd;
+        "toFolderId":toFolderId&#xd;
     }&#xd;
     options = {&#xd;
         type: "POST",&#xd;
@@ -405,7 +472,7 @@ function handleFolderDeleteClick() {&#xd;
         url: "/collect/page?folderType=delete",&#xd;
         success: function (data) {&#xd;
             if (data == "1") {&#xd;
-                window.location.href = `/bin/view/Main/收藏夹/?folderId=0&amp;folderName=我的收藏`;&#xd;
+                window.location.href = redirectUrl;&#xd;
                 closeModal("delete-collect-pop")&#xd;
             } else if (data == "2") {&#xd;
                 require(['toastMsg'], function (toastMsg) {&#xd;
@@ -745,7 +812,57 @@ li {&#xd;
 }&#xd;
 .dropdown-menu  a{&#xd;
   cursor:pointer;&#xd;
-}</code>
+}&#xd;
+&#xd;
+// radio style&#xd;
+.radio {&#xd;
+      margin: 5px 0;&#xd;
+    }&#xd;
+.radio .radio-label{&#xd;
+  padding:0;&#xd;
+}&#xd;
+    .radio input[type="radio"] {&#xd;
+      position: absolute;&#xd;
+      opacity: 0;&#xd;
+    }&#xd;
+&#xd;
+    .radio input[type="radio"]+.radio-label:before {&#xd;
+      content: '';&#xd;
+      background: #f4f4f4;&#xd;
+      border-radius: 100%;&#xd;
+      border: 1px solid #b4b4b4;&#xd;
+      display: inline-block;&#xd;
+      width: 16px;&#xd;
+      height: 16px;&#xd;
+      position: relative;&#xd;
+      top: 1px;&#xd;
+      margin-right: 8px;&#xd;
+      vertical-align: top;&#xd;
+      cursor: pointer;&#xd;
+      text-align: center;&#xd;
+      -webkit-transition: all 250ms ease;&#xd;
+      transition: all 250ms ease;&#xd;
+    }&#xd;
+&#xd;
+    .radio input[type="radio"]:checked+.radio-label:before {&#xd;
+      background-color: #3F51B5;&#xd;
+      box-shadow: inset 0 0 0 4px #f4f4f4;&#xd;
+    }&#xd;
+&#xd;
+    .radio input[type="radio"]:focus+.radio-label:before {&#xd;
+      outline: none;&#xd;
+      border-color: #3F51B5;&#xd;
+    }&#xd;
+&#xd;
+    .radio input[type="radio"]:disabled+.radio-label:before {&#xd;
+      box-shadow: inset 0 0 0 4px #f4f4f4;&#xd;
+      border-color: #b4b4b4;&#xd;
+      background: #b4b4b4;&#xd;
+    }&#xd;
+&#xd;
+    .radio input[type="radio"]+.radio-label:empty:before {&#xd;
+      margin-right: 0;&#xd;
+    }</code>
     </property>
     <property>
       <contentType>CSS</contentType>
