@@ -1,0 +1,48 @@
+{{- if .Values.preJob.initDB -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-init-db
+  annotations:
+    "helm.sh/hook": pre-install
+  labels:
+{{ include "service.labels.standard" . | indent 4 }}
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: {{ .Values.preJob.timeout | default 300 }}
+  template:
+    metadata:
+      name: {{ .Release.Name }}-init-data
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-init-db
+        image: {{ .Values.preJob.image }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        - -c
+        - $(mysql -u"${DB_USER}" -p"${DB_PASSWORD}" -h"${DB_HOST}" -P "${DB_PORT}"< /root/data/xwiki-release.sql)
+        command:
+        - /bin/sh
+        volumeMounts:
+        - name: xwiki-data
+          mountPath: /root/data
+{{- if not (empty .Values.persistence.subPath) }}
+          subPath: {{ .Values.persistence.subPath }}
+{{- end }}
+        env:
+{{- range $name, $value := .Values.env }}
+{{- if not (empty $value) }}
+        - name: {{ $name | quote }}
+          value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+      restartPolicy: Never
+      volumes:
+      - name: xwiki-data
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
+{{- end }}

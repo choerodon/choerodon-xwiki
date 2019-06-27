@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-init-data
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+  labels:
+{{ include "service.labels.standard" . | indent 4 }}
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: {{ .Values.preJob.timeout | default 300 }}
+  template:
+    metadata:
+      name: {{ .Release.Name }}-init-data
+    spec:
+      containers:
+      - name: init
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        command: ['/bin/sh', '-c', 'cp -rf /root/data/* /data && rm -rf /data/data/hibernate.cfg.xml && rm -rf /data/data/xwiki.cfg && rm -rf /data/data/xwiki.properties']
+        volumeMounts:
+        - name: xwiki-data
+          mountPath: /data
+{{- if not (empty .Values.persistence.subPath) }}
+          subPath: {{ .Values.persistence.subPath }}
+{{- end }}
+        env:
+{{- range $name, $value := .Values.env }}
+{{- if not (empty $value) }}
+        - name: {{ $name | quote }}
+          value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+      restartPolicy: Never
+      volumes:
+      - name: xwiki-data
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim }}
+        {{- else }}
+        emptyDir: {}
+        {{- end }}

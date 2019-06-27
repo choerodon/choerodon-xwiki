@@ -1,0 +1,86 @@
+# Default values for gitlab.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: registry.cn-shanghai.aliyuncs.com/choerodon/xwiki
+  tag: 10.4-mysql-tomcat-0.15.1
+  pullPolicy: IfNotPresent
+
+
+preJob:
+  image: registry.cn-hangzhou.aliyuncs.com/choerodon-tools/mysql-client:10.2.15-r0
+  timeout: 1200
+  initDB: true
+
+env:
+  DB_USER: xwiki
+  DB_PASSWORD: password
+  DB_HOST: 127.0.0.1
+  DB_PORT: 3306
+  DB_DATABASE: xwiki
+  JAVA_OPTS: -Xmx2048m
+  OIDC_ENDPOINT_AUTHORIZATION: http://api.choerodon.com/oauth/oauth/authorize
+  OIDC_ENDPOINT_TOKEN: http://api.choerodon.com/oauth/oauth/token
+  OIDC_ENDPOINT_USERINFO: http://api.choerodon.com/iam/v1/users/self
+  OIDC_ENDPOINT_LOGOUT: http://api.choerodon.com/oauth/logout
+  OIDC_CLIENTID: wiki
+  OIDC_SECRET: secret
+  OIDC_CUSTOMSCOPE: 
+  OIDC_WIKI_TOKEN: Choerodon
+  CHOERODON_REQUEST_API_URL: http://api.choerodon.com
+  CHOERODON_REQUEST_FRONT_URL: http://choerodon.com
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+
+resources: 
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+  #  cpu: 100m
+   memory: 3Gi
+  requests:
+  #  cpu: 100m
+   memory: 2Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+persistence:
+  enabled: false
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  existingClaim: xwiki
+  subPath: data
+
+logs:
+  parser: spring-boot
+
+service:
+  enabled: false
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - wiki.example.choerodon.com
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
