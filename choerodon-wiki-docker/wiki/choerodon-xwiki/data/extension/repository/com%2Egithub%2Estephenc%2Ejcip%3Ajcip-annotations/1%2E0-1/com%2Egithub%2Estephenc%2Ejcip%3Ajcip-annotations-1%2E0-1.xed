@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>com.github.stephenc.jcip:jcip-annotations</id>
+<version>1.0-1</version>
+<type>jar</type>
+<name>JCIP Annotations under Apache License</name>
+<summary>A clean room implementation of the JCIP Annotations based entirely on the specification provided by the javadocs.</summary>
+<website>http://stephenc.github.com/jcip-annotations</website>
+<authors>
+<author>
+<name>Stephen Connolly</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>http://github.com/stephenc/jcip-annotations/tree/master/</url>
+<connection>
+<system>git</system>
+<path>git://github.com/stephenc/jcip-annotations.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>git@github.com:stephenc/jcip-annotations.git</path>
+</developerconnection>
+</scm>
+<issuemanagement>
+<system>github</system>
+<url>http://github.com/stephenc/jcip-annotations/issues</url>
+</issuemanagement>
+<properties>
+<maven.groupid>com.github.stephenc.jcip</maven.groupid>
+<maven.artifactid>jcip-annotations</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754703</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

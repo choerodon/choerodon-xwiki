@@ -1,0 +1,259 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.TemplateProviderSheet" locale="">
+  <web>XWiki</web>
+  <name>TemplateProviderSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755116000</creationDate>
+  <parent>XWiki.TemplateProviderClass</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755116000</date>
+  <contentUpdateDate>1534755116000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{include reference="XWiki.TemplateProviderMacros" /}}
+
+{{velocity output="false"}}
+#macro (initializeTemplateProvider)
+  #if ($doc.name.endsWith('Provider'))
+    #set ($discard = $doc.set('template', $stringtool.removeEnd($doc.fullName, 'Provider').trim()))
+    #set ($templateName = $stringtool.removeEnd($doc.name, 'Provider').trim())
+    #set ($templateName = $stringtool.join($stringtool.splitByCharacterTypeCamelCase($templateName), ' '))
+    #set ($templateName = $templateName.replaceAll('\s+', ' '))
+    #set ($discard = $doc.set('name', $templateName))
+  #end
+#end
+{{/velocity}}
+
+{{velocity}}
+{{html clean="false"}}
+#set ($discard = $xwiki.ssx.use('XWiki.TemplateProviderMacros'))
+#set ($discard = $xwiki.jsx.use('XWiki.TemplateProviderMacros'))
+#set ($discard = $doc.use('XWiki.TemplateProviderClass'))
+#if ($doc.isNew())
+  #initializeTemplateProvider
+#end
+&lt;div class="xform row templateProviderSheet">
+  ##
+  ## Left side
+  ##
+  &lt;div class="col-xs-12 col-md-6">
+    &lt;dl>
+      ##
+      ## Template Provider Title
+      ##
+      #if ($isEditing)
+        &lt;dt>
+          &lt;label for="title">
+            $escapetool.xml($services.localization.render('xe.templateprovider.name'))
+          &lt;/label>
+        &lt;/dt>
+        &lt;dd>
+          &lt;input type="text" value="$!escapetool.xml($doc.title)" name="title" id="title" />
+        &lt;/dd>
+      #end
+      ##
+      ## Template Name
+      ##
+      &lt;dt>
+        &lt;label#if ($isEditing) for="XWiki.TemplateProviderClass_0_name"#end>
+          $escapetool.xml($services.localization.render('xe.templateprovider.templatename'))
+        &lt;/label>
+        #if ($isEditing)
+          &lt;span class="xHint">
+            $escapetool.xml($services.localization.render('xe.templateprovider.templatename.info'))
+          &lt;/span>
+        #end
+      &lt;/dt>
+      &lt;dd>
+        #if ($isEditing)
+          #displayPropertyValue('name')
+        #else
+          $!escapetool.xml($services.localization.render($doc.getValue('name')))
+        #end
+      &lt;/dd>
+      ##
+      ## Template Description
+      ##
+      &lt;dt>
+        &lt;label#if ($isEditing) for="XWiki.TemplateProviderClass_0_description"#end>
+          $escapetool.xml($services.localization.render('administration.templateProvider.description'))
+        &lt;/label>
+        #if ($isEditing)
+          &lt;span class="xHint">
+            $services.localization.render('administration.templateProvider.description.hint')
+          &lt;/span>
+        #end
+      &lt;/dt>
+      &lt;dd>
+        #if ($isEditing)
+          #displayPropertyValue('description')
+        #else
+          $!escapetool.xml($services.localization.render($doc.getValue('description')))
+        #end
+      &lt;/dd>
+      ##
+      ## Template Icon
+      ##
+      &lt;dt>
+        &lt;label#if($isEditing) for="XWiki.TemplateProviderClass_0_icon"#end>
+          $escapetool.xml($services.localization.render('administration.templateProvider.icon'))
+        &lt;/label>
+        #if ($isEditing)
+          &lt;span class="xHint">
+            $services.localization.render('administration.templateProvider.icon.hint', ['', ''])
+          &lt;/span>
+        #end
+      &lt;/dt>
+      &lt;dd>
+        #if ($isEditing)
+          #displayPropertyValue('icon')
+        #else
+          $!services.icon.renderHTML($doc.getValue('icon'))
+        #end
+      &lt;/dd>
+      ##
+      ## Visibility Restrictions
+      ##
+      &lt;dt>
+        &lt;label>$escapetool.xml($services.localization.render('xe.templateprovider.spaces'))&lt;/label>
+        #if ($isEditing)
+          &lt;span class="xHint">
+            $escapetool.xml($services.localization.render('xe.templateprovider.spaces.info'))
+          &lt;/span>
+        #end
+      &lt;/dt>
+      &lt;dd>
+        #set ($visibilityRestrictions = $doc.getValue('visibilityRestrictions'))
+        #if ($isEditing || ($visibilityRestrictions &amp;&amp; $visibilityRestrictions.size() > 0))
+          #displayPathsPropertyValue('visibilityRestrictions')
+        #else
+          $escapetool.xml($services.localization.render('xe.templateprovider.spaces.all'))
+        #end
+      &lt;/dd>
+    &lt;/dl>
+  &lt;/div>
+  ##
+  ## Right side
+  ##
+  &lt;div class="col-xs-12 col-md-6">
+    &lt;dl>
+      ##
+      ## Template Reference
+      ##
+      &lt;dt>
+        &lt;label#if ($isEditing) for="XWiki.TemplateProviderClass_0_template"#end>
+          $escapetool.xml($services.localization.render('xe.templateprovider.template'))
+        &lt;/label>
+      &lt;/dt>
+      &lt;dd>
+        #set ($template = $doc.getValue('template'))
+        #if ($isEditing)
+          &lt;input type="text" id="XWiki.TemplateProviderClass_0_template" name="XWiki.TemplateProviderClass_0_template"
+            class="suggestDocuments" autocomplete="off" value="$!escapetool.xml($template)" />
+        #elseif ("$!template" != '')
+          #set ($templateReference = $services.model.resolveDocument($template))
+          #hierarchy($templateReference {
+            'local': true,
+            'selfIsActive': false
+          })
+        #end
+      &lt;/dd>
+      ##
+      ## Creation Restrictions
+      ##
+      &lt;dt>
+        &lt;label>
+          $escapetool.xml($services.localization.render('administration.templateProvider.creationRestrictions'))
+        &lt;/label>
+        #if ($isEditing)
+          &lt;span class="xHint">
+            $services.localization.render('administration.templateProvider.creationRestrictions.hint')
+          &lt;/span>
+        #end
+      &lt;/dt>
+      &lt;dd>
+        #set ($creationRestrictions = $doc.getValue('creationRestrictions'))
+        #if ($isEditing || ($creationRestrictions &amp;&amp; $creationRestrictions.size() > 0))
+          #displayPathsPropertyValue('creationRestrictions')
+        #else
+          $escapetool.xml($services.localization.render('administration.templateProvider.creationRestrictions.none'))
+        #end
+      &lt;/dd>
+      ##
+      ## Creation Restrictions As Suggestions
+      ##
+      &lt;dt>
+        &lt;label>
+          #if ($isEditing)
+            #displayPropertyValue('creationRestrictionsAreSuggestions')
+          #end
+          $escapetool.xml($services.localization.render('administration.templateProvider.creationRestrictionsAreSuggestions'))
+        &lt;/label>
+        #if ($isEditing)
+          &lt;span class="xHint">
+            $services.localization.render('administration.templateProvider.creationRestrictionsAreSuggestions.hint')
+          &lt;/span>
+        #end
+      &lt;/dt>
+      &lt;dd>
+        #if (!$isEditing)
+          #displayPropertyValue('creationRestrictionsAreSuggestions')
+        #end
+      &lt;/dd>
+      ##
+      ## Terminal page creation - Advanced user (both view and edit mode)
+      ##
+      #if ($isAdvancedUser || $isSuperAdmin)
+        &lt;dt>
+          &lt;label#if ($isEditing) for="XWiki.TemplateProviderClass_0_terminal"#end>
+            $escapetool.xml($services.localization.render('xe.templateprovider.terminal'))
+          &lt;/label>
+          #if ($isEditing)
+            &lt;span class="xHint">
+              $escapetool.xml($services.localization.render('xe.templateprovider.terminal.hint'))
+            &lt;/span>
+          #end
+        &lt;/dt>
+        &lt;dd>#displayPropertyValue('terminal')&lt;/dd>
+      #else
+        &lt;dd>#displayPropertyValue('terminal' 'hidden')&lt;/dd>
+      #end
+      ##
+      ## Action
+      ##
+      &lt;dt>
+        &lt;label#if ($isEditing) for="XWiki.TemplateProviderClass_0_action"#end>
+          $escapetool.xml($services.localization.render('xe.templateprovider.action'))
+        &lt;/label>
+        #if ($isEditing)
+          &lt;span class="xHint">
+            $escapetool.xml($services.localization.render('xe.templateprovider.action.info'))
+          &lt;/span>
+        #end
+      &lt;/dt>
+      &lt;dd>#displayPropertyValue('action')&lt;/dd>
+    &lt;/dl>
+  &lt;/div>
+  #locationPickerModal
+&lt;/div>
+{{/html}}
+
+{{iconPicker id="XWiki\\.TemplateProviderClass_0_icon" prefix="" /}}
+
+##
+## Go back to the administration
+##
+#if (!$isEditing)
+  (% class="buttonwrapper" %)
+  [[{{translation key="xe.templateprovider.backtoadmin"/}}>>path:$xwiki.getURL($services.model.createDocumentReference('', 'XWiki', 'XWikiPreferences'), 'admin', 'section=Templates')]]
+#end
+{{/velocity}}</content>
+</xwikidoc>

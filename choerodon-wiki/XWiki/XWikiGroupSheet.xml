@@ -1,0 +1,222 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.XWikiGroupSheet" locale="">
+  <web>XWiki</web>
+  <name>XWikiGroupSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755126000</creationDate>
+  <parent>XWiki.XWikiGroups</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755126000</date>
+  <contentUpdateDate>1534755126000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity output="false"}}
+#set($groupDoc = $doc)
+#if($doc.fullName == 'Main.UserDirectory')
+  #set($groupDoc = $xwiki.getDocument('XWiki.XWikiAllGroup'))
+#end
+#macro(hasGroupRight $right $hasGroupRight)
+  #set($result = $xwiki.hasAccessLevel($right, $xcontext.user, $doc.fullName) &amp;&amp; $doc.getObject('XWiki.XWikiGroups', false))
+  #set($hasGroupRight = $NULL)
+  #setVariable("$hasGroupRight" $result)
+#end
+#hasGroupRight('edit' $hasEditGroupRight)
+{{/velocity}}
+
+{{velocity}}
+## Keep testing the inline action for backward compatibility with existing groups.
+#if(($xcontext.action == 'edit' || $xcontext.action == 'inline') &amp;&amp; $hasEditGroupRight)
+  {{html}}
+  #if ($request.xpage == 'plain')
+    ## AJAX request.
+    #set ($wrapperTag = 'form')
+    &lt;form class="xform" action="$doc.getURL('preview')">
+      &lt;input type="hidden" name="form_token" value="$!services.csrf.getToken()" />
+  #else
+    #set ($discard = $xwiki.jsx.use('XWiki.XWikiGroupSheet'))
+    ## The form is generated in the edit template.
+    &lt;div class="xform">
+    #set ($wrapperTag = 'div')
+  #end
+    &lt;dl>
+      &lt;dt>&lt;label for="userInput">$services.localization.render('xe.admin.groups.addUser')&lt;/label>&lt;/dt>
+      &lt;dd>
+        #set ($parameters = {'id': 'userInput', 'name': 'name'})
+        #userPicker(true $parameters)
+      &lt;/dd>
+      &lt;dt>&lt;label for="groupInput">$services.localization.render('xe.admin.groups.addGroup')&lt;/label>&lt;/dt>
+      &lt;dd>
+        #set ($parameters = {'id': 'groupInput', 'name': 'name'})
+        #groupPicker(true $parameters)
+      &lt;/dd>
+    &lt;/dl>
+    &lt;div class="buttons">
+      &lt;span class="buttonwrapper">
+        &lt;button type="submit" id="addMembers" name="xpage" value="adduorg">$services.localization.render('xe.admin.groups.addUser.submit')&lt;/button>
+      &lt;/span>
+    &lt;/div>
+  &lt;/$wrapperTag>
+  {{/html}}##
+#end
+#set($columnOptions = {
+  "member" : {'link': 'auto', 'type': 'text'},
+  '_avatar' : { 'type' : 'none', 'link' : 'field', 'html' : 'true', 'sortable' : false },
+  "_actions" : {
+    'actions': ['delete'],
+    'actionCallbacks': {'delete': 'table.deleteRow(i);'},
+    'ajaxActions': {'delete': true}
+   }
+})
+## Keep testing the inline action for backward compatibility with existing groups.
+#if(($xcontext.action == 'edit' || $xcontext.action == 'inline') &amp;&amp; $hasEditGroupRight)
+  #set($columns = ['_avatar', 'member', '_actions'])
+#else
+  #set($columns = ['_avatar', 'member'])
+#end
+#livetable('groupusers', $columns, $columnOptions, {
+  'url' : $groupDoc.getURL('view', 'xpage=getgroupmembers'),
+  'translationPrefix' : 'xe.admin.groups.',
+  'javascriptName' : 'editgrouptable'
+})
+{{/velocity}}</content>
+  <object>
+    <name>XWiki.XWikiGroupSheet</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>6e43f145-6962-4b17-a268-f85890a2c00c</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>(function() {
+  var addMembers = function(event) {
+    event &amp;&amp; event.stop();
+    var form = event.element().form;
+    if (form.select('ul.accepted-suggestions li').length == 0 &amp;&amp; $('userInput').value.strip() == ''
+      &amp;&amp; $('groupInput').value.strip() == '') {
+      // Nothing to add.
+      return;
+    }
+    new Ajax.Request(form.action, {
+      parameters: form.serialize(),
+      onSuccess: function() {
+        // Clear the list of selected users and groups.
+        XWiki.widgets.UserPicker.instances.groupInput.clear();
+        XWiki.widgets.UserPicker.instances.userInput.clear();
+        // Reload the live table.
+        var end = editgrouptable.limit;
+        var start = Math.max(editgrouptable.lastOffset, 1);
+        editgrouptable.clearCache();
+        editgrouptable.getRows(start, end, start, end);
+        // Show notification message.
+        new XWiki.widgets.Notification("$services.localization.render('xe.admin.groups.addSuccess')", 'done', {timeout: 5});
+      },
+      onFailure: function(response) {
+        new XWiki.widgets.Notification("$services.localization.render('xe.admin.groups.addFailure')" + response.statusText, 'error', {timeout: 5});
+      }
+    });
+  }
+  var init = function() {
+    var addMembersButton = $('addMembers');
+    if (addMembersButton &amp;&amp; !addMembersButton.__initialized) {
+      addMembersButton.observe('click', addMembers);
+      addMembersButton.__initialized = true;
+    }
+    return true;
+  };
+  (XWiki.domIsLoaded &amp;&amp; init()) || document.observe('xwiki:dom:loaded', init);
+  document.observe('xwiki:dom:updated', init);
+})()</code>
+    </property>
+    <property>
+      <name>Code</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

@@ -1,0 +1,1611 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="ChoerodonConfig.ChoerodonMacros.c7n-Issue" locale="">
+  <web>ChoerodonConfig.ChoerodonMacros</web>
+  <name>c7n-Issue</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538119159000</creationDate>
+  <parent>ChoerodonConfig.ChoerodonMacros.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1544690819000</date>
+  <contentUpdateDate>1538119159000</contentUpdateDate>
+  <version>23.1</version>
+  <title>c7n-Issue</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content/>
+  <object>
+    <name>ChoerodonConfig.ChoerodonMacros.c7n-Issue</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>f01a5d32-bb68-4902-a189-c76767c3684b</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>(function() {&#xd;
+    CKEDITOR.plugins.add("ck-issue", {&#xd;
+        requires: ["dialog"],&#xd;
+      icons: 'icon',&#xd;
+        init: function(a) {&#xd;
+         &#xd;
+            a.addCommand("ck-issue", new CKEDITOR.dialogCommand("ck-issue"));&#xd;
+            a.ui.addButton("ck-issue", {&#xd;
+                label: "插入issue",//调用dialog时显示的名称&#xd;
+                command: "ck-issue",&#xd;
+                toolbar: 'insert'&#xd;
+            });&#xd;
+          &#xd;
+          &#xd;
+            CKEDITOR.dialog.add("ck-issue",&#xd;
+                function(a) {&#xd;
+                    return {&#xd;
+                        title: "插入issue",&#xd;
+                        contents: [{&#xd;
+                            id: "issueTab1",&#xd;
+                            label: "搜索",&#xd;
+                            title: "搜索",&#xd;
+                            expand: true,&#xd;
+                            padding: 0,&#xd;
+                            elements: [{&#xd;
+                                type: 'html',&#xd;
+                                html: `&#xd;
+&lt;div id="cke-list-issue">&#xd;
+&lt;div class="search-lab" >&#xd;
+        &lt;span class="span-desc">选择项目&lt;/span>&#xd;
+        &lt;span class="span-desc" style="padding-left: 98px;">搜索&lt;/span>&#xd;
+    &lt;/div>&#xd;
+&lt;div style="display: inline-block;align-items: center;">&#xd;
+  &lt;div style="float: left;"  id="selectProjectHeader" onclick="selectProjectHeader()">&#xd;
+    &lt;div id="selProject"  class="issue-project-sel">&lt;div style="margin-top: 3px;cursor: pointer;">请选择项目！&lt;/div>&lt;/div>&#xd;
+    &lt;span class="icon icon-arrow_drop_down" style="margin-left: -23px;position: absolute;">&lt;/span>&#xd;
+  &lt;/div>&#xd;
+ &#xd;
+  &lt;div id="project-select-dropdown" class="ant-select-dropdown-hidden">&lt;div style="position: relative;">&#xd;
+      &lt;div style="background-color: rgb(250, 250, 250);box-shadow: 0 1px 3px 0 rgba(0,0,0,0.20);border-radius: 2px;">&#xd;
+        &lt;span class="icon icon-search" style="font-size: 20px;margin-left: 16px;vertical-align: middle;margin-top: -6px;">&lt;/span>&#xd;
+        &lt;input type="text" name="text" onkeydown="selectfilter(event)" id="ant-select-dropdown-filter-input" placeholder="输入文字以进行过滤" autocomplete="off">&#xd;
+      &lt;/div>&#xd;
+        &lt;div style="overflow: auto;">&#xd;
+          &lt;ul class="ant-select-dropdown-menu" role="menu" aria-activedescendant="" tabindex="0">&#xd;
+          &lt;/ul>&#xd;
+        &lt;/div>&#xd;
+      &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&#xd;
+  &lt;div style="float: left;margin-left: 4px;">&#xd;
+     &lt;span style="position: absolute;padding-left: 2px;">&lt;i class="icon icon-search" style=" font-size: 20px;">&lt;/i>&lt;/span>&#xd;
+     &lt;input type="text"  id="name" placeholder="请输入名称" class="issue-search" onblur="txtblur()" onfocus="txtfocus()" onkeydown="enterSearch()" &gt;&#xd;
+     &lt;input type="button"  onclick="btnSearch()" value="搜索" class="btnSearch"  />&#xd;
+  &lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;div>&lt;span class="search-desc">使用摘要关键字进行模糊搜索&lt;/span>&lt;/div>&#xd;
+&#xd;
+&lt;table  class="table table-striped" style="width: 100%;">&#xd;
+    &lt;thead>&#xd;
+    &lt;tr style="background: rgba(0,0,0,0.04);">&#xd;
+        &lt;th style="width: 98px;">键值&lt;/th>&#xd;
+        &lt;th>摘要&lt;/th>&#xd;
+    &lt;/tr>&#xd;
+    &lt;/thead>&#xd;
+    &lt;tbody>&lt;tr>&lt;/tr>&lt;/tbody>&#xd;
+&lt;/table>&#xd;
+&lt;table id="issue-table" class="table table-striped" style="width: 501px;height: 305px;">&#xd;
+    &lt;tbody id="issues_summary">&#xd;
+    &lt;tr style="background-color: transparent;">&#xd;
+        &lt;td>没有数据&lt;/td>&#xd;
+    &lt;/tr>&#xd;
+    &lt;/tbody>&#xd;
+&lt;/table>&#xd;
+&lt;div>&#xd;
+    &lt;ul class="pagination" >&#xd;
+        &lt;li>每页行数&#xd;
+            &lt;select id="selPageSize" onclick="changePageSize()"  class="pageSize">&#xd;
+                &lt;option value ="10">10&lt;/option>&#xd;
+                &lt;option value ="30">30&lt;/option>&#xd;
+                &lt;option value="50">50&lt;/option>&#xd;
+                &lt;option value="100">100&lt;/option>&#xd;
+            &lt;/select>&#xd;
+        &lt;/li>&#xd;
+        &lt;li>&#xd;
+           &lt;span class="icon icon-arrow_drop_down" style="border: 0; background-color: unset;padding: 0;color: #000;">&lt;/span>&#xd;
+        &lt;/li>&#xd;
+        &lt;li>&#xd;
+            &lt;button id="firstPage" class="pageBtn" onclick="firstPageFun()" class="ant-btn ant-btn-circle ant-btn-icon-only ant-btn-flat">&lt;i class="icon icon-first_page">&lt;/i>&lt;/button>&#xd;
+        &lt;/li>&#xd;
+        &lt;li>&#xd;
+            &lt;button id="prePage" class="pageBtn" onclick="prePageFun()" class="ant-btn ant-btn-circle ant-btn-icon-only ant-btn-flat">&lt;i class="icon icon-navigate_before">&lt;/i>&lt;/button>&#xd;
+        &lt;/li>&#xd;
+        &lt;li>&#xd;
+            &lt;button type="button" class="pageBtn" id="nextPage" onclick="nextPageFun()" class="ant-btn ant-btn-circle ant-btn-icon-only ant-btn-flat" >&lt;i class="icon icon-navigate_next">&lt;/i>&lt;/button>&#xd;
+        &lt;/li>&#xd;
+        &lt;li>&#xd;
+            &lt;button id="lastPage" class="pageBtn" onclick="lastPageFun()" class="ant-btn ant-btn-circle ant-btn-icon-only ant-btn-flat">&lt;i class="icon icon-last_page">&lt;/i>&lt;/button>&#xd;
+        &lt;/li>&#xd;
+    &lt;/ul>&#xd;
+&lt;/div>&#xd;
+&lt;/div>&#xd;
+&#xd;
+`&#xd;
+                            }&#xd;
+                            ]&#xd;
+                        },{&#xd;
+                            id: "issueTab2",&#xd;
+                            label: "创建",&#xd;
+                            title: "创建",&#xd;
+                            expand: true,&#xd;
+                            padding: 0,&#xd;
+                            elements: [{&#xd;
+                                type: 'html',&#xd;
+                                html: `&#xd;
+&lt;div>&#xd;
+&#xd;
+  &lt;div id="create-project-select-dropdown" class="ant-select-dropdown-hidden">&lt;div style="position: relative;">&#xd;
+      &lt;div style="background-color: rgb(250, 250, 250);box-shadow: 0 1px 3px 0 rgba(0,0,0,0.20);border-radius: 2px;">&#xd;
+        &lt;span class="icon icon-search" style="font-size: 20px;margin-left: 16px;vertical-align: middle;margin-top: -6px;">&lt;/span>&#xd;
+        &lt;input type="text" name="text" onkeydown="createfilter(event)" id="create-ant-select-dropdown-filter-input" placeholder="输入文字以进行过滤" autocomplete="off">&#xd;
+      &lt;/div>&#xd;
+        &lt;div style="overflow: auto;">&#xd;
+          &lt;ul class="ant-create-dropdown-menu" role="menu" aria-activedescendant="" tabindex="0">&#xd;
+          &lt;/ul>&#xd;
+        &lt;/div>&#xd;
+      &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&#xd;
+    &lt;form id="issue-create">&#xd;
+        &lt;br>&#xd;
+        &lt;span class="lab-title">项目：&lt;/span>&lt;br>&#xd;
+&#xd;
+        &lt;div id="createSelectProjectHeader" onclick="createSelectProjectHeader()">&#xd;
+          &lt;div id="create-selProject"  class="issue-project-sel">&lt;div style="margin-top: 3px;cursor: pointer;">请选择项目！&lt;/div>&lt;/div>&#xd;
+          &lt;span class="icon icon-arrow_drop_down" style="margin-left: -22px;position: absolute;">&lt;/span>&#xd;
+        &lt;/div>&#xd;
+&#xd;
+        &lt;br>&#xd;
+        &lt;span class="lab-title">问题类型：&lt;/span>&#xd;
+        &lt;br>&#xd;
+        &lt;div>&#xd;
+&#xd;
+            &lt;div id="sel-wrap">&#xd;
+                &lt;div id="cke-create-selType" style="display: flex;align-items: center;">&#xd;
+                    &lt;div id="sel-show" onclick="selTypeChange()">&lt;span class="option-span" data-type="story">&lt;i class="icon-bg icon icon-turned_in" style="background-color: rgb(0, 191, 165);">&lt;/i>故事&lt;/span>&lt;/div>&#xd;
+                    &lt;span class="icon icon-arrow_drop_down" style="position: absolute;right: -3px;padding-top: 13px;" >&lt;/span>&#xd;
+                &lt;/div>&#xd;
+                &lt;ul id="sel-option" style="display: none;">&#xd;
+                    &lt;li class="item" onclick="optionSel(this)">&lt;span data-type="sttory" class="option-span">&lt;i class="icon-bg icon icon-turned_in"  style="background-color: rgb(0, 191, 165);">&lt;/i>故事&lt;/span>&lt;/li>&#xd;
+                    &lt;li class="item" onclick="optionSel(this)">&lt;span data-type="task" class="option-span" >&lt;i class="icon-bg icon icon-assignment" style="background-color: rgb(77, 144, 254);">&lt;/i>任务&lt;/span>&lt;/li>&#xd;
+                    &lt;li class="item" onclick="optionSel(this)">&lt;span data-type="bug" class="option-span">&lt;i class="icon-bg icon icon-bug_report" style="background-color: rgb(244, 67, 54);">&lt;/i>故障&lt;/span>&lt;/li>&#xd;
+                    &lt;li class="item" onclick="optionSel(this)">&lt;span data-type="issue_epic" class="option-span">&lt;i class="icon-bg icon icon-priority" style="background-color: rgb(116, 59, 231);">&lt;/i>史诗&lt;/span>&lt;/li>&#xd;
+                &lt;/ul>&#xd;
+            &lt;/div>&#xd;
+&#xd;
+        &lt;/div>&#xd;
+        &lt;br>&#xd;
+        &lt;span class="lab-title">摘要：&lt;/span>&lt;br>&#xd;
+        &lt;input id="create-summary" type="text" placeholder="摘要" onblur="createSsummaryBlur()" onfocus="tcreateSsummaryFocus()">&#xd;
+        &lt;br>&#xd;
+        &lt;span id="create-summary-required" class="form-required">此项为必填项*&lt;/span>&#xd;
+    &lt;/form>&#xd;
+    &lt;div id="waite-display" style="height: 100%;width: 100%;text-align:  center;&#xd;
+     position:  absolute; z-index: 101;margin-top: -300px;display:none;&#xd;
+      background-color: rgba(0,0,0,0.06);left: 0px;bottom: 0px;">&#xd;
+        &lt;div id="waite" style="height: 30px;width: 30px;margin-top: 250px;margin-left: 240px;">&#xd;
+            &lt;svg  viewBox="0 0 50 50">&#xd;
+                &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
+                      -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      stroke-dasharray: 80px 200px;&#xd;
+                      stroke-dashoffset: 0;">&lt;/circle>&#xd;
+            &lt;/svg>&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+`&#xd;
+                            }&#xd;
+                            ]}&#xd;
+&#xd;
+                        ],&#xd;
+                        onShow: function() {&#xd;
+                          token = 'bearer ' + getCookie('accessToken');&#xd;
+                          &#xd;
+                           var projectUrl = urlPrex + '/iam/v1/users/' + userId + '/projects';&#xd;
+                          require(['jquery'], function ($) {&#xd;
+                              //所属项目列表&#xd;
+                              $.ajax({&#xd;
+                                  headers: {&#xd;
+                                      'Authorization': token&#xd;
+                                  },&#xd;
+                                  url: projectUrl,&#xd;
+                                  success: function (data) {&#xd;
+                                      var selHtml='';&#xd;
+                                      var createHtml='';&#xd;
+                                      for (var i = 0; i &lt; data.length; i++) {&#xd;
+                                          selHtml += '&lt;li data-orgid="'+data[i].organizationId+'" data-projectid="'+data[i].id +'" unselectable="unselectable" class="ant-select-dropdown-menu-item" role="menuitem" aria-selected="false" style="user-select: none;" onclick="li_select_method(this)">' + data[i].name + '&lt;/li>'&#xd;
+                                          createHtml += '&lt;li data-orgid="'+data[i].organizationId+'" data-projectid="'+data[i].id +'" unselectable="unselectable" class="ant-create-dropdown-menu-item" role="menuitem" aria-selected="false" style="user-select: none;" onclick="li_create_method(this)">' + data[i].name + '&lt;/li>'&#xd;
+&#xd;
+                                      }&#xd;
+                                    $('.ant-select-dropdown-menu').append(selHtml);&#xd;
+                                    $('.ant-create-dropdown-menu').append(createHtml);&#xd;
+                                    items = document.getElementsByClassName("ant-select-dropdown-menu-item");&#xd;
+                                    itemss = document.getElementsByClassName("ant-create-dropdown-menu-item");&#xd;
+                                  },&#xd;
+                                  error: function (err) {&#xd;
+                                     require(['toastMsg'],function(toastMsg){&#xd;
+                                         toastMsg.toast('获取项目失败！');&#xd;
+                                       })&#xd;
+                                  }&#xd;
+                              })&#xd;
+                          })&#xd;
+                        },&#xd;
+                        onOk: function(evt) {&#xd;
+                          evt.data.hide = false;&#xd;
+                          var dialogObj = CKEDITOR.dialog.getCurrent();&#xd;
+                          require(['jquery'], function ($) {&#xd;
+                            var tab1 = $("a[id*='issueTab1']");&#xd;
+                            if(tab1.hasClass("cke_dialog_tab_selected")){&#xd;
+                              var obj = $('#issues_summary tr.focus');&#xd;
+                              if(obj.attr("data-issueId") != null &amp;&amp; obj.attr("data-issueId") != ""){&#xd;
+                                var issueData = {&#xd;
+                                    issueId:obj.attr("data-issueId"),&#xd;
+                                    issueNum:obj.attr("data-issueNum"),&#xd;
+                                    projectId:obj.attr("data-projectId"),&#xd;
+                                    statusType:obj.attr("data-statusType"),&#xd;
+                                    statusName:obj.attr("data-statusName"),&#xd;
+                                    summary:obj.attr("data-summary"),&#xd;
+                                    typeCode:obj.attr("data-typeCode"),&#xd;
+                                    projectText:$('#selProject').text(),&#xd;
+                                    organizationId:obj.attr("data-orgId")&#xd;
+                                }&#xd;
+                                if(insertToEditor(a,issueData) == true){&#xd;
+                                   dialogObj.hide();&#xd;
+                                }&#xd;
+                              }&#xd;
+                            }else{&#xd;
+                              var createSelection = $('.ant-create-selection-selected-value');&#xd;
+                              if (createSelection.length > 0) {&#xd;
+                                console.log(createSelection);&#xd;
+                              var projectId = createSelection[0].dataset.projectid;&#xd;
+                              var orgId = createSelection[0].dataset.orgid;&#xd;
+         &#xd;
+                              var issueData = {&#xd;
+                                  projectId:projectId,&#xd;
+                                  summary:$('#create-summary').val(),&#xd;
+                                  typeCode:$('#sel-show span').attr("data-type")&#xd;
+                              }&#xd;
+                              var createUrl = urlPrex+"/agile/v1/projects/"+projectId+"/issues?applyType=agile";&#xd;
+                              var priorityUrl = urlPrex + '/issue/v1/projects/'+projectId+'/priority/default';&#xd;
+                              var issueTypeUrl = urlPrex + '/issue/v1/projects/'+projectId+'/schemes/query_issue_types?apply_type=agile'&#xd;
+                              var summary = $.trim($('#create-summary').val());&#xd;
+                              if(summary.length > 0){&#xd;
+                                $.ajax({&#xd;
+                                  headers: {&#xd;
+                                      'Authorization': token,&#xd;
+                                      Accept: "application/json"&#xd;
+                                  },&#xd;
+                                  type: "GET",&#xd;
+                                  url: priorityUrl,&#xd;
+                                  success: function (data){&#xd;
+                                    issueData.priorityId = data.id;&#xd;
+                                    issueData.priorityCode = "priority-"+data.id;&#xd;
+                                    $.ajax({&#xd;
+                                      headers: {&#xd;
+                                        'Authorization': token,&#xd;
+                                        Accept: "application/json"&#xd;
+                                      },&#xd;
+                                      type: "GET",&#xd;
+                                      url: issueTypeUrl,&#xd;
+                                      success: function (data){&#xd;
+                                        for(var i = 0; i &lt; data.length; i++) {&#xd;
+                                          if(data[i].typeCode == issueData.typeCode) {&#xd;
+                                            issueData.issueTypeId = data[i].id;&#xd;
+                                            break;&#xd;
+                                          }&#xd;
+                                        }&#xd;
+                                        &#xd;
+                                        $.ajax({&#xd;
+                                        headers: {&#xd;
+                                            'Authorization': token&#xd;
+                                        },&#xd;
+                                        type: "POST",&#xd;
+                                        contentType: "application/json",&#xd;
+                                        dataType:"json",&#xd;
+                                        url: createUrl,&#xd;
+                                        data:JSON.stringify(issueData),&#xd;
+                                        beforeSend:function(XMLHttpRequest){&#xd;
+                                            $('#waite-display').addClass("waite-show");&#xd;
+                                        },&#xd;
+                                        success: function (data){&#xd;
+                                          if(data.failed != null &amp;&amp; data.failed == true){&#xd;
+                                             require(['toastMsg'],function(toastMsg){&#xd;
+                                               toastMsg.toast('创建失败,'+data.message);&#xd;
+                                             })&#xd;
+                                          }else{&#xd;
+                                            data.projectText=$('#create-selProject').text();&#xd;
+                                            data.organizationId = orgId;&#xd;
+                                            data.statusName = data.statusMapDTO.name;&#xd;
+                                            data.statusType = data.statusMapDTO.type;&#xd;
+                                            if(insertToEditor(a,data) == true){&#xd;
+                                               dialogObj.hide();&#xd;
+                                            }&#xd;
+                                          }&#xd;
+                                        },complete:function(XMLHttpRequest,textStatus){&#xd;
+                                            $('#waite-display').removeClass("waite-show")&#xd;
+                                        },&#xd;
+                                        error: function (err) {&#xd;
+                                             require(['toastMsg'],function(toastMsg){&#xd;
+                                               toastMsg.toast('创建失败!');&#xd;
+                                             })&#xd;
+                                        }&#xd;
+                                    });&#xd;
+&#xd;
+                                      }&#xd;
+                                    });&#xd;
+&#xd;
+                                  }&#xd;
+                                });&#xd;
+                              }&#xd;
+                             }&#xd;
+                            }&#xd;
+                         $('#create-summary').val('');&#xd;
+                         $('#name').val('');&#xd;
+                          })&#xd;
+                        }&#xd;
+                    }&#xd;
+                })&#xd;
+&#xd;
+        }&#xd;
+&#xd;
+    })&#xd;
+})();</code>
+    </property>
+    <property>
+      <name>创建tab界面的js</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.ChoerodonMacros.c7n-Issue</name>
+    <number>1</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>c888bc43-c4b2-45ca-8f62-bd29d5b98b3d</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>var token;&#xd;
+var items;&#xd;
+var itemss;&#xd;
+var currpage = 0;&#xd;
+var totalPage = 0;&#xd;
+var issueData = {&#xd;
+    issueId:null,&#xd;
+    issueNum:null,&#xd;
+    projectId:null,&#xd;
+    statusColor:null,&#xd;
+    statusName:null,&#xd;
+    summary:null,&#xd;
+    typeCode:null&#xd;
+}&#xd;
+&#xd;
+&#xd;
+function prePageFun() {&#xd;
+    currpage -= 1;&#xd;
+    pageSel();&#xd;
+}&#xd;
+&#xd;
+function nextPageFun() {&#xd;
+    currpage += 1;&#xd;
+    pageSel();&#xd;
+}&#xd;
+&#xd;
+function firstPageFun() {&#xd;
+    currpage = 0;&#xd;
+    pageSel();&#xd;
+}&#xd;
+&#xd;
+function lastPageFun() {&#xd;
+    currpage = totalPage;&#xd;
+    pageSel();&#xd;
+}&#xd;
+&#xd;
+function changePageSize(){&#xd;
+  pageSel();&#xd;
+}&#xd;
+&#xd;
+&#xd;
+function pageSel() {&#xd;
+     require(['jquery'], function ($) {&#xd;
+       var selection = $('.ant-select-selection-selected-value');&#xd;
+       if (selection.length > 0) {&#xd;
+       var proId = selection[0].dataset.projectid;&#xd;
+       var orgId = selection[0].dataset.orgid;&#xd;
+        var size = $('#selPageSize option:selected').val();&#xd;
+       var searchUrl = urlPrex+"/agile/v1/projects/"+proId+"/issues/include_sub?organizationId="+orgId+"&amp;page="+currpage+"&amp;size="+size;&#xd;
+       $.ajax({&#xd;
+        headers: {&#xd;
+            'Authorization': token&#xd;
+        },&#xd;
+        type: "POST",&#xd;
+        contentType: "application/json",&#xd;
+        dataType:"json",&#xd;
+        url: searchUrl,&#xd;
+        data:"{\"searchArgs\":{\"summary\":\""+$(" #name ").val()+"\"}}",&#xd;
+        success: function (data) {&#xd;
+           var content = data.content;&#xd;
+          var tbodyHtml = "";&#xd;
+          if(content.length > 0){&#xd;
+            totalPage = data.totalPages - 1;&#xd;
+            if (data.number == 0) {&#xd;
+                $("#firstPage ").attr("disabled", "disabled");&#xd;
+                $("#prePage ").attr("disabled", "disabled");&#xd;
+            } else {&#xd;
+                $("#firstPage ").removeAttr('disabled');&#xd;
+                $("#prePage ").removeAttr('disabled');&#xd;
+            }&#xd;
+            if (data.number == data.totalPages - 1) {&#xd;
+                $("#nextPage ").attr("disabled", "disabled");&#xd;
+                $("#lastPage ").attr("disabled", "disabled");&#xd;
+            } else {&#xd;
+                $("#nextPage ").removeAttr('disabled');&#xd;
+                $("#lastPage ").removeAttr('disabled');&#xd;
+            }&#xd;
+            var typeCode = "";&#xd;
+            var typeIcon;&#xd;
+            for (var i = 0; i &lt; content.length; i++) {&#xd;
+                typeCode = content[i].typeCode;&#xd;
+                if (typeCode == "bug") {&#xd;
+                    typeIcon = "icon-bug_report";&#xd;
+                } else if (typeCode == "task") {&#xd;
+                    typeIcon = "icon-assignment"&#xd;
+                }else if(typeCode == "issue_epic"){&#xd;
+                    typeIcon = "icon-priority";&#xd;
+                  } else {&#xd;
+                    typeIcon = "icon-turned_in";&#xd;
+                }&#xd;
+                tbodyHtml += "&lt;tr style=\"background-color: transparent;cursor: pointer;\" onclick='selectedTr(this)'   data-statusName=\""+content[i].statusMapDTO.name+"\"  data-summary=\""+content[i].summary+"\" data-statusType=\""+content[i].statusMapDTO.type+"\" data-typeCode=\"" + typeCode + "\"  data-issueNum=\"" + content[i].issueNum + "\" data-issueId=\"" + content[i].issueId+"\" data-projectId=\"" + content[i].projectId+"\" data-orgId=\"" + orgId +"\" data-url=\""+fontUrl+"/#/agile/issue?type=project&amp;id=" + content[i].projectId +"&amp;organizationId="+ orgId +"&amp;paramName=" + content[i].issueNum + "&amp;paramIssueId=" + content[i].issueId + "\">&lt;td>&lt;div class=\"icon\" >&lt;i class=\"icon td-icon " + typeIcon + " td-summary \" >&lt;/i>&lt;/div>" + content[i].issueNum + "&lt;/td>&lt;td class=\"td-summary\">" + content[i].summary + "&lt;/td>&lt;/tr>"&#xd;
+            }&#xd;
+          }else{&#xd;
+            tbodyHtml += " &lt;tr style=\"background-color: transparent;\">&lt;td>没有数据&lt;/td>&lt;/tr>";&#xd;
+          }&#xd;
+            $('#issues_summary').html(tbodyHtml);&#xd;
+        },&#xd;
+        error: function (err) {&#xd;
+           require(['toastMsg'],function(toastMsg){&#xd;
+                toastMsg.toast('获取issue失败！');&#xd;
+         })&#xd;
+        }&#xd;
+    })&#xd;
+     }&#xd;
+     })&#xd;
+}&#xd;
+function enterSearch(){//回车搜索&#xd;
+    var event=window.event?window.event:event;   &#xd;
+    if(event.keyCode==13){&#xd;
+       btnSearch();&#xd;
+   }&#xd;
+}&#xd;
+&#xd;
+function btnSearch() {&#xd;
+  currpage = 0;&#xd;
+  pageSel();&#xd;
+}&#xd;
+&#xd;
+function selectedTr(a){&#xd;
+  require(['jquery'], function($) {&#xd;
+    $(a).parent().find("tr.focus").toggleClass("focus");//取消原先选中行&#xd;
+    $(a).toggleClass("focus");//设定当前行为选中行&#xd;
+})&#xd;
+}&#xd;
+&#xd;
+&#xd;
+&#xd;
+function txtfocus(){&#xd;
+  CKEDITOR.dialog.getCurrent().getButton("ok").disable(); &#xd;
+}&#xd;
+&#xd;
+function txtblur(){&#xd;
+  CKEDITOR.dialog.getCurrent().getButton("ok").enable();&#xd;
+}&#xd;
+&#xd;
+&#xd;
+&#xd;
+/*****************************此部分js模拟sselect下拉列表的实现***************************/&#xd;
+var selShow = document.getElementById('sel-show');&#xd;
+&#xd;
+var bd = document.getElementsByTagName('body')[0];&#xd;
+var flag = false;  //用于判断是否打开下拉列表&#xd;
+/*点击下拉框显示选项列表*/&#xd;
+function selTypeChange() {&#xd;
+  require(['jquery'], function($){&#xd;
+    var selOption = document.getElementById('sel-option');&#xd;
+    if(selOption) {&#xd;
+      selOption.toggle();&#xd;
+    }&#xd;
+  });&#xd;
+};&#xd;
+/*点击选项将内容替换到下拉框中并收起下拉选项*/&#xd;
+ function optionSel(e) {&#xd;
+     var selOption = document.getElementById('sel-option');&#xd;
+     var selShow = document.getElementById('sel-show');&#xd;
+     selShow.innerHTML =e.innerHTML;;&#xd;
+     selOption.style.display = 'none';&#xd;
+     flag = false;&#xd;
+};&#xd;
+&#xd;
+function createSsummaryBlur(){&#xd;
+   require(['jquery'], function($) {&#xd;
+       var summary = $.trim($('#create-summary').val()); &#xd;
+    if(summary.length > 0){&#xd;
+       $('#create-summary-required').addClass("form-required-hide")&#xd;
+     }else{&#xd;
+       $('#create-summary-required').removeClass("form-required-hide");&#xd;
+     }&#xd;
+   })&#xd;
+}&#xd;
+&#xd;
+function tcreateSsummaryFocus(){}&#xd;
+&#xd;
+function getCookie(c_name)&#xd;
+{&#xd;
+if (document.cookie.length>0)&#xd;
+  {&#xd;
+  c_start=document.cookie.indexOf(c_name + "=")&#xd;
+  if (c_start!=-1)&#xd;
+    { &#xd;
+    c_start=c_start + c_name.length+1 &#xd;
+    c_end=document.cookie.indexOf(";",c_start)&#xd;
+    if (c_end==-1) c_end=document.cookie.length&#xd;
+    return unescape(document.cookie.substring(c_start,c_end))&#xd;
+    } &#xd;
+  }&#xd;
+return ""&#xd;
+}&#xd;
+&#xd;
+function insertToEditor(editor,data){&#xd;
+  var dataIcon;&#xd;
+  var datacolor;&#xd;
+  var statusBackColor;&#xd;
+  &#xd;
+  switch (data.typeCode){&#xd;
+    case "bug":&#xd;
+      dataIcon = "icon-bug_report";&#xd;
+      datacolor = "rgb(244, 67, 54)";&#xd;
+      break;&#xd;
+    case "task":&#xd;
+      dataIcon = "icon-assignment"&#xd;
+      datacolor = "rgb(77, 144, 254)";&#xd;
+      break;&#xd;
+    case "issue_epic":&#xd;
+      dataIcon = "icon-priority";&#xd;
+      datacolor = "rgb(116, 59, 231);"&#xd;
+      break;&#xd;
+    case "story":&#xd;
+      dataIcon = "icon-turned_in";&#xd;
+      datacolor = "rgb(0, 191, 165)";&#xd;
+      break;&#xd;
+   &#xd;
+  }&#xd;
+  &#xd;
+  switch (data.statusType) {&#xd;
+      case "todo" :&#xd;
+        statusBackColor = 'rgb(255, 177, 0)';&#xd;
+        break;&#xd;
+      case "doing" :&#xd;
+        statusBackColor = 'rgb(77, 144, 254)';&#xd;
+        break;&#xd;
+      case "done" :&#xd;
+        statusBackColor = 'rgb(0, 191, 165)';&#xd;
+        break;&#xd;
+   }&#xd;
+   if(data.issueNum != null){&#xd;
+     var url = fontUrl+"/#/agile/issue?type=project&amp;id=" +data.projectId +"&amp;organizationId="+ data.organizationId +"&amp;paramName=" + data.issueNum + "&amp;name="+data.projectText+"&amp;paramIssueId=" + data.issueId;&#xd;
+     var htmlTmp = "&lt;a href=\""+url+"\" data-projectid=\""+data.projectId +"\" data-organizationid=\""+data.organizationId +"\" data-issueid=\""+data.issueId +"\" class=\"icon "+dataIcon+"\" target=\"view_window\" style=\"font-size: initial;color:"+datacolor+";\">"+data.issueNum+"&lt;span>";&#xd;
+     htmlTmp += "&lt;span class=\"c7n-view-issue\" style=\"color:#000000\">&amp;nbsp;- "+data.summary+"&amp;nbsp;&lt;/span>&lt;span class=\"c7n-statusTag c7n-view-issue\" style=\"background-color:"+statusBackColor+"\">";&#xd;
+     htmlTmp += data.statusName+"&lt;/span>&amp;nbsp;&lt;/a>";&#xd;
+     editor.insertHtml(htmlTmp);&#xd;
+     return true;&#xd;
+   }else{&#xd;
+     require(['toastMsg'],function(toastMsg){&#xd;
+         toastMsg.toast('没有选择插入的数据！');&#xd;
+       })&#xd;
+     return false;&#xd;
+   }&#xd;
+  &#xd;
+}&#xd;
+&#xd;
+&#xd;
+function selectfilter(e){&#xd;
+  require(['jquery'], function($) { &#xd;
+  if(e.keyCode==13){&#xd;
+  var search_val = $.trim($("#ant-select-dropdown-filter-input").val());&#xd;
+  for (var i = items.length - 1; i >= 0; i--) {&#xd;
+     var val = items[i].innerText;&#xd;
+     if (val.toLowerCase().indexOf(search_val.toLowerCase()) != -1) {&#xd;
+       items[i].style.display = 'block';&#xd;
+     } else {&#xd;
+       items[i].style.display = 'none';&#xd;
+     }&#xd;
+  }&#xd;
+        }&#xd;
+ });&#xd;
+}&#xd;
+&#xd;
+function createfilter(e){&#xd;
+  require(['jquery'], function($) { &#xd;
+  if(e.keyCode == 13){&#xd;
+  var search_val = $.trim($("#create-ant-select-dropdown-filter-input").val());&#xd;
+  for (var i = itemss.length - 1; i >= 0; i--) {&#xd;
+     var val = itemss[i].innerText;&#xd;
+     if (val.toLowerCase().indexOf(search_val.toLowerCase()) != -1) {&#xd;
+       itemss[i].style.display = 'block';&#xd;
+     } else {&#xd;
+       itemss[i].style.display = 'none';&#xd;
+     }&#xd;
+  }&#xd;
+ }&#xd;
+ });&#xd;
+}&#xd;
+&#xd;
+&#xd;
+function selectProjectHeader(){&#xd;
+   require(['jquery'], function($) { &#xd;
+     var isHidden = $("#project-select-dropdown").hasClass("ant-select-dropdown-hidden");&#xd;
+     if (isHidden) {&#xd;
+       $("#project-select-dropdown").removeClass("ant-select-dropdown-hidden");&#xd;
+       $("#ant-select-dropdown-filter-input").val("");&#xd;
+       $(".ant-select-dropdown-menu-item").each(function(){&#xd;
+          $(this).css('display','block'); &#xd;
+       });&#xd;
+     } else {&#xd;
+       $("#project-select-dropdown").addClass("ant-select-dropdown-hidden");&#xd;
+     }&#xd;
+   });&#xd;
+}&#xd;
+&#xd;
+function createSelectProjectHeader(){&#xd;
+   require(['jquery'], function($) { &#xd;
+     var isHidden = $("#create-project-select-dropdown").hasClass("ant-select-dropdown-hidden");&#xd;
+     if (isHidden) {&#xd;
+       $("#create-project-select-dropdown").removeClass("ant-select-dropdown-hidden");&#xd;
+       $("#create-ant-select-dropdown-filter-input").val("");&#xd;
+       $(".ant-create-dropdown-menu-item").each(function(){&#xd;
+          $(this).css('display','block'); &#xd;
+       });&#xd;
+     } else {&#xd;
+       $("#create-project-select-dropdown").addClass("ant-select-dropdown-hidden");&#xd;
+     }&#xd;
+   });&#xd;
+}&#xd;
+&#xd;
+function li_select_method(e){&#xd;
+  var val = '&lt;div class="ant-select-selection-selected-value" data-orgid="'+e.getAttribute("data-orgid")+'" data-projectid="'+e.getAttribute("data-projectid") +'" style="opacity: 1;cursor: pointer;" title="'+e.innerText+'">'+e.innerText+'&lt;/div>';&#xd;
+  document.getElementById("selProject").innerHTML = val;&#xd;
+  selectProjectHeader();&#xd;
+  pageSel();&#xd;
+}&#xd;
+&#xd;
+function li_create_method(e){&#xd;
+  var val = '&lt;div class="ant-create-selection-selected-value" data-orgid="'+e.getAttribute("data-orgid")+'" data-projectid="'+e.getAttribute("data-projectid") +'" style="opacity: 1;cursor: pointer;" title="'+e.innerText+'">'+e.innerText+'&lt;/div>';&#xd;
+  document.getElementById("create-selProject").innerHTML = val;&#xd;
+  createSelectProjectHeader();&#xd;
+}&#xd;
+&#xd;
+//全局监听点击事件，用于隐藏空间弹出框和用户信息弹出框&#xd;
+document.addEventListener("click", function (e) {&#xd;
+   var projectSelectDropdown = document.getElementById("project-select-dropdown");&#xd;
+   var selectProjectHeader = document.getElementById("selectProjectHeader");&#xd;
+   var ckissue = document.getElementsByClassName("cke_button__ck-issue");&#xd;
+   if(projectSelectDropdown &amp;&amp; selectProjectHeader &amp;&amp; ckissue.length > 0) {&#xd;
+     if(!projectSelectDropdown.contains(e.target) &amp;&amp; !selectProjectHeader.contains(e.target)  &amp;&amp; !ckissue[0].contains(e.target)) {&#xd;
+       require(['jquery'], function($) { &#xd;
+       $("#project-select-dropdown").addClass("ant-select-dropdown-hidden");&#xd;
+       });&#xd;
+     }&#xd;
+   }&#xd;
+  &#xd;
+   var createProjectSelectDropdown = document.getElementById("create-project-select-dropdown");&#xd;
+   var createSelectProjectHeader = document.getElementById("createSelectProjectHeader");&#xd;
+   var ckissue = document.getElementsByClassName("cke_button__ck-issue");&#xd;
+   if(createProjectSelectDropdown &amp;&amp; createSelectProjectHeader &amp;&amp; ckissue.length > 0) {&#xd;
+     if(!createProjectSelectDropdown.contains(e.target) &amp;&amp; !createSelectProjectHeader.contains(e.target)  &amp;&amp; !ckissue[0].contains(e.target)) {&#xd;
+       require(['jquery'], function($) { &#xd;
+       $("#create-project-select-dropdown").addClass("ant-select-dropdown-hidden");&#xd;
+       });&#xd;
+     }&#xd;
+   }&#xd;
+  &#xd;
+})</code>
+    </property>
+    <property>
+      <name>不解析的js</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.ChoerodonMacros.c7n-Issue</name>
+    <number>2</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>7dfdec71-a524-4bb6-9098-859d0124c72c</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>forbid</cache>
+    </property>
+    <property>
+      <code>var urlPrex = '$xcontext.getRequest().getHttpServletRequest().getSession().getAttribute("choerodon.request.api.url")';&#xd;
+var fontUrl = '$xcontext.getRequest().getHttpServletRequest().getSession().getAttribute("choerodon.request.front.url")'&#xd;
+var userId = '$xcontext.getRequest().getHttpServletRequest().getSession().getAttribute("oidc.oauth2.userinfo").id';&#xd;
+</code>
+    </property>
+    <property>
+      <name>要解析的js</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.ChoerodonMacros.c7n-Issue</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>2e9fc595-ea8f-483c-bc34-ca5632f6ce48</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>.cke_button__ck-issue_icon{&#xd;
+  line-height: 1;&#xd;
+  font-size: 18px;&#xd;
+  display: inline-block;&#xd;
+  -webkit-user-select: none;&#xd;
+  -moz-user-select: none;&#xd;
+  -ms-user-select: none;&#xd;
+  user-select: none;&#xd;
+  -webkit-transition: all 450ms cubic-bezier(0.23,1,0.32,1) 0ms;&#xd;
+  transition: all 450ms cubic-bezier(0.23,1,0.32,1) 0ms;&#xd;
+  vertical-align: middle;&#xd;
+  background-image: none;&#xd;
+  font-family: 'icomoon'!important;&#xd;
+  speak: none;&#xd;
+  font-style: normal;&#xd;
+  font-weight: inherit;&#xd;
+  font-variant: normal;&#xd;
+  text-transform: none;&#xd;
+  -webkit-font-smoothing: antialiased;&#xd;
+}&#xd;
+.cke_button__ck-issue_icon:before{&#xd;
+  content: "\e85d" !important;&#xd;
+  font-size:16px;&#xd;
+}&#xd;
+.create-selProject:before{&#xd;
+  content: "\e85d" !important;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .search-lab {&#xd;
+    display: flex;&#xd;
+    align-items: center;&#xd;
+    font-family: PingFangSC-Regular;&#xd;
+    font-size: 9px;&#xd;
+    color: rgba(0,0,0,0.54);&#xd;
+    text-align: left;&#xd;
+    line-height: 10px;&#xd;
+    padding-top: 15px;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .search-lab .span-desc {&#xd;
+    font-family: PingFangSC-Regular;&#xd;
+    font-size: 9px;&#xd;
+    color: rgba(0,0,0,0.54);&#xd;
+    text-align: left;&#xd;
+    line-height: 15px;&#xd;
+    padding-bottom: 4px;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .search-desc {&#xd;
+     display: flex;&#xd;
+    align-items: center;&#xd;
+    font-family: PingFangSC-Regular;&#xd;
+    font-size: 11px;&#xd;
+    color: rgba(0,0,0,0.54);&#xd;
+    text-align: left;&#xd;
+    line-height: 10px;&#xd;
+    padding-top: 8px;&#xd;
+    padding-bottom:26px;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .issue-search{&#xd;
+  width: 293px;&#xd;
+  height: 20px;&#xd;
+  box-shadow: none;&#xd;
+  border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+  border-radius: 0;&#xd;
+  font-size: 13px;&#xd;
+  border-top-width: 0px;&#xd;
+  border-left-width: 0px;&#xd;
+  border-right-width: 0px;&#xd;
+  padding: 0;&#xd;
+  padding-left: 22px;&#xd;
+}&#xd;
+#cke-list-issue .btnSearch{&#xd;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.20), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);&#xd;
+    color: #fff;&#xd;
+    background-color: #3f51b5;&#xd;
+    border-color: #3f51b5;&#xd;
+    text-align: center;&#xd;
+    border-radius: 2px;&#xd;
+    height: 28px;&#xd;
+    width: 50px;&#xd;
+    position: absolute;&#xd;
+    margin-left: 14px;&#xd;
+    margin-top: -6px;&#xd;
+}&#xd;
+&#xd;
+&#xd;
+&#xd;
+#issue-table{&#xd;
+    display: block;&#xd;
+    height: 300px;&#xd;
+    overflow-y: scroll;&#xd;
+}&#xd;
+#issue-table .td-summary{&#xd;
+  width:100%;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .pagination{&#xd;
+    display: flex;&#xd;
+    align-items: center;&#xd;
+    position: absolute;&#xd;
+    padding-top: 9px;&#xd;
+    right: 41px;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .pageBtn[disabled] i{&#xd;
+    cursor: not-allowed;&#xd;
+    color: rgba(0,0,0,.25);&#xd;
+    background-color: transparent;&#xd;
+    border-color: rgba(0,0,0,.12);;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .pageBtn i{&#xd;
+    cursor: pointer;&#xd;
+    font-size: 18px;&#xd;
+}&#xd;
+#cke-list-issue .pageSize{&#xd;
+    border-width: 0;&#xd;
+    box-shadow: none;&#xd;
+    border-radius: 0;&#xd;
+    cursor: pointer!important;&#xd;
+   appearance: none;&#xd;
+    -moz-appearance: none;&#xd;
+    -webkit-appearance: none;&#xd;
+}&#xd;
+}&#xd;
+&#xd;
+#issues_summary i.icon{&#xd;
+      width: 20px;&#xd;
+    height: 20px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+    -webkit-box-pack: center;&#xd;
+    -webkit-justify-content: center;&#xd;
+    -ms-flex-pack: center;&#xd;
+    justify-content: center;&#xd;
+    -webkit-box-align: center;&#xd;
+    -webkit-align-items: center;&#xd;
+    -ms-flex-align: center;&#xd;
+    align-items: center;&#xd;
+    margin-right: 5px;&#xd;
+    display: flex;&#xd;
+}&#xd;
+#issues_summary .icon .icon-bug_report{&#xd;
+      background-color: rgb(244, 67, 54);&#xd;
+   width: 20px;&#xd;
+    height: 20px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+    -webkit-box-pack: center;&#xd;
+    -webkit-justify-content: center;&#xd;
+    -ms-flex-pack: center;&#xd;
+    justify-content: center;&#xd;
+    -webkit-box-align: center;&#xd;
+    -webkit-align-items: center;&#xd;
+    -ms-flex-align: center;&#xd;
+    align-items: center;&#xd;
+    margin-right: 5px;&#xd;
+    display: flex;&#xd;
+}&#xd;
+#issues_summary .icon .icon-turned_in{&#xd;
+     background-color: rgb(0, 191, 165);&#xd;
+   width: 20px;&#xd;
+    height: 20px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+    -webkit-box-pack: center;&#xd;
+    -webkit-justify-content: center;&#xd;
+    -ms-flex-pack: center;&#xd;
+    justify-content: center;&#xd;
+    -webkit-box-align: center;&#xd;
+    -webkit-align-items: center;&#xd;
+    -ms-flex-align: center;&#xd;
+    align-items: center;&#xd;
+    margin-right: 5px;&#xd;
+    display: flex;&#xd;
+}&#xd;
+#issues_summary .icon .icon-assignment{&#xd;
+     background-color: rgb(77, 144, 254);&#xd;
+   width: 20px;&#xd;
+    height: 20px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+    -webkit-box-pack: center;&#xd;
+    -webkit-justify-content: center;&#xd;
+    -ms-flex-pack: center;&#xd;
+    justify-content: center;&#xd;
+    -webkit-box-align: center;&#xd;
+    -webkit-align-items: center;&#xd;
+    -ms-flex-align: center;&#xd;
+    align-items: center;&#xd;
+    margin-right: 5px;&#xd;
+    display: flex;&#xd;
+}&#xd;
+#issues_summary .icon .icon-priority{&#xd;
+      background-color: rgb(116, 59, 231);&#xd;
+  width: 20px;&#xd;
+    height: 20px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+    -webkit-box-pack: center;&#xd;
+    -webkit-justify-content: center;&#xd;
+    -ms-flex-pack: center;&#xd;
+    justify-content: center;&#xd;
+    -webkit-box-align: center;&#xd;
+    -webkit-align-items: center;&#xd;
+    -ms-flex-align: center;&#xd;
+    align-items: center;&#xd;
+    margin-right: 5px;&#xd;
+    display: flex;&#xd;
+}&#xd;
+#issue-table tr:hover{&#xd;
+    cursor: pointer;&#xd;
+}&#xd;
+#issue-table tr.focus{&#xd;
+    background-color:#eee!important;&#xd;
+}&#xd;
+#editor-issue .tab-list {&#xd;
+  margin-bottom: 2px;&#xd;
+}&#xd;
+#editor-issue .tab-list li{&#xd;
+   color: #3f51b5;&#xd;
+    cursor: pointer;&#xd;
+  margin-top: 15px;&#xd;
+  margin-left: 20px;&#xd;
+  font-weight: 500;&#xd;
+  text-align: center;&#xd;
+  font-size: 14px;&#xd;
+  padding-bottom: 5px;&#xd;
+  margin-bottom: 1px;&#xd;
+}&#xd;
+#editor-issue .tab-list li.active{&#xd;
+   border-bottom: 2px solid!important;&#xd;
+}&#xd;
+&#xd;
+#editor-issue .tab-content li.show{&#xd;
+  display: block;&#xd;
+}&#xd;
+#editor-issue .tab-content li.hide{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#issue-create {&#xd;
+  line-height:2.0;&#xd;
+}&#xd;
+#issue-create .lab-title{&#xd;
+  font-size:13px;&#xd;
+  color: rgba(0,0,0,.6);&#xd;
+}&#xd;
+#selProject{&#xd;
+    display: inline-block;&#xd;
+    width: 130px;&#xd;
+    height: 20px;&#xd;
+    box-shadow: none;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-radius: 0;&#xd;
+    text-align: center;&#xd;
+    font-size:13px;&#xd;
+    cursor: pointer!important;&#xd;
+   appearance:none;&#xd;
+  -moz-appearance:none;&#xd;
+  -webkit-appearance:none;&#xd;
+}&#xd;
+&#xd;
+#issue-create input{&#xd;
+  width: 100%;&#xd;
+    height: 20px;&#xd;
+    box-shadow: none;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-radius: 0;&#xd;
+    font-size:13px;&#xd;
+   border-top-width: 0px;&#xd;
+    border-left-width: 0px;&#xd;
+    border-right-width: 0px;&#xd;
+    padding:0;&#xd;
+}&#xd;
+#create-selProject{&#xd;
+    display: inline-block;&#xd;
+    width: 100%;&#xd;
+    height: 20px;&#xd;
+    box-shadow: none;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-radius: 0;&#xd;
+    text-align: center;&#xd;
+    font-size: 13px;&#xd;
+    cursor: pointer;&#xd;
+    appearance: none;&#xd;
+    -moz-appearance: none;&#xd;
+    -webkit-appearance: none;&#xd;
+}&#xd;
+&#xd;
+#cke-list-issue .icon-arrow_drop_down{&#xd;
+  font-size:24px;&#xd;
+}&#xd;
+#issue-create .icon-arrow_drop_down{&#xd;
+  font-size:24px;&#xd;
+}&#xd;
+    &#xd;
+ /*模拟select下拉列表实现样式部分*/&#xd;
+#sel-show {&#xd;
+    width: 100%;&#xd;
+    height: 30px;&#xd;
+    font: 14px/27px 'microsoft yahei';&#xd;
+    padding-left: 10px;&#xd;
+    box-sizing: border-box;&#xd;
+    cursor: pointer;&#xd;
+    display: inline-block;&#xd;
+    border-bottom:1px solid rgba(0,0,0,0.54);&#xd;
+}&#xd;
+#sel-wrap {&#xd;
+    position: relative;&#xd;
+}&#xd;
+#sel-option {&#xd;
+    display: block;&#xd;
+    top: 25px;&#xd;
+    background-color: #fff;&#xd;
+    z-index: 1050;&#xd;
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);&#xd;
+    position: absolute;&#xd;
+    width: 100%;&#xd;
+    box-sizing: border-box;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-top: none;&#xd;
+    border-bottom: none;&#xd;
+    background-color: #fff;&#xd;
+}&#xd;
+#sel-option li {&#xd;
+    width: 100%;&#xd;
+    height: 25px;&#xd;
+    padding-left: 15px;&#xd;
+    font: 13px/25px 'microsoft yahei';&#xd;
+    list-style: none;&#xd;
+    box-sizing: border-box;&#xd;
+     cursor: pointer;&#xd;
+}&#xd;
+#sel-wrap .option-span{&#xd;
+  display: flex;&#xd;
+  align-items: center;&#xd;
+  margin-top: 8px;&#xd;
+  cursor: pointer;&#xd;
+}&#xd;
+    &#xd;
+#sel-option li:hover {&#xd;
+    font-size: 14px;&#xd;
+    cursor: pointer;&#xd;
+    background-color: rgba(0,0,0,.04);&#xd;
+}&#xd;
+#sel-wrap .icon-bg{&#xd;
+    width: 20px;&#xd;
+    height: 20px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+    -webkit-box-pack: center;&#xd;
+    -webkit-justify-content: center;&#xd;
+    -ms-flex-pack: center;&#xd;
+    justify-content: center;&#xd;
+    -webkit-box-align: center;&#xd;
+    -webkit-align-items: center;&#xd;
+    -ms-flex-align: center;&#xd;
+    align-items: center;&#xd;
+    margin-right: 5px;&#xd;
+    display:flex;&#xd;
+}&#xd;
+&#xd;
+.form-required{&#xd;
+  display: block;&#xd;
+  font-size: 13px;&#xd;
+  color: #f00!important;&#xd;
+}&#xd;
+.form-required-hide{&#xd;
+   display:none;&#xd;
+}&#xd;
+&#xd;
+.waite-show{&#xd;
+  display:block!important;&#xd;
+}&#xd;
+.waite-svg{&#xd;
+  height: 30px;&#xd;
+  width: 30px;&#xd;
+  margin-top: 250px;&#xd;
+  margin-left: 240px;&#xd;
+}&#xd;
+.waite-circle{&#xd;
+  -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+  animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+  stroke-dasharray: 80px 200px;&#xd;
+  stroke-dashoffset: 0;&#xd;
+}&#xd;
+#waite{&#xd;
+    -webkit-transition-property: -webkit-transform;&#xd;
+    -webkit-transition-duration: 1s;&#xd;
+    -moz-transition-property: -moz-transform;&#xd;
+    -moz-transition-duration: 1s;&#xd;
+    -webkit-animation: rotate 3s linear infinite;&#xd;
+    -moz-animation: rotate 3s linear infinite;&#xd;
+    -o-animation: rotate 3s linear infinite;&#xd;
+    animation: rotate 3s linear infinite;&#xd;
+}&#xd;
+@-webkit-keyframes rotate{from{-webkit-transform: rotate(0deg)}&#xd;
+    to{-webkit-transform: rotate(360deg)}&#xd;
+}&#xd;
+@-moz-keyframes rotate{from{-moz-transform: rotate(0deg)}&#xd;
+    to{-moz-transform: rotate(359deg)}&#xd;
+}&#xd;
+@-o-keyframes rotate{from{-o-transform: rotate(0deg)}&#xd;
+    to{-o-transform: rotate(359deg)}&#xd;
+}&#xd;
+@keyframes rotate{from{transform: rotate(0deg)}&#xd;
+    to{transform: rotate(359deg)}&#xd;
+}&#xd;
+&#xd;
+.viewbody .c7n-statusTag {&#xd;
+    color: #fff;&#xd;
+    overflow: hidden;&#xd;
+    text-overflow: ellipsis;&#xd;
+    white-space: nowrap;&#xd;
+    border-radius: 2px;&#xd;
+    padding: 4px 6px 4px 6px;&#xd;
+    line-height: 20px;&#xd;
+    font-size: 12px;&#xd;
+    width: 48px;&#xd;
+    text-align: center;&#xd;
+}&#xd;
+&#xd;
+.viewbody .c7n-view-issue{&#xd;
+  font-family: Monospaced Number,Chinese Quote,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;&#xd;
+}&#xd;
+&#xd;
+#project-select-dropdown{&#xd;
+    width: 450px;&#xd;
+    left: 22px;&#xd;
+    top: 168px;&#xd;
+    line-height: 1.5;&#xd;
+    color: rgb(0, 0, 0);&#xd;
+    background-color: rgb(255, 255, 255);&#xd;
+    box-sizing: border-box;&#xd;
+    z-index: 1012;&#xd;
+    position: absolute;&#xd;
+    font-size: 13px;&#xd;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;&#xd;
+    margin: 0px;&#xd;
+    padding: 0px;&#xd;
+    list-style: none;&#xd;
+    border-radius: 2px;&#xd;
+    outline: none;&#xd;
+}&#xd;
+&#xd;
+#create-project-select-dropdown{&#xd;
+   width: 504px;&#xd;
+    left: 22px;&#xd;
+    top: 182px;&#xd;
+    line-height: 1.5;&#xd;
+    color: rgb(0, 0, 0);&#xd;
+    background-color: rgb(255, 255, 255);&#xd;
+    box-sizing: border-box;&#xd;
+    z-index: 1012;&#xd;
+    position: absolute;&#xd;
+    font-size: 13px;&#xd;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 5px -3px, rgba(0, 0, 0, 0.14) 0px 8px 10px 1px, rgba(0, 0, 0, 0.12) 0px 3px 14px 2px;&#xd;
+    margin: 0px;&#xd;
+    padding: 0px;&#xd;
+    list-style: none;&#xd;
+    border-radius: 2px;&#xd;
+    outline: none;&#xd;
+}&#xd;
+&#xd;
+#ant-select-dropdown-filter-input,#create-ant-select-dropdown-filter-input{&#xd;
+    width: 80%;&#xd;
+    font-size: 15px;&#xd;
+    color: #000;&#xd;
+    text-align: left;&#xd;
+    line-height: 15px;&#xd;
+    border: 0;&#xd;
+    box-shadow: none;&#xd;
+    outline: 0;&#xd;
+    background-color: rgb(250, 250, 250);&#xd;
+}&#xd;
+&#xd;
+.ant-select-dropdown-menu,.ant-create-dropdown-menu {&#xd;
+    margin-bottom: 0px !important;&#xd;
+    max-height: 250px;&#xd;
+    outline: none;&#xd;
+    list-style: none;&#xd;
+    overflow: auto;&#xd;
+    padding: 8px 0 !important;&#xd;
+}&#xd;
+&#xd;
+.ant-select-dropdown-menu-item ,.ant-create-dropdown-menu-item{&#xd;
+    position: relative !important;&#xd;
+    display: block;&#xd;
+    line-height: 20px !important;&#xd;
+    font-weight: 400 !important;&#xd;
+    color: rgb(0, 0, 0) !important;&#xd;
+    white-space: nowrap !important;&#xd;
+    cursor: pointer !important;&#xd;
+    text-overflow: ellipsis !important;&#xd;
+    height: auto !important;&#xd;
+    padding: 4px 12px !important;&#xd;
+    overflow: hidden !important;&#xd;
+}&#xd;
+&#xd;
+.ant-select-dropdown-menu-item:hover,.ant-create-dropdown-menu-item:hover {&#xd;
+    background-color: rgba(0, 0, 0, 0.04);&#xd;
+}&#xd;
+&#xd;
+.ant-select-selection-selected-value,.ant-create-selection-selected-value{&#xd;
+      margin-top: 3px !important;&#xd;
+    max-width: 120px;&#xd;
+    white-space: nowrap !important;&#xd;
+    overflow: hidden;&#xd;
+    text-overflow: ellipsis;&#xd;
+}&#xd;
+&#xd;
+.ant-select-dropdown-hidden {&#xd;
+    display: none;&#xd;
+}</code>
+    </property>
+    <property>
+      <contentType>CSS</contentType>
+    </property>
+    <property>
+      <name>ckeditor中issue界面的样式</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>always</use>
+    </property>
+  </object>
+</xwikidoc>

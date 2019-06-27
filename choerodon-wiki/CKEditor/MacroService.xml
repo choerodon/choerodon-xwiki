@@ -1,0 +1,191 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="CKEditor.MacroService" locale="">
+  <web>CKEditor</web>
+  <name>MacroService</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538119022000</creationDate>
+  <parent>CKEditor.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1542002478000</date>
+  <contentUpdateDate>1541995353000</contentUpdateDate>
+  <version>2.1</version>
+  <title/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{include document="ChoerodonConfig.ChoerodonMacros.MacrosConfig"/}}&#xd;
+&#xd;
+{{velocity output="false"}}&#xd;
+## ================================================================&#xd;
+## Returned JSON format:&#xd;
+##&#xd;
+## {&#xd;
+##   'options': {&#xd;
+##     'allMacrosExcludedCategories': [&#xd;
+##       (translated category name), ...&#xd;
+##     ]&#xd;
+##   },&#xd;
+##   'list': [&#xd;
+##     {&#xd;
+##       'id': (macro id),&#xd;
+##       'name': (translated macro name),&#xd;
+##       'description': (translated macro description),&#xd;
+##       'defaultCategory': (translated macro category),&#xd;
+##     },&#xd;
+##     ...&#xd;
+##   ]&#xd;
+## }&#xd;
+## ================================================================&#xd;
+#macro (getMacroList $syntaxId)&#xd;
+    #set ($macroManager = $services.component.getInstance('org.xwiki.rendering.macro.MacroManager'))&#xd;
+    #set ($syntax = $services.rendering.resolveSyntax($syntaxId))&#xd;
+    #set ($data = {})&#xd;
+    #set ($allMacrosExcludedCategories = [])&#xd;
+    #set ($discard = $allMacrosExcludedCategories.add("#maybeTranslate('rendering.macroCategory.Internal' 'Internal')"))&#xd;
+    #set ($discard = $allMacrosExcludedCategories.add("#maybeTranslate('rendering.macroCategory.Deprecated' 'Deprecated')"))&#xd;
+    #set ($discard = $data.put('options', { 'allMacrosExcludedCategories' : $allMacrosExcludedCategories }))&#xd;
+    #set ($macroList = [])&#xd;
+    #foreach ($macroId in $macroManager.getMacroIds($syntax))&#xd;
+        #if($isFilter == 1)&#xd;
+            #if($c7nMacroList.contains( $macroId.toString() ))&#xd;
+                #set ($macroDescriptor = $macroManager.getMacro($macroId).descriptor)&#xd;
+                #set ($macroTranslationKey = "rendering.macro.$macroId")&#xd;
+                #set ($macroCategoryTranslationKey = "rendering.macroCategory.$macroDescriptor.defaultCategory")&#xd;
+                #set ($discard = $macroList.add({&#xd;
+                    'id': $macroId,&#xd;
+                    'name': "#maybeTranslate(""${macroTranslationKey}.name"" $macroDescriptor.name)",&#xd;
+                    'description': "#maybeTranslate(""${macroTranslationKey}.description"" $macroDescriptor.description)",&#xd;
+                    'defaultCategory': "#maybeTranslate($macroCategoryTranslationKey $macroDescriptor.defaultCategory)"&#xd;
+                }))&#xd;
+            #end&#xd;
+        #else&#xd;
+            #set ($macroDescriptor = $macroManager.getMacro($macroId).descriptor)&#xd;
+            #set ($macroTranslationKey = "rendering.macro.$macroId")&#xd;
+            #set ($macroCategoryTranslationKey = "rendering.macroCategory.$macroDescriptor.defaultCategory")&#xd;
+            #set ($discard = $macroList.add({&#xd;
+                'id': $macroId,&#xd;
+                'name': "#maybeTranslate(""${macroTranslationKey}.name"" $macroDescriptor.name)",&#xd;
+                'description': "#maybeTranslate(""${macroTranslationKey}.description"" $macroDescriptor.description)",&#xd;
+                'defaultCategory': "#maybeTranslate($macroCategoryTranslationKey $macroDescriptor.defaultCategory)"&#xd;
+            }))&#xd;
+        #end&#xd;
+    #end&#xd;
+    #set ($macroList = $sorttool.sort($macroList, 'name'))&#xd;
+    #set ($discard = $data.put('list', $macroList))&#xd;
+#end&#xd;
+&#xd;
+#macro (maybeGetMacroDescriptor $macroIdAsString)&#xd;
+    #set ($macroIdFactory = $services.component.getInstance('org.xwiki.rendering.macro.MacroIdFactory'))&#xd;
+    #set ($macroId = $macroIdFactory.createMacroId($macroIdAsString))&#xd;
+    #set ($macroManager = $services.component.getInstance('org.xwiki.rendering.macro.MacroManager'))&#xd;
+    #if ($macroManager.exists($macroId))&#xd;
+        #getMacroDescriptor($macroId)&#xd;
+    #elseif ($macroId.syntax)&#xd;
+    ## Try the macro id without the syntax.&#xd;
+        #set ($macroId = $macroIdFactory.createMacroId($macroId.id))&#xd;
+        #if ($macroManager.exists($macroId))&#xd;
+            #getMacroDescriptor($macroId)&#xd;
+        #end&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+#macro (getMacroDescriptor $macroId)&#xd;
+    #set ($macro = $macroManager.getMacro($macroId))&#xd;
+    #set ($macroDescriptor = $macro.descriptor)&#xd;
+## Translate the macro name and description.&#xd;
+    #set ($macroTranslationKey = "rendering.macro.$macroId")&#xd;
+    #set ($data = {&#xd;
+        'id': $macroDescriptor.id,&#xd;
+        'name': "#maybeTranslate(""${macroTranslationKey}.name"" $macroDescriptor.name)",&#xd;
+        'description': "#maybeTranslate(""${macroTranslationKey}.description"" $macroDescriptor.description)",&#xd;
+        'defaultCategory': $macroDescriptor.defaultCategory,&#xd;
+        'supportsInlineMode': $macro.supportsInlineMode(),&#xd;
+        'parameterDescriptorMap': {}&#xd;
+        })&#xd;
+        #if ($macroDescriptor.contentDescriptor)&#xd;
+        ## Translate the content label and description.&#xd;
+        ## Treat the macro content as if it is the last macro parameter.&#xd;
+            #set ($data.contentDescriptor = {&#xd;
+                'name': "#maybeTranslate('rendering.macroContent' 'Content')",&#xd;
+                'description': "#maybeTranslate(""${macroTranslationKey}.content.description""&#xd;
+                    $macroDescriptor.contentDescriptor.description)",&#xd;
+                    'mandatory': $macroDescriptor.contentDescriptor.mandatory,&#xd;
+                    'index': $macroDescriptor.parameterDescriptorMap.size()&#xd;
+                    })&#xd;
+                    #end&#xd;
+                    #foreach ($entry in $macroDescriptor.parameterDescriptorMap.entrySet())&#xd;
+                        #set ($parameterDescriptor = $entry.value)&#xd;
+                    ## Translate the parameter name and description.&#xd;
+                        #set ($parameterTranslationKey = "${macroTranslationKey}.parameter.$parameterDescriptor.id")&#xd;
+                        #set ($translatedParameterDescriptor = {&#xd;
+                            'id': $parameterDescriptor.id,&#xd;
+                            'name': "#maybeTranslate(""${parameterTranslationKey}.name"" $parameterDescriptor.name)",&#xd;
+                            'description': "#maybeTranslate(""${parameterTranslationKey}.description"" $parameterDescriptor.description)",&#xd;
+                            'mandatory': $parameterDescriptor.mandatory,&#xd;
+                            'defaultValue': $parameterDescriptor.defaultValue,&#xd;
+                            'type': $parameterDescriptor.parameterType,&#xd;
+                            'index': $foreach.index&#xd;
+                            })&#xd;
+                            #if ($parameterDescriptor.parameterType.isEnum())&#xd;
+                            ## Collect the allowed parameter values.&#xd;
+                                #set ($translatedParameterDescriptor.type = 'enum')&#xd;
+                                #if ($parameterDescriptor.defaultValue)&#xd;
+                                    #set ($parameterValues = $parameterDescriptor.defaultValue.values())&#xd;
+                                #else&#xd;
+                                ## A parameter of type enum that doesn't have a default value is very unlikely. We attempt to read the list of&#xd;
+                                ## possible values from the enum type in this case, which is currently forbidden, but at least it will generate&#xd;
+                                ## a warning in the logs that will help us investigate the problem.&#xd;
+                                    #set ($parameterValues = $parameterDescriptor.parameterType.getEnumConstants())&#xd;
+                                #end&#xd;
+                                #set ($translatedParameterDescriptor.values = [])&#xd;
+                            ## Translate the allowed parameter values.&#xd;
+                            #foreach ($parameterValue in $parameterValues)&#xd;
+                                #set ($discard = $translatedParameterDescriptor.values.add({&#xd;
+                                    'id': $parameterValue,&#xd;
+                                    'label': "#maybeTranslate(""${parameterTranslationKey}.value.$parameterValue"" $parameterValue)"&#xd;
+                                    }))&#xd;
+                                    #end&#xd;
+                                    #elseif (($parameterDescriptor.defaultValue == 'false' || $parameterDescriptor.defaultValue == 'true')&#xd;
+                                    &amp;&amp; $macroDescriptor.parametersBeanClass.getSimpleName() == 'WikiMacroParameters')&#xd;
+                                        #set ($translatedParameterDescriptor.type = 'boolean')&#xd;
+                                        #set ($translatedParameterDescriptor.defaultValue = $parameterDescriptor.defaultValue == 'true')&#xd;
+                                    #end&#xd;
+                                    ## Make sure the key is lowercase (for XWiki &lt;9.0).&#xd;
+                                    ## See XWIKI-13990: Inconsistency between Java-based and Wiki-based rendering macros regarding the parameter&#xd;
+                                    ## descriptor map keys&#xd;
+                                        #set ($discard = $data.parameterDescriptorMap.put($entry.key.toLowerCase(), $translatedParameterDescriptor))&#xd;
+                                    #end&#xd;
+                                    #end&#xd;
+&#xd;
+                                        #macro (maybeTranslate $key $defaultValue)&#xd;
+                                            #if ($services.localization.get($key))&#xd;
+                                                $services.localization.render($key)##&#xd;
+                                            #else&#xd;
+                                                $!defaultValue##&#xd;
+                                            #end&#xd;
+                                        #end&#xd;
+                                    {{/velocity}}&#xd;
+&#xd;
+                                    {{velocity wiki="false"}}&#xd;
+                                        #if ("$!request.data" != '')&#xd;
+                                            #set ($data = $NULL)&#xd;
+                                            #if ($request.data == 'list')&#xd;
+                                                #getMacroList($request.syntaxId)&#xd;
+                                            #elseif ($request.data == 'descriptor')&#xd;
+                                                #maybeGetMacroDescriptor($request.macroId)&#xd;
+                                            #end&#xd;
+                                            #if ($data)&#xd;
+                                                #set ($discard = $response.setContentType('application/json'))&#xd;
+                                                $jsontool.serialize($data)&#xd;
+                                            #else&#xd;
+                                                $response.sendError(404)&#xd;
+                                            #end&#xd;
+                                        #end&#xd;
+                                    {{/velocity}}&#xd;
+</content>
+</xwikidoc>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>com.nimbusds:oauth2-oidc-sdk</id>
+<version>5.44</version>
+<type>jar</type>
+<name>OAuth 2.0 SDK with OpenID Connect extensions</name>
+<summary>OAuth 2.0 SDK with OpenID Connection extensions for developing
+		client and server applications.</summary>
+<website>https://bitbucket.org/connect2id/oauth-2.0-sdk-with-openid-connect-extensions</website>
+<authors>
+<author>
+<name>Vladimir Dzhuvinov</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>https://bitbucket.org/connect2id/oauth-2.0-sdk-with-openid-connect-extensions</url>
+<connection>
+<system>git</system>
+<path>https://bitbucket.org/connect2id/oauth-2.0-sdk-with-openid-connect-extensions.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>git@bitbucket.org:connect2id/oauth-2.0-sdk-with-openid-connect-extensions.git</path>
+</developerconnection>
+</scm>
+<dependencies>
+<dependency>
+<id>javax.mail:mail</id>
+<version>1.4.7</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>com.github.stephenc.jcip:jcip-annotations</id>
+<version>1.0-1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.apache.commons:commons-lang3</id>
+<version>3.5</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.apache.commons:commons-collections4</id>
+<version>4.1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>net.minidev:json-smart</id>
+<version>[1.3.1,2.3]</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>com.nimbusds:lang-tag</id>
+<version>[1.4.3,)</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>com.nimbusds:nimbus-jose-jwt</id>
+<version>[5.0,)</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.cryptomator:siv-mode</id>
+<version>[1.1.1,)</version>
+<optional type="boolean">true</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.opensaml:opensaml</id>
+<version>[2.6.4,3.0.0)</version>
+<optional type="boolean">true</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.slf4j:slf4j-api</id>
+<version>[1.7.13,2.0.0)</version>
+<optional type="boolean">true</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>com.nimbusds</maven.groupid>
+<maven.artifactid>oauth2-oidc-sdk</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407755102</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

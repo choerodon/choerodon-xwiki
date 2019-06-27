@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+-->
+
+<xwikidoc version="1.2" reference="CKEditor.VelocityMacros" locale="">
+  <web>CKEditor</web>
+  <name>VelocityMacros</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.Admin</creator>
+  <creationDate>1464773839000</creationDate>
+  <parent>CKEditor.WebHome</parent>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <date>1465811713000</date>
+  <contentUpdateDate>1465575055000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity output="false"}}
+#macro (convert $text $toHTML $fromHTML)
+  #if ($toHTML)
+    ## The $source variable is used inside the content sheet.
+    #set ($source = {
+      'documentReference': $doc.documentReference,
+      'syntax': $doc.syntax
+    })
+    #if ($fromHTML)
+      #set ($source.html = $text)
+    #else
+      #set ($source.content = $text)
+    #end
+    #set ($output = "#renderContentSheet")
+  #else
+    #set ($output = $services.wysiwyg.fromAnnotatedXHTML($text, $doc.syntax.toIdString()))
+    #if ("$!output" == '' &amp;&amp; $output != '')
+      ## $output is null, probably because $services.wysiwyg.fromAnnotatedXHTML() is not available (before 10.10RC1)
+      #set ($xdom = $services.rendering.parse($text, 'xhtml/1.0'))
+      #set ($output = $services.rendering.render($xdom, $doc.syntax.toIdString()))
+    #end
+  #end
+  #if ("$!output" != '' || $output == '')
+    $output##
+  #else
+    ## The output is null so an exception must have been thrown.
+    $response.sendError(500)
+  #end
+#end
+
+#macro (renderContentSheet)
+  #set ($output = $services.wysiwyg.render('CKEditor.ContentSheet'))
+  #if ("$!output" == '' &amp;&amp; $output != '')
+    ## $output is null, probably because $services.wysiwyg.render() is not available (before 7.4.1)
+    #set ($output = $xwiki.getDocument('CKEditor.ContentSheet').getRenderedContent())
+    #set ($skinExtensionHooks = {
+      'ssx': 'CssSkinExtensionPlugin',
+      'ssfx': 'CssSkinFileExtensionPlugin',
+      'ssrx': 'CssResourceSkinExtensionPlugin'
+    })
+    #foreach ($entry in $skinExtensionHooks.entrySet())
+      #set ($output = $output.replace("&lt;!-- com.xpn.xwiki.plugin.skinx.$entry.value --&gt;",
+        $xwiki.get($entry.key).importString))
+    #end
+  #end
+  ## Unescape {{ which happened in CKEditor.ContentSheet for protecting the {{html}} macro.
+  $!output.replace('&amp;amp;#123;&amp;amp;#123;', '{{')##
+#end
+
+#macro (importCSS $groupId $artifactId $version $path $evaluate)
+  #set ($url = $services.webjars.url("$groupId:$artifactId", $path, {'evaluate': $evaluate}))
+  #if ("$!url" == '')
+    ## Before XWiki 6.3RC1
+    #set ($url = $services.webjars.url("$artifactId/$version/$path"))
+  #end
+  #set ($discard = $xwiki.linkx.use($url, {'type': 'text/css', 'rel': 'stylesheet'}))
+#end
+
+#macro (importCKEditorCSS $path $evaluate)
+  #set ($ckeditorWebJarVersion = $services.extension.installed.getInstalledExtension(
+    'org.xwiki.contrib:application-ckeditor-webjar', "wiki:$xcontext.database").id.version)
+  #importCSS('org.xwiki.contrib' 'application-ckeditor-webjar' $ckeditorWebJarVersion $path $evaluate)
+#end
+
+#macro (importCKEditorResources)
+  #set ($discard = $xwiki.ssx.use('CKEditor.EditSheet'))
+  #set ($discard = $xwiki.jsx.use('CKEditor.EditSheet'))
+  #importCKEditorCSS('plugins/xwiki-resource/resourcePicker.min.css' true)
+  #importCKEditorCSS('plugins/xwiki-macro/macroWizard.min.css' true)
+  ## Tree styles needed for the document/attachment tree picker.
+  #set ($discard = $xwiki.linkx.use($services.webjars.url('org.xwiki.platform:xwiki-platform-tree-webjar', 'tree.min.css',
+    {'evaluate': true}), {'type': 'text/css', 'rel': 'stylesheet'}))
+  #set ($discard = $xwiki.linkx.use($services.webjars.url('org.xwiki.platform:xwiki-platform-tree-webjar',
+    'finder.min.css', {'evaluate': true}), {'type': 'text/css', 'rel': 'stylesheet'}))
+#end
+
+#macro (ckeditor $parameters)
+  #importCKEditorResources
+  #set ($sourceDocument = $tdoc)
+  #if ($parameters.attributes.get('data-sourceDocumentReference'))
+    #set ($sourceDocument = $xwiki.getDocument($parameters.attributes.get('data-sourceDocumentReference')))
+  #end
+  #set ($source = {
+    'documentReference': $sourceDocument.documentReference,
+    'syntax': $sourceDocument.syntax,
+    'content': $parameters.content
+  })
+  #set ($content = "#renderContentSheet")
+  #set ($emptyAttachmentReference = $services.model.resolveAttachment('CKEditor.OfficeImporter@empty.txt'))
+  #set ($officeImporterSupported = $services.officemanager.serverState == 'Connected' &amp;&amp;
+    $services.wysiwyg.importOfficeAttachment($emptyAttachmentReference, {}).equals(''))
+  #set ($discard = $parameters.attributes.putAll({
+    'class': "$!parameters.attributes.get('class') ckeditor-textarea loading",
+    'spellcheck': false,
+    'data-sourceDocumentSyntax': $sourceDocument.syntax.toIdString(),
+    'data-officeImporterSupported': $officeImporterSupported
+  }))
+  &lt;textarea
+    #foreach ($entry in $parameters.attributes.entrySet())
+      $entry.key="$!escapetool.xml($entry.value)"
+    #end
+  &gt;$!escapetool.xml($content)&lt;/textarea&gt;
+  #set ($escapedName = $escapetool.xml($parameters.attributes.name))
+  &lt;input value="$!escapedName" name="RequiresHTMLConversion" type="hidden"/&gt;
+  &lt;input value="$!escapetool.xml($sourceDocument.syntax.toIdString())" name="$!{escapedName}_syntax" type="hidden"/&gt;
+  ## Chrome doesn't cache the enabled/disabled state of the form fields so we must store this state in the value of
+  ## another form field. For instance, the enabled/disabled state of the RequiresHTMLConversion hidden input
+  ## determines which editor mode (WYSIWYG vs. Source) is loaded initially.
+  ## See CKEDITOR-34: Wiki syntax gets escaped when you click "Back" in the browser
+  &lt;input value="" name="$!{escapedName}_cache" type="hidden" class="cache"/&gt;
+#end
+
+#macro (displayCKEditorConfigProperty $configDoc $propName $action)
+  &lt;dt&gt;
+    &lt;label&gt;$configDoc.displayPrettyName($propName)&lt;/label&gt;
+    &lt;span class="xHint"&gt;$services.localization.render("CKEditor.ConfigClass_${propName}.hint")&lt;/span&gt;
+  &lt;/dt&gt;
+  &lt;dd&gt;#displayCKEditorConfigPropertyValue($configDoc $propName $action)&lt;/dd&gt;
+#end
+
+#macro (displayCKEditorConfigBooleanProperty $configDoc $propName $action)
+  &lt;dt&gt;
+    &lt;label&gt;
+      #displayCKEditorConfigPropertyValue($configDoc $propName $action)
+      $configDoc.displayPrettyName($propName)
+    &lt;/label&gt;
+    &lt;span class="xHint"&gt;$services.localization.render("CKEditor.ConfigClass_${propName}.hint")&lt;/span&gt;
+  &lt;/dt&gt;
+  &lt;dd&gt;&lt;/dd&gt;
+#end
+
+#macro (displayCKEditorConfigPropertyValue $configDoc $propName $action)
+  #set ($output = $configDoc.display($propName, $action))
+  #set ($output = $stringtool.removeStart($output, '{{html clean="false" wiki="false"}}'))
+  #set ($output = $stringtool.removeEnd($output, '{{/html}}'))
+  $output
+#end
+
+#macro (displayCKEditorConfig $configDoc $action)
+  #set ($discard = $xwiki.ssx.use('CKEditor.ConfigSheet'))
+  #set ($discard = $xwiki.jsx.use('CKEditor.ConfigSheet'))
+  #importCSS('org.webjars' 'bootstrap-select' '1.11.2' 'css/bootstrap-select.min.css')
+  &lt;dl class="ckeditor-config#if ($configDoc.isNew()) new#end"&gt;
+    #displayCKEditorConfigProperty($configDoc 'removePlugins' $action)
+    #displayCKEditorConfigProperty($configDoc 'removeButtons' $action)
+    #displayCKEditorConfigBooleanProperty($configDoc 'linkShowAdvancedTab' $action)
+    #displayCKEditorConfigBooleanProperty($configDoc 'linkShowTargetTab' $action)
+    #displayCKEditorConfigBooleanProperty($configDoc 'loadJavaScriptSkinExtensions' $action)
+    &lt;dt&gt;
+      &lt;label&gt;$configDoc.displayPrettyName('advanced')&lt;/label&gt;
+      &lt;span class="xHint"&gt;$services.localization.render('CKEditor.ConfigClass_advanced.hint',
+        ['&lt;a href="http://docs.ckeditor.com/#!/api/CKEDITOR.config"&gt;', '&lt;/a&gt;'])&lt;/span&gt;
+    &lt;/dt&gt;
+    &lt;dd&gt;#displayCKEditorConfigPropertyValue($configDoc 'advanced' $action)&lt;/dd&gt;
+  &lt;/dl&gt;
+#end
+{{/velocity}}</content>
+</xwikidoc>

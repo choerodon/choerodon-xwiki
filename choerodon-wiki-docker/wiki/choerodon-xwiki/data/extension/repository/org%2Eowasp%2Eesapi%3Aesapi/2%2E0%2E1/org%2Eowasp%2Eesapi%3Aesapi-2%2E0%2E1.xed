@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.owasp.esapi:esapi</id>
+<version>2.0.1</version>
+<type>jar</type>
+<name>ESAPI</name>
+<summary>The Enterprise Security API (ESAPI) project is an OWASP project
+        to create simple strong security controls for every web platform.
+        Security controls are not simple to build. You can read about the
+        hundreds of pitfalls for unwary developers on the OWASP website. By
+        providing developers with a set of strong controls, we aim to
+        eliminate some of the complexity of creating secure web applications.
+        This can result in significant cost savings across the SDLC.</summary>
+<website>http://www.esapi.org/</website>
+<authors>
+<author>
+<name>Jeff Williams</name>
+</author>
+<author>
+<name>Jim Manico</name>
+</author>
+<author>
+<name>Chris Schmidt</name>
+</author>
+<author>
+<name>Kevin Wall</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>BSD License</name>
+</license>
+<license>
+<name>Creative Commons 3.0 BY-SA</name>
+</license>
+</licenses>
+<scm>
+<url>http://code.google.com/p/owasp-esapi-java/source/checkout/tags/esapi-2.0.1</url>
+<connection>
+<system>svn</system>
+<path>http://owasp-esapi-java.googlecode.com/svn/tags/esapi-2.0.1</path>
+</connection>
+<developerconnection>
+<system>svn</system>
+<path>https://owasp-esapi-java.googlecode.com/svn/tags/esapi-2.0.1</path>
+</developerconnection>
+</scm>
+<issuemanagement>
+<system>Google Code Issue Tracking</system>
+<url>http://code.google.com/p/owasp-esapi-java/issues/list</url>
+</issuemanagement>
+<dependencies>
+<dependency>
+<id>commons-configuration:commons-configuration</id>
+<version>1.5</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-beanutils:commons-beanutils-core</id>
+<version>1.7.0</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-fileupload:commons-fileupload</id>
+<version>1.2</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-collections:commons-collections</id>
+<version>3.2</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>log4j:log4j</id>
+<version>1.2.16</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>xom:xom</id>
+<version>1.1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.beanshell:bsh-core</id>
+<version>2.0b4</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.owasp.antisamy:antisamy</id>
+<version>1.4.3</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>org.owasp.esapi</maven.groupid>
+<maven.artifactid>esapi</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407755027</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

@@ -1,0 +1,138 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.XWikiSyntaxTables" locale="it">
+  <web>XWiki</web>
+  <name>XWikiSyntaxTables</name>
+  <language>it</language>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>1</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755144000</creationDate>
+  <parent>XWiki.XWikiSyntax</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755144000</date>
+  <contentUpdateDate>1534755144000</contentUpdateDate>
+  <version>1.1</version>
+  <title>XWikiSyntaxTables</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>= Editing =
+
+== Tabelle ==
+
+{{comment}}please do not translate the sub headlines{{/comment}}
+=== 1.0 Tables ===
+
+È possibile creare facilmente del testo in forma tabellare.
+
+|=Caratteristica|=Sintassi XWiki 1.0|=Risultato
+|Tabella Standard|((({{{
+{table}
+Titolo 1 | Titolo 2
+Parola 1 | Parola 2
+{table}
+}}})))|(((
+|=Titolo 1|=Titolo 2
+|Parola 1|Parola 2
+)))
+|Tabella con Parametri|(((
+&lt;table style="background-color:red;align:center">
+&lt;tbody>
+&lt;tr>
+&lt;td>Titolo 1&lt;/td>
+&lt;td style="background-color:yellow">Titolo 2&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Parola 1&lt;/td>
+&lt;td>Parola 2&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+)))|(((
+(% style="background-color: red;" %)
+|=Titolo 1|=(% style="background-color: yellow;" %)Titolo 2
+|Parola 1|Parola 2
+)))
+|Tabella filtrabile ordinabile|((({{{
+$xwiki.ssfx.use("js/xwiki/table/table.css")
+$xwiki.jsfx.use("js/xwiki/table/tablefilterNsort.js", true)
+&lt;table id="table1id" class="grid sortable filterable doOddEven">
+&lt;tr class="sortHeader">
+&lt;th>Titolo1&lt;/th>
+&lt;th>Titolo2&lt;/th>
+&lt;/tr>
+&lt;tr>
+&lt;td>Cella11&lt;/td>
+&lt;td>Cella12&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Cella21&lt;/td>
+&lt;td>Cella22&lt;/td>
+&lt;/tr>
+&lt;/table>
+}}}
+
+{{info}}Per caratteristiche avanzate vedere la [[Livetable Macro>>http://extensions.xwiki.org/xwiki/bin/view/Extension/Livetable+Macro]].{{/info}}
+)))|(((
+{{velocity}}
+$xwiki.ssfx.use("js/xwiki/table/table.css")
+$xwiki.jsfx.use("js/xwiki/table/tablefilterNsort.js", true)
+{{/velocity}}
+
+(% class="grid sortable filterable doOddEven" id="table1id" %)
+(% class="sortHeader" %)|=Titolo 1|=Titolo 2
+|Cella 11|Cella 12
+|Cella 21|Cella 22
+)))
+
+=== 2.0 Tables ===
+
+È possibile creare facilmente del testo in forma tabellare. Con la Sintassi XWiki {{velocity}}$crtSyntaxVer{{/velocity}} sono supportati anche parametri per la tabella, le righe o le celle.
+
+|=Caratteristica|=Sintassi XWiki {{velocity}}$crtSyntaxVer{{/velocity}}|=Risultato
+|Tabella Standard|((({{{
+|=Titolo 1|=Titolo 2
+|Parola 1|Parola 2}}}
+}}}))) o ((({{{
+!=Titolo 1!=Titolo 2
+!!Parola 1!!Parola 2
+}}})))|(((
+|=Titolo 1|=Titolo 2
+|Parola 1|Parola 2
+)))
+|Tabella con Parametri|((({{{
+(% style="background-color:red;align=center" %)
+|=Titolo 1|=(% style="background-color:yellow" %)Titolo 2
+|Parola 1|Parola 2
+}}})))|(((
+(% style="background-color: red;" %)
+|=Titolo 1|=(% style="background-color: yellow;" %)Titolo 2
+|Parola 1|Parola 2
+)))
+|Tabella filtrabile ordinabile|((({{{
+{{velocity}}
+$xwiki.ssfx.use("js/xwiki/table/table.css")
+$xwiki.jsfx.use("js/xwiki/table/tablefilterNsort.js", true)
+{{/velocity}}
+
+(% class="grid sortable filterable doOddEven" id="tableid" %)
+(% class="sortHeader" %)|=Titolo 1|=Titolo 2
+|Cella 11|Cella 12
+|Cella 21|Cella 22
+}}}
+
+{{info}}Per caratteristiche avanzate vedere la [[Livetable Macro>>http://extensions.xwiki.org/xwiki/bin/view/Extension/Livetable+Macro]].{{/info}}
+)))|(((
+{{velocity}}
+$xwiki.ssfx.use("js/xwiki/table/table.css")
+$xwiki.jsfx.use("js/xwiki/table/tablefilterNsort.js", true)
+{{/velocity}}
+
+(% class="grid sortable filterable doOddEven" id="tableid" %)
+(% class="sortHeader" %)|=Titolo 1|=Titolo 2
+|Cella 11|Cella 12
+|Cella 21|Cella 22
+)))</content>
+</xwikidoc>

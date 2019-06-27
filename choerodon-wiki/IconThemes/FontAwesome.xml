@@ -1,0 +1,625 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="IconThemes.FontAwesome" locale="">
+  <web>IconThemes</web>
+  <name>FontAwesome</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755051000</creationDate>
+  <parent>IconThemes.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755051000</date>
+  <contentUpdateDate>1534755051000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content>## General settings
+xwiki.iconset.type = font
+xwiki.iconset.ssx = IconThemes.FontAwesome
+xwiki.iconset.jsx = IconThemes.FontAwesome
+xwiki.iconset.render.wiki = {{html clean="false"}}&lt;span class="fa fa-$icon">&lt;/span>{{/html}}
+xwiki.iconset.render.html = &lt;span class="fa fa-$icon">&lt;/span>
+
+## XWiki Icon Set (see: http://design.xwiki.org/xwiki/bin/view/Proposal/XWiki+Icon+Set).
+home = home
+wiki = globe
+space = folder
+page = file-o
+check = check
+add = plus
+anchor = anchor
+terminal = terminal
+list = list-alt
+branch = code-fork
+down = arrow-down
+up = arrow-up
+left = arrow-left
+right = arrow-right
+arrows = arrows-alt
+repeat = repeat
+undo = undo
+refresh = refresh
+rotate-left = rotate-left
+rotate-right = rotate-right
+switch = random
+random = random
+attach = paperclip
+shopping-cart = shopping-cart
+bell = bell
+trash = trash
+bomb = bomb
+book = book
+cube = cube
+cubes = cubes
+briefcase = briefcase
+bug = bug
+building = building
+caret-down = caret-down
+caret-up = caret-up
+caret-right = caret-right
+calculator = calculator
+calendar = calendar
+camera = camera
+remove = times-circle
+cross = times
+car = car
+truck = truck
+chart-bar = bar-chart-o
+chart-organisation = sitemap
+cloud = cloud
+clock = clock-o
+cog = cog
+comment = comment
+comments = comments
+desktop = desktop
+contrast = adjust
+eject = eject
+step-forward = step-forward
+step-backward = step-backward
+fast-forward = fast-forward
+backward = backward
+play = play
+pause = pause
+stop = stop
+gamepad = gamepad
+credit-card = credit-card
+coffee = coffee
+cut = cut
+database = database
+delete = minus-circle
+floppy-disk = floppy-o
+glass = glass
+drive = hdd-o
+envelope = envelope-o
+warning = exclamation-triangle
+error = exclamation-circle
+info = info-circle
+eye = eye
+female = female
+male = male
+film = film
+flag = flag
+search = search
+search-plus = search-plus
+search-minus = search-minus
+folder = folder-open
+user = user
+group = group
+heart = heart
+question = question-circle
+image = image
+key = key
+keyboard = keyboard-o
+lightbulb = lightbulb-o
+link = link
+unlink = unlink
+lock = lock
+unlock = unlock
+money = money
+dollar = dollar
+euro = euro
+gbp = gbp
+yen = yen
+music = music
+file = file
+file-white = file-o
+file-pdf = file-pdf-o
+file-code = file-code-o
+file-archive = file-archive-o
+file-word = file-word-o
+file-excel = file-excel-o
+file-powerpoint = file-powerpoint-o
+file-text = file-text-o
+paste = paste
+pencil = pencil
+print = print
+shield = shield
+certificate = certificate
+volume-up = volume-up
+volume-down = volume-down
+volume-off = volume-off
+soccer = futbol-o
+star = star
+table = table
+phone = phone
+font = font
+bold = bold
+italic = italic
+strikethrough = strikethrough
+subscript = subscript
+superscript = superscript
+underline = underline
+align-center = align-center
+align-justify = align-justify
+align-left = align-left
+align-right = align-right
+columns = columns
+indent-left = indent
+indent-right = outdent
+list-bullets = list-ul
+list-numbers = list-ol
+sun = sun-o
+world = globe
+wrench = wrench
+menu=bars
+more-vertical=ellipsis-v
+edit=edit
+copy=copy
+move=external-link
+download=download
+log-in=sign-in
+log-out=sign-out
+th=th
+
+## Silk icons for backward compatibility (see: http://design.xwiki.org/xwiki/bin/view/Proposal/Silk+Mapping).
+accept = check
+anchor = anchor
+application = square-o
+application_osx_terminal = terminal
+application_view_list = list-alt
+application_view_tile = th-large
+application_xp_terminal = terminal
+arrow_branch = code-fork
+arrow_divide = code-fork
+arrow_down = arrow-down
+arrow_inout = arrows-alt
+arrow_left = arrow-left
+arrow_out = arrows-alt
+arrow_redo = repeat
+arrow_refresh = refresh
+arrow_refresh_small = refresh
+arrow_right = arrow-right
+arrow_rotate_anticlockwise = rotate-left
+arrow_rotate_clockwise = rotate-right
+arrow_switch = random
+arrow_turn_left = share
+arrow_turn_right = reply
+arrow_undo = undo
+arrow_up = arrow-up
+asterisk_orange = asterisk
+asterisk_yellow = asterisk
+attach = paperclip
+basket = shopping-basket
+bell = bell
+bell_delete=bell-slash
+bin = trash-o
+bomb = bomb
+book = book
+book_addresses=address-book
+box = cube
+bricks = cubes
+briefcase = briefcase
+bug = bug
+building = building
+bullet_arrow_down = caret-down
+bullet_arrow_up = caret-up
+bullet_go = caret-right
+cake=birthday-cake
+calculator = calculator
+calendar = calendar
+calendar_add=calendar-plus-o
+calendar_delete=calendar-times-o
+camera = camera
+cancel = times-circle
+car = car
+cart = shopping-cart
+cart_add=cart-plus
+chart_curve=area-chart
+chart_line = line-chart
+chart_pie = pie-chart
+chart_bar = bar-chart-o
+chart_organisation = sitemap
+weather_clouds = cloud
+clock = clock-o
+cog = cog
+comment = comment
+comments = comments
+computer = desktop
+contrast = adjust
+control_eject = eject
+control_end = step-forward
+control_equalizer = sliders
+control_fastforward = fast-forward
+control_pause = pause
+control_play = play
+control_rewind = backward
+control_start = step-backward
+control_stop = stop
+controller = gamepad
+creditcards = credit-card
+cross = times
+cup = coffee
+cursor=mouse-pointer
+cut = cut
+database = database
+delete = minus-circle
+disk = floppy-o
+drink = glass
+drive = hdd-o
+email = envelope-o
+emoticon_smile=smile-o
+error = exclamation-triangle
+exclamation = exclamation-circle
+eye = eye
+feed = rss-square
+female = female
+film = film
+find = search
+flag = flag
+folder = folder
+font = font
+group = group
+heart = heart
+help = question-circle
+house = home
+hourglass=hourglass
+image = image
+information = info-circle
+ipod = tablet
+joystick = gamepad
+key = key
+keyboard = keyboard-o
+layout = columns
+lightbulb = lightbulb-o
+link = link
+link_break = unlink
+lock = lock
+lock_open = unlock
+lorry = truck
+magifier_zoom_out = search-minus
+magnifier = search
+magnifier_zoom_in = search-plus
+male = male
+map = map-marker
+money = money
+money_dollar = dollar
+money_euro = euro
+money_pound = gbp
+money_yen = yen
+monitor = desktop
+music = music
+newspaper=newspaper-o
+note=sticky-note-o
+paintbrush=paint-brush
+page = file
+page_white = file-o
+page_white_acrobat = file-pdf-o
+page_white_code = file-code-o
+page_white_compressed = file-archive-o
+page_white_excel = file-excel-o
+page_white_picture = file-image-o
+page_white_powerpoint = file-powerpoint-o
+page_white_text = file-text-o
+page_white_word = file-word-o
+page_white_zip = file-archive-o
+paste_plain = paste
+pencil = pencil
+phone = mobile
+photo = photo
+picture = file-image-o
+plugin=puzzle-piece
+printer = print
+rosette = certificate
+rss = rss
+shape_group=object-group
+shape_ungroup=object-ungroup
+shield = shield
+sitemap=sitemap
+sound = volume-up
+sound_low = volume-down
+sound_none = volume-off
+sport_soccer = futbol-o
+star = star
+style = font
+table = table
+tag = tag
+telephone = phone
+television=television
+text_align_center = align-center
+text_align_justify = align-justify
+text_align_left = align-left
+text_align_right = align-right
+text_bold = bold
+text_columns = columns
+text_indent = indent
+text_indent_remove = outdent
+text_italic = italic
+text_list_bullets = list-ul
+text_list_numbers = list-ol
+text_strikethrough = strikethrough
+text_subscript = subscript
+text_superscript = superscript
+text_underline = underline
+thumb_down=thumbs-down
+thumb_up=thumbs-up
+tick=check
+time = clock-o
+transmit = rss
+user = user
+user_add=user-plus
+user_delete=user-times
+vcard = vcard-o
+weather_clouds = cloud
+weather_sun = sun-o
+weather_snow=snowflake-o
+webcam = video-camera
+world = globe
+wrench = wrench
+zoom = search
+zoom_in = search-plus
+zoom_out = search-minus
+</content>
+  <object>
+    <name>IconThemes.FontAwesome</name>
+    <number>0</number>
+    <className>IconThemesCode.IconThemeClass</className>
+    <guid>d3c39c16-68d9-4937-9acb-96e55491ee50</guid>
+    <class>
+      <name>IconThemesCode.IconThemeClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <name>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <picker>0</picker>
+        <prettyName>name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <name>Font Awesome</name>
+    </property>
+  </object>
+  <object>
+    <name>IconThemes.FontAwesome</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>f8945ea9-36bd-46a9-ab6e-414ffa902988</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>// Sometimes IE8 loads the font *after* the rendering of the page so it does not display the icon correctly.
+// To fix this, we reload the stylesheet when we receive the 'document ready' event so that the browser recomputes
+// the display. Although, it does not solve everything (see https://jira.xwiki.org/browse/XWIKI-10813).
+require(['jquery'], function($) {
+  // This hack concerns IE8 only
+  if (navigator.userAgent.indexOf('MSIE 8.0') > -1) {
+    $(function() {
+      var link = $("link[href*='IconThemes/FontAwesome']");
+      link[0].href = link[0].href;
+    });
+  }
+});
+</code>
+    </property>
+    <property>
+      <name>IE8 fix</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <name>IconThemes.FontAwesome</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>8b5cb416-e129-4063-9c8f-67c6a31d2e1d</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>@import "$services.webjars.url('org.webjars:font-awesome', 'css/font-awesome.min.css')"</code>
+    </property>
+    <property>
+      <name>Font-Awesome CSS</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

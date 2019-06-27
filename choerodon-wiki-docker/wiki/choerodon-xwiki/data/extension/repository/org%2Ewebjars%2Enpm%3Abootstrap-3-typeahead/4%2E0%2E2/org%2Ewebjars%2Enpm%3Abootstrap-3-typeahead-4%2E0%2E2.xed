@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.webjars.npm:bootstrap-3-typeahead</id>
+<version>4.0.2</version>
+<type>jar</type>
+<name>bootstrap-3-typeahead</name>
+<summary>WebJar for bootstrap-3-typeahead</summary>
+<website>http://webjars.org</website>
+<authors>
+<author>
+<name>webjars</name>
+<url>http://webjars.org</url>
+</author>
+</authors>
+<licenses>
+<license>
+<name>The MIT License</name>
+</license>
+</licenses>
+<scm>
+<url>git+https://github.com/bassjobsen/Bootstrap-3-Typeahead</url>
+<connection>
+<system>git+https</system>
+<path>//github.com/bassjobsen/Bootstrap-3-Typeahead.git</path>
+</connection>
+<developerconnection>
+<system>git+https</system>
+<path>//github.com/bassjobsen/Bootstrap-3-Typeahead.git</path>
+</developerconnection>
+</scm>
+<properties>
+<maven.groupid>org.webjars.npm</maven.groupid>
+<maven.artifactid>bootstrap-3-typeahead</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534405916492</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

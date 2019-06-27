@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>xerces:xmlParserAPIs</id>
+<version>2.6.2</version>
+<type>jar</type>
+<properties>
+<maven.groupid>xerces</maven.groupid>
+<maven.artifactid>xmlParserAPIs</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754942</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

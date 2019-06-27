@@ -1,0 +1,116 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="TourCode.TourJson" locale="">
+  <web>TourCode</web>
+  <name>TourJson</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755086000</creationDate>
+  <parent>TourCode.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755086000</date>
+  <contentUpdateDate>1534755086000</contentUpdateDate>
+  <version>1.1</version>
+  <title>TourJson</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+#if ($xcontext.action == 'get')
+  ##--------------------------------------------------------
+  ## Get the tour steps corresponding to the target page
+  ##--------------------------------------------------------
+  #set ($tours = [])
+  #if ("$!request.tourDoc" != '')
+    #set ($targetRef = $services.model.resolveDocument($request.tourDoc))
+    #set ($targetDoc = $xwiki.getDocument($targetRef))
+    #set ($classes = $targetDoc.getxWikiObjects().keySet())
+    ##-------------------
+    ## Compute the query
+    ##-------------------
+    #set ($extraClause = '')
+    #if (!$classes.isEmpty())
+      ## We need to put this request part in the $extraClause variable otherwise we end up with "tour.targetClass IN ()"
+      ## which causes an hibernate parser error reported in the logs.
+      ## Say differently, "()" cannot be empty in a "IN" clause.
+      #set ($extraClause = 'OR tour.targetClass IN (:classes)')
+    #end
+    #set ($query = $services.query.xwql("from doc.object(TourCode.TourClass) as tour, doc.object(TourCode.StepClass) as step WHERE tour.isActive = 1 AND (tour.targetPage = :targetPage OR step.targetPage = :targetPage ${extraClause})").bindValue('targetPage', $request.tourDoc).addFilter('unique'))
+    #if (!$classes.isEmpty())
+      #set ($query = $query.bindValue('classes', $classes))
+    #end
+    ## -------------------------
+    ## Get the different tours
+    ## -------------------------
+    #foreach ($tourRef in $query.execute())
+      #set ($tourDoc = $xwiki.getDocument($tourRef))
+      #set ($tourObj = $tourDoc.getObject('TourCode.TourClass'))
+      ## the targetPage property takes precedence over targetClass property.
+      ## the targetClass property is used only when targetPage is empty.
+      #if ("$!tourDoc.getValue('targetClass', $tourObj)" != '' &amp;&amp; "$!tourDoc.getValue('targetPage', $tourObj)" == '')
+        ## Path is the URL where the Tour should be visible. Here, $targetDoc is a page holding some objects concerned
+        ## by this tour so the URL should be the one of the document.
+        #set ($path = $xwiki.getURL($targetDoc))
+      #else
+        #set ($path = $xwiki.getURL($tourDoc.getValue('targetPage', $tourObj)))
+      #end
+      ## Verify that the user who has saved this tour has the edit right on the target page
+      #if ($services.security.authorization.hasAccess('edit', $tourDoc.authorReference, $targetRef))
+        #set ($tour = { 'name': $tourRef, 'steps': [] })
+        #set ($discard = $tours.add($tour))
+        ## -------------------------
+        ## Get the tour steps
+        ## -------------------------
+        #foreach($stepObj in $tourDoc.getObjects('TourCode.StepClass'))
+          #set ($backdrop = $tourDoc.getValue('backdrop', $stepObj) == 1)
+          ## If the 'targetPage' value of a step is empty, the path is inherited from the previous step.
+          ## For the first step, the path is inherited from the tour configuration.
+          ## This way the tour stays in the same wiki page.
+          #set ($targetPage = "$!tourDoc.getValue('targetPage', $stepObj)")
+          #if ($targetPage != '')
+            #set ($path = $xwiki.getURL($targetPage))
+          #end
+          ## ------------------------------
+          ## Render the content of the step
+          ## ------------------------------
+          #set ($content = $stepObj.display('content', 'view'))
+          ## Remove "{{html clean="false" wiki="false"}}" and {{/html}}
+          #set ($endIndex = $content.length() - 9)
+          #set ($content = $content.substring(35, $endIndex))
+          ## -----------------------------
+          ## Create the step map (that will be serialized to JSON afterwards)
+          ## -----------------------------
+          #set ($element = "$!tourDoc.getValue('element', $stepObj)")
+          ## For retro-compatibility and because of a bug (https://github.com/sorich87/bootstrap-tour/issues/557)
+          ## we need to replace the element when it targets the document body by an empty string.
+          #if ($element == 'body')
+            #set ($element = '')
+          #end
+          #set ($step = { 'element'  : $element,
+                          'title'    : $services.localization.render($tourDoc.getValue('title', $stepObj)),
+                          'content'  : $content,
+                          'placement': $tourDoc.getValue('placement', $stepObj),
+                          'order'    : $tourDoc.getValue('order', $stepObj),
+                          'backdrop' : $backdrop,
+                          'path'     : $path })
+          #set ($discard = $tour.steps.add($step))
+        #end
+        ##--------------------------------------------------------
+        ## Sort the steps
+        ##--------------------------------------------------------
+        #set ($tour.steps = $sorttool.sort($tour.steps, 'order'))
+      #end
+    #end
+  #end
+  ##--------------------------------------------------------
+  ## Display the results as JSON
+  ##--------------------------------------------------------
+  #set ($discard = $response.setContentType('application/json'))
+  $jsontool.serialize({'tours': $tours})
+#end
+{{/velocity}}
+</content>
+</xwikidoc>

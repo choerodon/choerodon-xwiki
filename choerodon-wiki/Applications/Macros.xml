@@ -1,0 +1,53 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Applications.Macros" locale="">
+  <web>Applications</web>
+  <name>Macros</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755037000</creationDate>
+  <parent>Applications.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755037000</date>
+  <contentUpdateDate>1534755037000</contentUpdateDate>
+  <version>1.1</version>
+  <title>Macros</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity output="false"}}
+#macro (displayAppEntry $params)
+  #if ($params.icon.startsWith('icon:'))
+    #set ($icon = $services.icon.renderHTML($params.icon.substring(5)))
+  #else
+    #set ($icon = $services.rendering.render($services.rendering.parse("image:${params.icon}", 'xwiki/2.1'),
+      'xhtml/1.0'))
+  #end
+  &lt;li>
+    &lt;a href="$xwiki.getURL($params.target, 'view', $!{params.targetQueryString})" title="$escapetool.xml($params.label)">
+      &lt;span class="application-img">$icon&lt;/span>
+      &lt;span class="application-label">$escapetool.xml($params.label)&lt;/span>
+    &lt;/a>
+  &lt;/li>
+#end
+
+#macro (maybeDisplayAppEntry $uix $configDoc)
+  #set ($params = $uix.getParameters())
+  #set ($blackListObj = $configDoc.getObject('PanelsCode.ApplicationsPanelBlackListClass', 'applicationId', $uix.id))
+  #set ($targetReference = $services.model.resolveDocument($params.target))
+  #if (!$blackListObj &amp;&amp; "$!params.icon" != '' &amp;&amp; "$!params.label" != '' &amp;&amp; "$!params.target" != ''
+      &amp;&amp; $services.security.authorization.hasAccess('view', $targetReference))
+    #displayAppEntry($params)
+  #end
+#end
+
+#macro (displayAppEntries $extensionPointId $configDoc)
+  #foreach ($uix in $services.uix.getExtensions($extensionPointId, {'sortByParameter': 'label'}))
+    #maybeDisplayAppEntry($uix $configDoc)
+  #end
+#end
+{{/velocity}}</content>
+</xwikidoc>

@@ -1,0 +1,524 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Panels.DocumentInformation" locale="">
+  <web>Panels</web>
+  <name>DocumentInformation</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538119063000</creationDate>
+  <parent>Panels.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1541744653000</date>
+  <contentUpdateDate>1538119063000</contentUpdateDate>
+  <version>2.1</version>
+  <title>Document Information</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity output="false"}}
+#macro(convertDocument $targetDoc $error $oldSyntaxId $newSyntaxId)
+  #if ($targetDoc.realLocale == $xwiki.localePreference)
+    #if ($request.content)
+      ## Use the content received from the client if the target document is the edited one (could be also a translation of the edited document).
+      #set ($void = $targetDoc.setContent($request.content))
+    #end
+  #end
+  ## Use the syntax received from the client as the user might have made some changes that are not saved yet.
+  #set ($void = $targetDoc.setSyntaxId($oldSyntaxId))
+  #if (!$services.csrf.isTokenValid($request.form_token) || !$targetDoc.convertSyntax($newSyntaxId))
+    #set ($error = true)
+  #else
+    #set ($void = $targetDoc.save("Document converted from syntax $oldSyntaxId to syntax $newSyntaxId"))
+  #end
+#end
+{{/velocity}}
+
+{{velocity wiki="false"}}
+#if ("$!request.action" == 'convertSyntax')
+  #set ($oldSyntaxId = $request.oldSyntaxId)
+  #set ($newSyntaxId = $request.newSyntaxId)
+  #set ($targetDoc = $xwiki.getDocument($request.documentName))
+  #set ($error = false)
+  ##
+  ## Convert the specified document
+  ##
+  #convertDocument($targetDoc $error $oldSyntaxId $newSyntaxId)
+  ##
+  ## Convert all the translations of the specified document
+  ##
+  #set($languages = $targetDoc.translationList)
+  #if (!$error)
+    #foreach ($language in $languages)
+      #if (!$error)
+        #set ($translatedDoc = $targetDoc.getTranslatedDocument($language))
+        #if ($translatedDoc.locale != $targetDoc.locale)
+          #convertDocument($translatedDoc $error $oldSyntaxId $newSyntaxId)
+        #end
+      #end
+    #end
+  #end
+  ##
+  ## Error management
+  ##
+  #if (!$error)
+    ## Conversion successful. The "ok:" prefix is needed, since otherwise an empty content will result in a "This template does not exist" exception.
+    ok:${targetDoc.content}##
+  #else
+    $response.setStatus(501)
+    ## TODO: Find a way to put the exception in the context and send it to the client.
+    failed
+  #end
+#end
+{{/velocity}}</content>
+  <object>
+    <name>Panels.DocumentInformation</name>
+    <number>0</number>
+    <className>Panels.PanelClass</className>
+    <guid>0fc28595-9c62-4ef9-b19b-a937f795efd8</guid>
+    <class>
+      <name>Panels.PanelClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <category>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>category</name>
+        <number>1</number>
+        <prettyName>Category</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Information|Navigation|Tools|Administration|Other</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </category>
+      <content>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>25</rows>
+        <size>120</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <description>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>description</name>
+        <number>3</number>
+        <prettyName>Description</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>4</number>
+        <prettyName>Name</prettyName>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <type>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>type</name>
+        <number>5</number>
+        <prettyName>Panel type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>view|edit</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </type>
+    </class>
+    <property>
+      <category>Tools</category>
+    </property>
+    <property>
+      <content>{{velocity}}&#xd;
+#set ($discard = $xwiki.ssx.use('Panels.DocumentInformation'))&#xd;
+#set ($pages = $tdoc.includedPages)&#xd;
+#largepanelheader($services.localization.render('panels.documentInformation.title'))&#xd;
+#if ("$tdoc.locale" == '' &amp;&amp; $xwiki.isMultiLingual())&#xd;
+; {{html}}&lt;label for="xwikidoclanguageinput2">$services.localization.render('panels.documentInformation.defaultLanguage')&lt;/label>{{/html}}&#xd;
+: {{html}}&lt;input type="text" id="xwikidoclanguageinput2" name="defaultLanguage" value="$!tdoc.defaultLocale" size="30"/>{{/html}}&#xd;
+#end&#xd;
+##----------------------------------&#xd;
+## Display the wiki syntax combo box&#xd;
+##----------------------------------&#xd;
+#set ($discard = $xwiki.jsx.use($paneldoc.fullName))&#xd;
+#set ($configuredSyntaxes = $services.rendering.getConfiguredSyntaxes())&#xd;
+; {{html}}&lt;label for="xwikidocsyntaxinput2">$services.localization.render('panels.documentInformation.syntax')&lt;/label>{{/html}}&#xd;
+: {{html}}&#xd;
+  &lt;select name="syntaxId" id="xwikidocsyntaxinput2">&#xd;
+    #set ($docSyntax = $tdoc.getSyntax())&#xd;
+    #foreach ($syntax in $configuredSyntaxes)&#xd;
+      &lt;option value="$syntax.toIdString()"#if($syntax.equals($docSyntax))selected="selected"#end>$syntax.toString()&lt;/option>&#xd;
+    #end&#xd;
+    ## If the current document's syntax is not in the list of configured syntax, add it to the Select so that the user sees the Document's Syntax.&#xd;
+    #if (!$configuredSyntaxes.contains($docSyntax))&#xd;
+      &lt;option value="$docSyntax.toIdString()" selected="selected">$docSyntax.toString()&lt;/option>&#xd;
+    #end&#xd;
+  &lt;/select>&#xd;
+{{/html}}&#xd;
+#if ($hasAdmin &amp;&amp; $configuredSyntaxes.size() &lt; 2)&#xd;
+: [[$services.localization.render('panels.documentInformation.configureSyntaxes')>>path:$xwiki.getURL('XWiki.XWikiPreferences', 'admin', 'editor=globaladmin&amp;section=Syntaxes')]]&#xd;
+#end&#xd;
+##--------------------------------------------------------------------------&#xd;
+; (% class="checkbox" %){{html}}&#xd;
+&lt;label for="xhidden">&lt;input id="xhidden" type="checkbox" name="xhidden" #if($tdoc.isHidden()) checked="checked"#end value="1"/>$services.localization.render('panels.documentInformation.hiddenDocument')&lt;/label>&#xd;
+&lt;input name="xhidden" type="hidden" value="0" />&#xd;
+{{/html}}&#xd;
+: #* Keep empty for HTML validation. *#&#xd;
+&#xd;
+##--------------------------------------------------------------------------&#xd;
+#if($pages.size() != 0)&#xd;
+  ; $services.localization.render('panels.documentInformation.includesCount', [$pages.size()])&#xd;
+  #foreach ($page in $pages)&#xd;
+  : [[$page>>$page]] [[[[image:icon:page_white_edit||alt="$services.localization.render('panels.documentInformation.editIncluded', [$page])"]]&gt;&gt;path:$xwiki.getURL($page, 'edit')]]&#xd;
+  #end&#xd;
+#end&#xd;
+##--------------------------------------------------------------------------&#xd;
+(% id="parserSyntaxes" class="hidden" %)[#foreach ($syntax in $services.rendering.availableParserSyntaxes)"$syntax.toIdString()"#if ($foreach.hasNext), #end#end](%%)&#xd;
+(% id="rendererSyntaxes" class="hidden" %)[#foreach ($syntax in $services.rendering.availableRendererSyntaxes)"$syntax.toIdString()"#if ($foreach.hasNext), #end#end](%%)&#xd;
+#panelfooter()&#xd;
+{{/velocity}}</content>
+    </property>
+    <property>
+      <description>Displays and allows editing the document title and syntax, and lists the included documents.</description>
+    </property>
+    <property>
+      <name>Document Information</name>
+    </property>
+    <property>
+      <type>edit</type>
+    </property>
+  </object>
+  <object>
+    <name>Panels.DocumentInformation</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>4c52a44e-14d5-46e0-9d60-6bd17d5e44d5</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>// Make sure the XWiki "namespace" is valid.&#xd;
+if (typeof(XWiki) == 'undefined') {&#xd;
+  XWiki = new Object();&#xd;
+}&#xd;
+&#xd;
+/**&#xd;
+ * When the user switches to a different syntax, this component offers the ability to also convert the document content&#xd;
+ * to the new syntax, if a valid converter is available on the server.&#xd;
+ */&#xd;
+XWiki.SyntaxConverter = Class.create({&#xd;
+  /**&#xd;
+   * Valid syntaxes as the initial content syntax. If the originally selected syntax is not among these, then a&#xd;
+   * conversion is not proposed.&#xd;
+   *&#xd;
+   * Note that we get the list of parser syntaxes dynamically from the HTML generated by the panel velocity code. If we were&#xd;
+   * not doing this, we would only have a cached list of syntaxes and it wouldn't be possible to dynamically register new&#xd;
+   * syntaxes.&#xd;
+   */&#xd;
+  validSourceSyntaxes : JSON.parse($('parserSyntaxes').innerHTML),&#xd;
+&#xd;
+  /**&#xd;
+   * Valid syntaxes as the target content syntax. If the newly selected syntax is not among these, then a conversion is&#xd;
+   * not proposed.&#xd;
+   *&#xd;
+   * Note that we get the list of renderer syntaxes dynamically from the HTML generated by the panel velocity code. If we were&#xd;
+   * not doing this, we would only have a cached list of syntaxes and it wouldn't be possible to dynamically register new&#xd;
+   * syntaxes.&#xd;
+   */&#xd;
+  validTargetSyntaxes : JSON.parse($('rendererSyntaxes').innerHTML),&#xd;
+&#xd;
+  /**&#xd;
+   * Constructor. If the syntax field is present in the HTML (and it should, as the extension is pulled iff the syntax&#xd;
+   * field is displayed), then adds the custom behavior to that field.&#xd;
+   */&#xd;
+  initialize : function() {&#xd;
+    if ($("xwikidocsyntaxinput2")) {&#xd;
+      this.gatherMembers();&#xd;
+      this.addSyntaxChangeListener();&#xd;
+    }&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Gather/create the data needed for this component to work.&#xd;
+   */&#xd;
+  gatherMembers : function() {&#xd;
+    this.contentField = $('content');&#xd;
+    this.syntaxField = $('xwikidocsyntaxinput2');&#xd;
+    this.storeNewSyntax();&#xd;
+    var name = $$("meta[name='document']");&#xd;
+    if (name.length > 0) {&#xd;
+      // The meta element holding the document name is present. Use it.&#xd;
+      this.name = name[0].content;&#xd;
+    } else {&#xd;
+      // The metadata is missing, probably an old or custom skin. Try to obtain the document name from the URL.&#xd;
+      if (document.location.pathname.indexOf('/edit/') >= 0) {&#xd;
+        this.name = document.location.pathname.substring(document.location.pathname.indexOf('/edit/') + 6).replace("/", ".");&#xd;
+      } else {&#xd;
+        // Use the default name, as this is not a critical part.&#xd;
+        this.name = "Main.WebHome";&#xd;
+      }&#xd;
+    }&#xd;
+    this.loading = new Element("div").setStyle({backgroundColor: '#000', backgroundImage: 'url($xwiki.getSkinFile('icons/xwiki/ajax-loader-large.gif'))', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 0.6}).hide();&#xd;
+    document.body.appendChild(this.loading);&#xd;
+    this.loading.absolutize().clonePosition(this.contentField);&#xd;
+  },&#xd;
+&#xd;
+  /** Add the event listener that triggers the custom behavior when the syntax choice is changed. */&#xd;
+  addSyntaxChangeListener : function() {&#xd;
+    Event.observe(this.syntaxField, 'change', this.syntaxChanged.bind(this));&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Callback function triggered when the user selects a new syntax. If the combination of the previously and newly&#xd;
+   * selected syntaxes are a valid combination for converting the content, then send an AJAX request to the server to&#xd;
+   * obtain the converted content from the editor. This data might be newer than what is stored on the server (the user&#xd;
+   * could have made changes), so always convert the current content of the editing area.&#xd;
+   */&#xd;
+  syntaxChanged : function() {&#xd;
+    var syntaxIndex = this.syntaxField.selectedIndex;&#xd;
+    var syntax = this.syntaxField.options.item(syntaxIndex).value;&#xd;
+    if (this.validSourceSyntaxes.indexOf(this.originalSyntax) == -1 || this.validTargetSyntaxes.indexOf(syntax) == -1) {&#xd;
+      // Server does not support this conversion. Simply accept the new syntax.&#xd;
+    } else {&#xd;
+      if (XWiki.editor=='wysiwyg') {&#xd;
+        // Conversion in WYSIWYG mode does not yet support conversion of the current content&#xd;
+        if (XWiki.docisnew || confirm("$services.localization.render('confirm.editor.syntax.change.notify.message')")) {&#xd;
+          this.disableEditingArea();&#xd;
+          new Ajax.Request(&#xd;
+            "$doc.getURL('get')",&#xd;
+            {&#xd;
+              method: 'post',&#xd;
+              parameters: {&#xd;
+                action: 'convertSyntax',&#xd;
+                sheet: '$doc.fullName',&#xd;
+                outputSyntax: 'plain',&#xd;
+                form_token: $$('meta[name=form_token]')[0].content,&#xd;
+                documentName: this.name,&#xd;
+                oldSyntaxId: this.originalSyntax,&#xd;
+                newSyntaxId: syntax&#xd;
+              },&#xd;
+              onSuccess: this.successfulWYSIWYGConversion.bindAsEventListener(this),&#xd;
+              onFailure: this.failedConversion.bindAsEventListener(this),&#xd;
+              onComplete: this.enableEditingArea.bind(this)&#xd;
+            }&#xd;
+          );&#xd;
+        } else {&#xd;
+          this.syntaxField.value = this.originalSyntax;&#xd;
+        }&#xd;
+      } else if (!this.contentField.value.blank()) {&#xd;
+        if (confirm("Do you want to also convert the document's content and objects to the selected syntax? Choosing 'cancel' will only change the syntax identifier, without modifying the document's content. Note that if you choose 'ok' this will save the document automatically, you can cancel this modification by going to the document history interface and revert the last version.")) {&#xd;
+          this.disableEditingArea();&#xd;
+          new Ajax.Request(&#xd;
+            "$doc.getURL('get')",&#xd;
+            {&#xd;
+              method: 'post',&#xd;
+              parameters: {&#xd;
+                action: 'convertSyntax',&#xd;
+                sheet: '$doc.fullName',&#xd;
+                outputSyntax: 'plain',&#xd;
+                form_token: $$('meta[name=form_token]')[0].content,&#xd;
+                documentName: this.name,&#xd;
+                oldSyntaxId: this.originalSyntax,&#xd;
+                newSyntaxId: syntax,&#xd;
+                content: $('content').value&#xd;
+              },&#xd;
+              onSuccess: this.successfulConversion.bindAsEventListener(this),&#xd;
+              onFailure: this.failedConversion.bindAsEventListener(this),&#xd;
+              onComplete: this.enableEditingArea.bind(this)&#xd;
+            }&#xd;
+          );&#xd;
+        }&#xd;
+      }&#xd;
+      return;&#xd;
+    }&#xd;
+    this.storeNewSyntax();&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Callback function triggered by a successful response from the server. The converted content should be in the&#xd;
+   * response text. This method re-enables the editing area and sets the new content.&#xd;
+   * &#xd;
+   * @param response The Ajax.Response object, wrapping the HTTP response received from the server.&#xd;
+   */&#xd;
+  successfulConversion : function(response) {&#xd;
+    this.storeNewSyntax();&#xd;
+    var contentField = this.contentField;&#xd;
+    contentField.value = response.responseText.substring(3);&#xd;
+    // Trigger the 'change' event so that the editor can display changes on the content field.&#xd;
+    // Note: The only way apparently possible for this triggering to work in 2017 is to trigger it with jQuery.&#xd;
+    //       Neither PrototypeJS nor standard JavaScript events triggering works from this location (even if it works from the browser's console).&#xd;
+    require(['jquery'], function ($) {&#xd;
+      $(contentField).trigger('change');&#xd;
+    })&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Callback function triggered by a successful response from the server. The converted content should be in the&#xd;
+   * response text. This method re-enables the editing area and reload the page.&#xd;
+   * &#xd;
+   * @param response The Ajax.Response object, wrapping the HTTP response received from the server.&#xd;
+   * @todo this is a temporary methods waiting for a complete support of synamic unloading/loading of the WYSIWYG.&#xd;
+   */&#xd;
+  successfulWYSIWYGConversion : function(response) {&#xd;
+    this.storeNewSyntax();&#xd;
+    window.location.reload(true);&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Callback function triggered by a failed response from the server. This method informs the user of the error and&#xd;
+   * re-enables the editing area with the old content and syntax.&#xd;
+   * &#xd;
+   * @param response The Ajax.Response object, wrapping the HTTP response received from the server.&#xd;
+   * @todo The cause of the error should be placed in the context and sent in this response, so that the user can know&#xd;
+   *     what exactly prevented the conversion.&#xd;
+   */&#xd;
+  failedConversion : function(response) {&#xd;
+    alert('Failed to convert to the selected syntax. If you want to use this syntax anyway, you can select it again and choose not to perform the conversion.');&#xd;
+    this.syntaxField.selectedIndex = this.originalSyntaxIndex;&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Disable the editing area and the syntax chooser. Also cover the editing area with a busy loading image.&#xd;
+   * &#xd;
+   * @todo How to disable the WYSIWYG editor?&#xd;
+   */&#xd;
+  disableEditingArea : function() {&#xd;
+    this.syntaxField.disabled = true;&#xd;
+    this.contentField.disabled = true;&#xd;
+    this.loading.show();&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Re-enable the editing area and the syntax chooser.&#xd;
+   * &#xd;
+   * @todo How to enable the WYSIWYG editor?&#xd;
+   */&#xd;
+  enableEditingArea : function() {&#xd;
+    this.syntaxField.disabled = false;&#xd;
+    this.loading.hide();&#xd;
+    this.contentField.disabled = false;&#xd;
+  },&#xd;
+&#xd;
+  /**&#xd;
+   * Store the new syntax as the source syntax. This allows to change the syntax more than once in the same editing&#xd;
+   * session, and to perform the proper chained conversions.&#xd;
+   */&#xd;
+  storeNewSyntax : function() {&#xd;
+    this.originalSyntaxIndex = this.syntaxField.selectedIndex;&#xd;
+    this.originalSyntax = this.syntaxField.options.item(this.originalSyntaxIndex).value;&#xd;
+  }&#xd;
+});&#xd;
+&#xd;
+// Create the component when the HTML tree is fully loaded.&#xd;
+document.observe("xwiki:dom:loaded", function() { new XWiki.SyntaxConverter(); });</code>
+    </property>
+    <property>
+      <name>SyntaxConverter</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

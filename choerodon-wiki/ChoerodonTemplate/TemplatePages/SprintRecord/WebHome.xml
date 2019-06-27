@@ -1,0 +1,80 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="ChoerodonTemplate.TemplatePages.SprintRecord.WebHome" locale="">
+  <web>ChoerodonTemplate.TemplatePages.SprintRecord</web>
+  <name>WebHome</name>
+  <language/>
+  <defaultLanguage>zh</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538015897000</creationDate>
+  <parent>xwiki:ChoerodonTemplate.TemplatePages.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1538032326000</date>
+  <contentUpdateDate>1538032326000</contentUpdateDate>
+  <version>2.1</version>
+  <title>SprintRecord</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>(% border="1" cellspacing="0" style="border-collapse:collapse" %)&#xd;
+|(% colspan="7" style="background-color:#f5f5f5; border-color:#000000; text-align:center; text-decoration:underline" %)xxx组冲刺回顾会议记录&#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)冲刺|(% colspan="2" style="border-color:#000000; width:274px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)时间|(% colspan="3" rowspan="1" style="border-color:#000000; width:647px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)参会人员|(% colspan="6" style="border-color:#000000; width:966px" %) &#xd;
+|(% colspan="7" style="border-color:#000000; text-align:center; vertical-align:middle" %)回顾总结&#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)方面|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)序号|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:228px" %)进步|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)序号|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:222px" %) 问题|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:336px" %)提升方式|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:89px" %)落地负责人&#xd;
+|(% rowspan="5" style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)(((&#xd;
+ &#xd;
+&#xd;
+&#xd;
+目标达成&#xd;
+)))|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)1|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)1|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)2|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)2|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)3|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)3|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)4|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)4|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)5|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)5|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% rowspan="5" style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)(((&#xd;
+ &#xd;
+&#xd;
+&#xd;
+产品功能&#xd;
+)))|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)1|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)1|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)2|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)2|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)3|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)3|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)4|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)4|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)5|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)5|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% rowspan="5" style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)(((&#xd;
+ &#xd;
+&#xd;
+&#xd;
+敏捷流程&#xd;
+)))|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)1|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)1|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)2|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)2|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)3|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)3|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)4|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)4|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)5|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)5|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% rowspan="5" style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)(((&#xd;
+ &#xd;
+&#xd;
+&#xd;
+需求管理&#xd;
+)))|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)1|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)1|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)2|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)2|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)3|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)3|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)4|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)4|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)5|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)5|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% rowspan="5" style="border-color:#000000; text-align:center; vertical-align:middle; width:50px" %)(((&#xd;
+ &#xd;
+&#xd;
+&#xd;
+其他&#xd;
+)))|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)1|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)1|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)2|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)2|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)3|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)3|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)4|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)4|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+|(% style="border-color:#000000; text-align:center; vertical-align:middle; width:46px" %)5|(% style="border-color:#000000; width:228px" %) |(% style="border-color:#000000; text-align:center; vertical-align:middle; width:47px" %)5|(% style="border-color:#000000; width:222px" %) |(% style="border-color:#000000; width:336px" %) |(% style="border-color:#000000; width:89px" %) &#xd;
+&#xd;
+ &#xd;
+</content>
+</xwikidoc>

@@ -1,0 +1,991 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="ChoerodonConfig.MainPanel" locale="">
+  <web>ChoerodonConfig</web>
+  <name>MainPanel</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538119024000</creationDate>
+  <parent>xwiki:ChoerodonConfig.WebHome</parent>
+  <author>XWiki.9999</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1548905280000</date>
+  <contentUpdateDate>1538119024000</contentUpdateDate>
+  <version>21.1</version>
+  <title/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content> 
+
+ </content>
+  <object>
+    <name>ChoerodonConfig.MainPanel</name>
+    <number>0</number>
+    <className>Panels.PanelClass</className>
+    <guid>ccd55276-d10f-45e4-af56-e1dab1f91da9</guid>
+    <class>
+      <name>Panels.PanelClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <category>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>category</name>
+        <number>1</number>
+        <prettyName>Category</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Information|Navigation|Tools|Administration|Other</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </category>
+      <content>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>25</rows>
+        <size>120</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <description>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>description</name>
+        <number>3</number>
+        <prettyName>Description</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>4</number>
+        <prettyName>Name</prettyName>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <type>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>type</name>
+        <number>5</number>
+        <prettyName>Panel type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>view|edit</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </type>
+    </class>
+    <property>
+      <category>Information</category>
+    </property>
+    <property>
+      <content>{{velocity}}&#xd;
+#macro(displayFirst $doc)&#xd;
+&lt;div class="aui-sidebar-wrapper">&#xd;
+    &lt;div id="main-header">&#xd;
+        &lt;div class="backbone-view">&#xd;
+            &lt;div class="aui-nav-heading" onclick="runCollectEffect()">&#xd;
+                &lt;span class="icon icon-star">&lt;/span>&#xd;
+                &lt;span class="title-nav-group">收藏夹&lt;/span>&#xd;
+                &lt;span class="icon icon-keyboard_arrow_up" id="xwiki-collect-material-icons"&#xd;
+                      style="float: right;margin-right:16px;margin-top: 7px;cursor: pointer;">&lt;/span>&#xd;
+            &lt;/div>&#xd;
+            &lt;ul class="aui-nav-collect">&#xd;
+                &lt;li&#xd;
+                    #if($request.folderName== '我的收藏')&#xd;
+                            class="panel-li-selected"&#xd;
+                    #end&#xd;
+                >&#xd;
+                    &lt;a href="/bin/view/Main/收藏夹/?folderId=0&amp;folderName=我的收藏" title="我的收藏">&#xd;
+                        &lt;span class="aui-nav-item-label">我的收藏&lt;/span>&#xd;
+                    &lt;/a>&#xd;
+                &lt;/li>&#xd;
+&#xd;
+&#xd;
+                #set ($currentUser = $xcontext.getUser())&#xd;
+                #set ($query = $xwiki.queryManager.createQuery("select doc.id,doc.name from ChoerodonConfig.ChoerodonTables.FolderClass doc where doc.user = '$currentUser' order by doc.date asc ","hql"))&#xd;
+                #set ($folders = $query.execute())&#xd;
+                #if ($folders.size() > 0 || $showEmptyPanels)&#xd;
+                   #foreach ($folder in $folders )&#xd;
+                      &#xd;
+                &lt;li&#xd;
+                    #if($request.folderName==$folder.get(1) )&#xd;
+                            class="panel-li-selected"&#xd;
+                    #end&#xd;
+                >&#xd;
+                    &lt;a href="/bin/view/Main/收藏夹/?folderId=$folder.get(0)&amp;folderName=$folder.get(1)" title="$folder.get(1)">&#xd;
+                        &lt;span class="aui-nav-item-label">$folder.get(1)&lt;/span>&#xd;
+                    &lt;/a>&#xd;
+                &lt;/li>                   &#xd;
+                   #end&#xd;
+                #end&#xd;
+&#xd;
+&#xd;
+&#xd;
+            &lt;/ul>&#xd;
+        &lt;/div>&#xd;
+        &lt;div class="backbone-view">&#xd;
+            &lt;div class="aui-nav-heading" style="margin-top: 6px;" onclick="runFindEffect()">&#xd;
+                &lt;span class="icon icon-language">&lt;/span>&#xd;
+                &lt;span class="title-nav-group">发现&lt;/span>&#xd;
+                &lt;span class="icon icon-keyboard_arrow_up" id="xwiki-find-material-icons"&#xd;
+                      style="float: right;margin-right:16px;margin-top:7px;cursor: pointer;">&lt;/span>&#xd;
+            &lt;/div>&#xd;
+            &lt;ul class="aui-nav-find">&#xd;
+                &lt;li&#xd;
+                    #if($doc.getDocumentReference().toString() == 'xwiki:Main.所有更新.WebHome')&#xd;
+                            class="panel-li-selected"&#xd;
+                    #end&#xd;
+                >&#xd;
+                    &lt;a href="/bin/view/Main/所有更新/" title="所有更新">&#xd;
+                        &lt;span class="aui-nav-item-label">所有更新&lt;/span>&#xd;
+                    &lt;/a>&#xd;
+                &lt;/li>&#xd;
+                &lt;li&#xd;
+                    #if($doc.getDocumentReference().toString() == 'xwiki:Main.热门.WebHome')&#xd;
+                            class="panel-li-selected"&#xd;
+                    #end&#xd;
+                >&#xd;
+                    &lt;a href="/bin/view/Main/热门/" title="热门">&#xd;
+                        &lt;span class="aui-nav-item-label">热门&lt;/span>&#xd;
+                    &lt;/a>&#xd;
+                &lt;/li>&#xd;
+            &lt;/ul>&#xd;
+        &lt;/div>        &#xd;
+        &lt;div class="backbone-view">&#xd;
+            &lt;div class="aui-nav-heading" onclick="runRecentEffect()">&#xd;
+                &lt;span class="icon icon-work">&lt;/span>&#xd;
+                &lt;span class="title-nav-group">我的工作&lt;/span>&#xd;
+                &lt;span class="icon icon-keyboard_arrow_up" id="xwiki-recent-material-icons"&#xd;
+                      style="float: right;margin-right:16px;margin-top: 7px;cursor: pointer;">&lt;/span>&#xd;
+            &lt;/div>&#xd;
+            &lt;ul class="aui-nav-recent">&#xd;
+                &lt;li&#xd;
+                    #if($doc.getDocumentReference().toString() == 'xwiki:Main.最近工作.WebHome')&#xd;
+                            class="panel-li-selected"&#xd;
+                    #end&#xd;
+                >&#xd;
+                    &lt;a href="/bin/view/Main/最近工作/" title="最近工作">&#xd;
+                        &lt;span class="aui-nav-item-label">最近工作&lt;/span>&#xd;
+                    &lt;/a>&#xd;
+                &lt;/li>&#xd;
+                &lt;li&#xd;
+                    #if($doc.getDocumentReference().toString() == 'xwiki:Main.最近访问.WebHome')&#xd;
+                            class="panel-li-selected"&#xd;
+                    #end&#xd;
+                >&#xd;
+                    &lt;a href="/bin/view/Main/最近访问/" title="最近访问">&#xd;
+                        &lt;span class="aui-nav-item-label">最近访问&lt;/span>&#xd;
+                    &lt;/a>&#xd;
+                &lt;/li>                &#xd;
+            &lt;/ul>&#xd;
+        &lt;/div>        &#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro(displaySecond $doc $application $flag)&#xd;
+&lt;div class="aui-sidebar-wrapper">&#xd;
+    &lt;div id="backbone-view-header">&#xd;
+        &lt;div class="backbone-view">&#xd;
+            &lt;div class="aui-nav-heading" style="margin-top: 6px;" onclick="runSpace()">&#xd;
+                #if($flag)&#xd;
+                   &lt;span class="icon icon-contacts">&lt;/span>&#xd;
+                   &lt;span class="title-nav-group">我的空间&lt;/span>&#xd;
+                #else&#xd;
+                   &lt;span class="icon icon-document">&lt;/span>&#xd;
+                   &lt;span class="title-nav-group">文档库&lt;/span>&#xd;
+                #end&#xd;
+                &lt;span id="application-current-name" style="display:none">$application&lt;/span>&#xd;
+                &lt;span class="icon icon-keyboard_arrow_up" id="xwiki-space-material-icons"&#xd;
+                      style="float: right;margin-right:16px;margin-top: 7px;cursor: pointer;">&lt;/span>&#xd;
+            &lt;/div>&#xd;
+            #set ($page = $application+".WebHome")&#xd;
+            #if($xwiki.hasAccessLevel('view', $page))&#xd;
+            &lt;div id="main-page" class="aui-nav-heading&#xd;
+                       #if($doc.getDocumentReference().toString() == 'xwiki:' + $page)&#xd;
+                            panel-li-selected&#xd;
+                       #end&#xd;
+                       ">&#xd;
+                &lt;a href="$xwiki.getURL($page, 'view')" title="主页"&#xd;
+                   style="color: #42526e;display: block;text-decoration: none;cursor: pointer;">&#xd;
+                    &lt;span class="aui-nav-item-label">主页&lt;/span>&#xd;
+                &lt;/a>&#xd;
+            #end&#xd;
+        &lt;/div>&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro(displayThree $doc $application $isMainPage)&#xd;
+    #set ($openTo = "xwiki:"+$application+".WebHome")&#xd;
+    #if($isMainPage)&#xd;
+      #set ($openToDoc = "xwiki:"+$application+".WebHome")&#xd;
+    #else&#xd;
+      #set ($openToDoc = $doc.documentReference.toString().replaceAll('([~"])', '~$1'))&#xd;
+    #end&#xd;
+{{documentTree showTranslations="false" showAttachments="false"  compact="true" openTo="document:$openToDoc"   root="document:$openTo" /}}&#xd;
+#end&#xd;
+&#xd;
+#macro(displayFour $doc)&#xd;
+      &lt;div class="aui-nav-heading" style="margin-top: 6px;" onclick="runSpace()">&#xd;
+          &lt;span class="icon icon-document">&lt;/span>&#xd;
+          &lt;span class="title-nav-group">知识库&lt;/span>      &#xd;
+      &lt;/div>&#xd;
+      #set ($recentDoc = $xwiki.getDocument('XWiki.XWikiSyntax').getTranslatedDocument())&#xd;
+      &lt;div  class="aui-nav-heading #if($doc == $recentDoc)&#xd;
+                            panel-li-selected&#xd;
+                       #end&#xd;
+                       ">&#xd;
+        &lt;a href="$recentDoc.getURL()" title="$recentDoc.plainTitle"&#xd;
+            style="color: #42526e;display: block;text-decoration: none;cursor: pointer;">&#xd;
+            &lt;span class="aui-nav-item-label">$escapetool.xml($recentDoc.plainTitle)&lt;/span>&#xd;
+        &lt;/a>&#xd;
+      &lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro(isMain $doc $ismain)&#xd;
+    #set($ismain = false)&#xd;
+    #if($doc == "Main.所有更新.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.最近工作.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.最近访问.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.热门.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.收藏夹.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "ChoerodonConfig.CreateSpace")&#xd;
+        #set($ismain = true)&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+#macro(isXWiki $doc $isxwiki)&#xd;
+    #set($isxwiki = false)&#xd;
+    #if($doc.web == "XWiki")&#xd;
+        #set($isxwiki = true)&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+#macro(isSpace $doc $result)&#xd;
+    #set($result = false)&#xd;
+    #if(!$doc.isHidden())&#xd;
+        #set($liveTableClass = $doc.getObject("AppWithinMinutes.LiveTableClass"))&#xd;
+        #set($uiextensionClass = $doc.getObject("XWiki.UIExtensionClass"))&#xd;
+        #if($liveTableClass &amp;&amp; $uiextensionClass)&#xd;
+            #foreach($uie in $uiextensionClass.get("parameters").split("\r\n"))&#xd;
+                #if($uie == "personal=true")&#xd;
+                   #set($result = true)&#xd;
+                   #break&#xd;
+                #end&#xd;
+            #end&#xd;
+        #end&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+#macro(disPlayTree $doc $shouldDisplay $parentLevel)&#xd;
+    #set($parentLevel = false)&#xd;
+    #isSpace($doc $result)&#xd;
+    #if($result)&#xd;
+        #set($shouldDisplay = true)&#xd;
+        #set($parentLevel = true)&#xd;
+    #else&#xd;
+        #set($parent = $doc.getParent())&#xd;
+        #if($parent == "")&#xd;
+            #set($shouldDisplay = false)&#xd;
+        #else&#xd;
+            #set($parentDoc = $xwiki.getDocument($parent))&#xd;
+            #if($parentDoc)&#xd;
+                #isSpace($parentDoc $result)&#xd;
+                #if($result)&#xd;
+                    #set($shouldDisplay = true)&#xd;
+                    #set($parentLevel = true)&#xd;
+                #else&#xd;
+                    #disPlayTree($parentDoc $shouldDisplay)&#xd;
+                #end&#xd;
+            #else&#xd;
+                #set($shouldDisplay = false)&#xd;
+            #end&#xd;
+        #end&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+##获取给定用户有权限查看的页面的父级页面，用于树形浏览器的root，主要针对未登录用户&#xd;
+#macro(hasParentViewAccess $doc $finalParentDoc)&#xd;
+  #set($par = $doc.parent)&#xd;
+  #if($par != "" &amp;&amp; $xwiki.hasAccessLevel('view', $par))&#xd;
+    #set($nowDoc = $xwiki.getDocument($par))&#xd;
+    #hasParentViewAccess($nowDoc $finalParentDoc)&#xd;
+  #else&#xd;
+    #set($finalParentDoc = $doc)&#xd;
+  #end&#xd;
+#end&#xd;
+&#xd;
+#macro(displayTreeForGuest $doc)&#xd;
+  #set ($openTo = $services.model.serialize($doc.documentReference, 'default').replaceAll('([~"])', '~$1'))&#xd;
+  #hasParentViewAccess($doc $finalParentDoc)&#xd;
+  #set($flag = false)&#xd;
+  {{html}}&#xd;
+  #displaySecond($doc $finalParentDoc.web $flag)&#xd;
+  {{/html}}&#xd;
+&#xd;
+  #set($rootDoc = $services.model.serialize($finalParentDoc.documentReference, 'default').replaceAll('([~"])', '~$1'))&#xd;
+  {{documentTree  showTranslations="false" showAttachments="false" compact="true" root="document:$rootDoc" openTo="document:$openTo" /}}&#xd;
+#end&#xd;
+&#xd;
+#macro(getApplication $doc $app)&#xd;
+#set($app= "")&#xd;
+#set($isAppend = true)&#xd;
+#set($j = -1)&#xd;
+#set($spaceList = $doc.space.toString().split(''))&#xd;
+#foreach ($i in $spaceList )&#xd;
+    #if($isAppend &amp;&amp; $i != "." &amp;&amp; !$i.equals("\"))&#xd;
+        #set($app= $app+ $i)&#xd;
+    #elseif($isAppend &amp;&amp; $i=="." &amp;&amp; $j>-1 &amp;&amp; $spaceList.get($j).equals("\"))&#xd;
+        #set($app= $app+ $i)&#xd;
+    #elseif($i.equals("\"))&#xd;
+        #set($isAppend = true)&#xd;
+    #else&#xd;
+        #set($isAppend = false)&#xd;
+        #break&#xd;
+    #end&#xd;
+    #set($j = $j+1)&#xd;
+#end&#xd;
+#end&#xd;
+{{/velocity}}&#xd;
+&#xd;
+{{velocity}}&#xd;
+#panelheader('')&#xd;
+#getApplication($doc $app)&#xd;
+#set($application= $app)&#xd;
+&#xd;
+##匿名用户看到左侧面板&#xd;
+#if($isGuest)&#xd;
+  #displayTreeForGuest($doc)&#xd;
+#elseif(!$xwiki.hasAccessLevel('view', $doc.fullName))&#xd;
+    #set($application= $xcontext.getUser().substring(6))&#xd;
+    #set($flag = true)&#xd;
+    {{html}}&#xd;
+        #displaySecond($doc $application $flag)&#xd;
+    {{/html}}&#xd;
+&#xd;
+    #set($isMainPage = true)&#xd;
+    #displayThree($doc $application $isMainPage)&#xd;
+&#xd;
+    {{html}}&#xd;
+      #displayFirst($doc)&#xd;
+    {{/html}}&#xd;
+&#xd;
+#else&#xd;
+  ##登录用户看到左侧面板，判断是否跳转到主页&#xd;
+  #isMain($doc $ismain)&#xd;
+  #if($ismain)&#xd;
+&#xd;
+    #set($application= $xcontext.getUser().substring(6))&#xd;
+    #set($flag = true)&#xd;
+    {{html}}&#xd;
+        #displaySecond($doc $application $flag)&#xd;
+    {{/html}}&#xd;
+&#xd;
+    #set($isMainPage = true)&#xd;
+    #displayThree($doc $application $isMainPage)&#xd;
+&#xd;
+    {{html}}&#xd;
+      #displayFirst($doc)&#xd;
+    {{/html}}&#xd;
+&#xd;
+  #else&#xd;
+    #isXWiki($doc $isxwiki)&#xd;
+    #if($isxwiki)&#xd;
+      {{html}}&#xd;
+      #displayFour($doc)&#xd;
+      {{/html}}&#xd;
+    #else&#xd;
+    ##登录用户看到左侧面板，判断是个人空间还是其它空间&#xd;
+    #disPlayTree($doc $shouldDisplay $parentLevel)&#xd;
+    #if($shouldDisplay &amp;&amp; $parentLevel)&#xd;
+       #set($flag = true)&#xd;
+       {{html}}&#xd;
+          #displaySecond($doc $application $flag)&#xd;
+       {{/html}}&#xd;
+&#xd;
+       #set($isMainPage = false)&#xd;
+       #displayThree($doc $application $isMainPage)&#xd;
+&#xd;
+       {{html}}&#xd;
+          #displayFirst($doc)&#xd;
+       {{/html}}&#xd;
+    #elseif(!$shouldDisplay &amp;&amp; $parentLevel)&#xd;
+       #set($flag = false)&#xd;
+       {{html}}&#xd;
+          #displaySecond($doc $application $flag)&#xd;
+       {{/html}}&#xd;
+&#xd;
+       #set($isMainPage = false)&#xd;
+       #displayThree($doc $application $isMainPage)&#xd;
+    #elseif(!$shouldDisplay &amp;&amp; !$parentLevel)&#xd;
+        #set($pages = $application+".WebHome")&#xd;
+        #if($xwiki.hasAccessLevel('view', $pages))&#xd;
+            #set($flag = false)&#xd;
+            {{html}}&#xd;
+                #displaySecond($doc $application $flag)&#xd;
+            {{/html}}&#xd;
+&#xd;
+            #set($isMainPage = false)&#xd;
+            #displayThree($doc $application $isMainPage)&#xd;
+        #else&#xd;
+            #displayTreeForGuest($doc)&#xd;
+        #end&#xd;
+    #end&#xd;
+   #end&#xd;
+&#xd;
+  #end&#xd;
+#end&#xd;
+{{/velocity}}</content>
+    </property>
+    <property>
+      <description>系统首页侧边栏</description>
+    </property>
+    <property>
+      <name>MainPanel</name>
+    </property>
+    <property>
+      <type>view</type>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.MainPanel</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>8c70cdae-d336-49ff-8ac5-eb16aef4cc3e</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>forbid</cache>
+    </property>
+    <property>
+      <code>//增加元素&#xd;
+var title = document.getElementsByClassName("panel expanded MainPanel");&#xd;
+var strTitle = `&#xd;
+&lt;div onclick="toMain()" style="&#xd;
+    line-height: 60px;&#xd;
+    display: flex;&#xd;
+    border-bottom: 1px solid #D3D3D3;&#xd;
+    font-size: 18px;&#xd;
+    height: 60px;&#xd;
+    cursor: pointer;&#xd;
+    background-color: #FAFAFA;&#xd;
+    color: rgba(0,0,0,0.65);&#xd;
+">&lt;span class="icon icon-book" style="&#xd;
+    font-size: 28px !important;&#xd;
+    padding:13px 10px 10px 15px;">&lt;/span>知识管理&lt;/div>&#xd;
+`;&#xd;
+if(title.length > 0) {&#xd;
+  title[0].insertAdjacentHTML('afterBegin', strTitle);&#xd;
+}&#xd;
+&#xd;
+function toMain(){&#xd;
+  var user = '$xcontext.getUser().substring(6)';&#xd;
+  location.href = '/bin/view/' + user + '/';&#xd;
+}&#xd;
+&#xd;
+//滑动&#xd;
+function runFindEffect(){&#xd;
+  require(['jquery'], function($) {&#xd;
+     $(".aui-nav-find").slideToggle("normal");&#xd;
+     if ($('#xwiki-find-material-icons').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-find-material-icons').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-find-material-icons').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+  });&#xd;
+}&#xd;
+function runCollectEffect(){&#xd;
+    require(['jquery'], function($) { &#xd;
+     $(".aui-nav-collect").slideToggle("normal");&#xd;
+    if ($('#xwiki-collect-material-icons').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-collect-material-icons').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-collect-material-icons').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+  });&#xd;
+}&#xd;
+//滑动&#xd;
+function runRecentEffect(){&#xd;
+  require(['jquery'], function($) { &#xd;
+     $(".aui-nav-recent").slideToggle("normal");&#xd;
+    if ($('#xwiki-recent-material-icons').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-recent-material-icons').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-recent-material-icons').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+  });&#xd;
+}&#xd;
+&#xd;
+//滑动&#xd;
+function runSpace(){&#xd;
+  require(['jquery'], function($) {&#xd;
+     $("#leftPanels .jstree-xwiki-responsive").slideToggle("normal");&#xd;
+     $("#main-page").slideToggle("normal");&#xd;
+    if ($('#xwiki-space-material-icons').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-space-material-icons').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-space-material-icons').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+  });&#xd;
+}&#xd;
+&#xd;
+&#xd;
+</code>
+    </property>
+    <property>
+      <name>mainPanelScript</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>always</use>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.MainPanel</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>377cd613-dc3b-4174-8c2e-f72096d36200</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>#leftPanels > .wikimodel-emptyline {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.aui-sidebar-wrapper {&#xd;
+    background: #FAFAFA !important;&#xd;
+    color: rgba(0,0,0,0.65) !important;&#xd;
+    display: block !important;&#xd;
+}&#xd;
+&#xd;
+.xwikipanelcontents{&#xd;
+  padding:0px;&#xd;
+  background-color: #FAFAFA;&#xd;
+}&#xd;
+&#xd;
+.aui-nav-heading {&#xd;
+    font-weight: 500;&#xd;
+    height: 36px;&#xd;
+    line-height: 36px;&#xd;
+    cursor: pointer;&#xd;
+    padding-left: 19px;&#xd;
+}&#xd;
+&#xd;
+#main-page {&#xd;
+  height: 32px;&#xd;
+  line-height: 32px;&#xd;
+}&#xd;
+&#xd;
+.title-nav-group {&#xd;
+    font-size: 14px;&#xd;
+    padding-left: 9px;&#xd;
+    text-decoration: none !important;&#xd;
+    width: 154px;&#xd;
+    white-space: nowrap;&#xd;
+    overflow: hidden;&#xd;
+    text-overflow: ellipsis;&#xd;
+  display: inline-block;&#xd;
+      color: rgba(0,0,0,0.65);&#xd;
+}&#xd;
+&#xd;
+.title-nav-group:hover {&#xd;
+  color: rgba(0,0,0,0.65);&#xd;
+}&#xd;
+&#xd;
+.backbone-view ul>li>a {&#xd;
+    color: rgba(0,0,0,0.65);&#xd;
+    display: block;&#xd;
+    text-decoration: none;&#xd;
+    cursor: pointer;&#xd;
+    padding-left: 19px;&#xd;
+}&#xd;
+&#xd;
+.aui-nav,.aui-nav-find,.aui-nav-recent,&#xd;
+.aui-nav>li {&#xd;
+    border-radius: 3px !important;&#xd;
+    list-style: none !important;&#xd;
+    margin-bottom: 0 !important;&#xd;
+}&#xd;
+&#xd;
+.aui-nav-item-label {&#xd;
+    white-space: nowrap;&#xd;
+    text-overflow: ellipsis;&#xd;
+    overflow: hidden;&#xd;
+    padding: 0 0 0 5px;&#xd;
+    word-wrap: normal;&#xd;
+    font-size: 13px;&#xd;
+    padding-left: 32px;&#xd;
+}&#xd;
+&#xd;
+.aui-application-label {&#xd;
+    white-space: nowrap;&#xd;
+    text-overflow: ellipsis;&#xd;
+    overflow: hidden;&#xd;
+    padding: 0 0 0 5px;&#xd;
+    word-wrap: normal;&#xd;
+    font-size: 13px;&#xd;
+    white-space: nowrap;&#xd;
+}&#xd;
+&#xd;
+.mainPanel-link-selected {&#xd;
+    background-color: #dfe1e5;&#xd;
+}&#xd;
+&#xd;
+&#xd;
+&#xd;
+.MainPanel .aui-sidebar-wrapper .backbone-view .aui-nav li>ul {&#xd;
+  padding-left:0;&#xd;
+}&#xd;
+&#xd;
+.MainPanel .aui-sidebar-wrapper .backbone-view .aui-nav li>ul>li>a {&#xd;
+  padding-left:20px;&#xd;
+}&#xd;
+&#xd;
+.MainPanel .aui-sidebar-wrapper .backbone-view .aui-nav li>ul>li>ul>li>a {&#xd;
+  padding-left:40px;&#xd;
+}&#xd;
+&#xd;
+.all-spaces-link {&#xd;
+    text-decoration: none !important;&#xd;
+    cursor: pointer;&#xd;
+    font-size:12px;&#xd;
+    margin-right: 20px;&#xd;
+}&#xd;
+&#xd;
+.all-spaces-link:hover {&#xd;
+    text-decoration: underline !important;&#xd;
+    cursor: pointer;&#xd;
+}&#xd;
+&#xd;
+.MainPanel>.xwikipaneltitle {&#xd;
+    display:none;&#xd;
+}&#xd;
+&#xd;
+#leftPanels {&#xd;
+    position: fixed !important;&#xd;
+    width: 250px !important;&#xd;
+    right: auto !important;&#xd;
+    background-color: #FAFAFA;&#xd;
+    border-right: 1px solid #D3D3D3 !important;&#xd;
+    padding-top: 0px !important;&#xd;
+    padding: 0 !important;&#xd;
+}&#xd;
+&#xd;
+.xwiki-main-application{&#xd;
+  font-size:13px;&#xd;
+  padding-left:16px;&#xd;
+}&#xd;
+&#xd;
+.MainPanel{&#xd;
+  margin-top:0px;&#xd;
+}&#xd;
+&#xd;
+.panel{&#xd;
+  border:none !important;&#xd;
+  margin-bottom: 0px;&#xd;
+}&#xd;
+&#xd;
+body{&#xd;
+  background-color: white;&#xd;
+}&#xd;
+&#xd;
+#appPanel-page{&#xd;
+   color: #42526e;&#xd;
+   display: block;&#xd;
+   text-decoration: none;&#xd;
+   cursor: pointer;&#xd;
+}&#xd;
+&#xd;
+#leftPanels .jstree-anchor {&#xd;
+  font-size: 13px;&#xd;
+  color: rgba(0,0,0,0.65);&#xd;
+  line-height: 32px;&#xd;
+  white-space: nowrap;&#xd;
+  overflow: hidden;&#xd;
+  text-overflow: ellipsis;&#xd;
+  width: calc(100% - 18px);&#xd;
+  outline: none;&#xd;
+}&#xd;
+&#xd;
+#leftPanels .jstree-leaf .jstree-ocl {&#xd;
+  visibility: hidden;&#xd;
+}&#xd;
+&#xd;
+#leftPanels .xdocLastModification {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#leftPanels>.jstree-xwiki .jstree-hovered {&#xd;
+  background: #F4F5F7;&#xd;
+  border-radius: 2px;&#xd;
+  box-shadow: inset 0 0 1px #ffffff;&#xd;
+  text-decoration:none;&#xd;
+}&#xd;
+&#xd;
+#leftPanels .xtree{&#xd;
+  padding-left: 20px;&#xd;
+  width: 100%;&#xd;
+}&#xd;
+&#xd;
+#leftPanels .xtree .jstree-node {&#xd;
+  overflow: hidden;&#xd;
+  text-overflow: ellipsis;&#xd;
+  white-space: nowrap;&#xd;
+  min-height: 36px;&#xd;
+  font-family: Monospaced Number,Chinese Quote,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;&#xd;
+  font-size: 13px;&#xd;
+  color: rgba(0,0,0,0.65);&#xd;
+  line-height: 36px;&#xd;
+}&#xd;
+&#xd;
+#leftPanels .jstree-ocl{&#xd;
+      margin-left: -8px !important;&#xd;
+}&#xd;
+&#xd;
+.aui-nav-heading span:first-child{&#xd;
+  height:48px;&#xd;
+}&#xd;
+&#xd;
+.backbone-view ul li{&#xd;
+  padding:8px 0;&#xd;
+}&#xd;
+&#xd;
+.backbone-view ul li:hover, .aui-nav-heading:hover{&#xd;
+  background-color: rgba(0,0,0,0.04)!important;&#xd;
+}&#xd;
+&#xd;
+#main-page:hover{&#xd;
+  background-color: rgba(0,0,0,0.04)!important;&#xd;
+}&#xd;
+&#xd;
+#leftPanels .jstree-xwiki .jstree-clicked {&#xd;
+    font-weight: bold;&#xd;
+}&#xd;
+&#xd;
+.panel-li-selected {&#xd;
+  background-color: rgba(140,158,255,.16)!important;&#xd;
+}&#xd;
+&#xd;
+.panel-li-selected >a {&#xd;
+  color: #3f51b5 !important;&#xd;
+}&#xd;
+&#xd;
+.xwikipanelcontents .jstree-hovered {&#xd;
+  background-color: rgba(0,0,0,.04);&#xd;
+  box-shadow: 0 0 0 rgba(0,0,0,.04) !important;&#xd;
+}&#xd;
+&#xd;
+.xwikipanelcontents .jstree-xwiki .jstree-node .jstree-clicked {&#xd;
+  background-color: #E9ECFC !important;&#xd;
+  color: #3F51B5 !important;&#xd;
+}</code>
+    </property>
+    <property>
+      <contentType>CSS</contentType>
+    </property>
+    <property>
+      <name>mainPanelStyle</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>always</use>
+    </property>
+  </object>
+</xwikidoc>

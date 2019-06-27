@@ -1,0 +1,784 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Main.所有更新.WebHome" locale="">
+  <web>Main.所有更新</web>
+  <name>WebHome</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538119061000</creationDate>
+  <parent>Main.test.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1548136727000</date>
+  <contentUpdateDate>1540872326000</contentUpdateDate>
+  <version>10.1</version>
+  <title>所有更新</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{velocity output=false}}&#xd;
+##$xwiki.jsx.use('Main.Activity')&#xd;
+$xwiki.ssx.use('Main.Activity')&#xd;
+{{/velocity}}&#xd;
+</content>
+  <object>
+    <name>Main.所有更新.WebHome</name>
+    <number>1</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>06a3dc85-b501-441e-b6e8-dce96335256d</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>var XWiki = (function (XWiki) {&#xd;
+    // Start XWiki augmentation.&#xd;
+    XWiki.Activity = Class.create({&#xd;
+        initialize: function () {&#xd;
+            this.initHandlers();&#xd;
+            this.attachDeleteHandlers();&#xd;
+        },&#xd;
+        initHandlers: function () {&#xd;
+            $$('.activityHeader').each(function (activityHeader) {&#xd;
+                if (activityHeader.up().hasClassName('collapsed')) {&#xd;
+                    activityHeader.observe('click', this.toggle.bind(this, activityHeader.up()));&#xd;
+                }&#xd;
+            }.bind(this));&#xd;
+&#xd;
+            document.observe('xwiki:activity:newActivity', function (event) {&#xd;
+                // Update all activity streams to display the new message&#xd;
+                $$('.activity').each(this.updateActivity.bind(this));&#xd;
+            }.bind(this));&#xd;
+        },&#xd;
+        toggle: function () {&#xd;
+            var collapsable = arguments[0];&#xd;
+            if (collapsable.hasClassName('collapsed')) {&#xd;
+                collapsable.removeClassName('collapsed');&#xd;
+                collapsable.down('.toolExpand').update('&amp;#9650;');&#xd;
+            } else {&#xd;
+                collapsable.addClassName('collapsed');&#xd;
+                collapsable.down('.toolExpand').update('&amp;#9660;');&#xd;
+            }&#xd;
+        },&#xd;
+        updateActivity: function (activityContainer) {&#xd;
+            var updateURL = activityContainer.down('.updateURL').value;&#xd;
+            new Ajax.Updater(&#xd;
+                { success: activityContainer },&#xd;
+                updateURL, {&#xd;
+                    onCreate: function () {&#xd;
+                        // NOTE: Do we need any progress/success notification at this level or do we do it only in the "calling" component?&#xd;
+                        //activityContainer._notification = new XWiki.widgets.Notification("$services.localization.render('core.widgets.confirmationBox.notification.inProgress')", 'inprogress');&#xd;
+                    },&#xd;
+                    onSuccess: function () {&#xd;
+                        if (activityContainer &amp;&amp; activityContainer._notification) {&#xd;
+                            activityContainer._notification.hide();&#xd;
+                        }&#xd;
+                    },&#xd;
+                    onFailure: function (response) {&#xd;
+                        var failureReason = '';&#xd;
+                        if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {&#xd;
+                            failureReason = 'Server not responding';&#xd;
+                        } else {&#xd;
+                            failureReason = response.statusText;&#xd;
+                        }&#xd;
+                        if (activityContainer) {&#xd;
+                            if (activityContainer._notification) {&#xd;
+                                activityContainer._notification.hide();&#xd;
+                            }&#xd;
+                            activityContainer._notification = new XWiki.widgets.Notification("$services.localization.render('core.widgets.confirmationBox.notification.failed')" + failureReason, 'error');&#xd;
+                        }&#xd;
+                    },&#xd;
+                    on1223: function (response) { /*SUCCESS*/&#xd;
+                        response.request.options.onSuccess(response);&#xd;
+                    },&#xd;
+                    on0: function (response) {  /*FAILURE*/&#xd;
+                        response.request.options.onFailure(response);&#xd;
+                    },&#xd;
+                    onComplete: function (response) {&#xd;
+                        // The newly retrieved activity element is inserted after onSuccess is called, so we must handle it here instead of in onSuccess.&#xd;
+                        if (response.request.success()) {&#xd;
+                            // The remplacement activity has a default updateURL. We discard that and replace it with the updateURL of the original activity so that, at each update, the URL stays the same.&#xd;
+                            var newActivity = activityContainer.next();&#xd;
+                            if (newActivity) {&#xd;
+                                newActivity.down('.updateURL').value = updateURL;&#xd;
+                            }&#xd;
+&#xd;
+                            // Remove the old activity element.&#xd;
+                            activityContainer.remove();&#xd;
+&#xd;
+                            this.attachDeleteHandlers();&#xd;
+                        }&#xd;
+                    }.bind(this),&#xd;
+                    insertion: 'after'&#xd;
+                }&#xd;
+            );&#xd;
+        },&#xd;
+        attachDeleteHandlers: function () {&#xd;
+            $$('.activity .activityItem .toolDelete').invoke('observe', 'click', function (event) {&#xd;
+                event.stop();&#xd;
+                var trigger = event.element();&#xd;
+                trigger.blur();&#xd;
+                if (trigger.disabled) {&#xd;
+                    // Do nothing if the button was already clicked and it's waiting for a response from the server.&#xd;
+                    return;&#xd;
+                } else {&#xd;
+                    new XWiki.widgets.ConfirmedAjaxRequest(&#xd;
+                        /* Ajax request URL */&#xd;
+                        trigger.href.replace(/xredirect=.*$/, 'xpage=plain&amp;confirm=1'),&#xd;
+                        /* Ajax request parameters */&#xd;
+                        {&#xd;
+                            onCreate: function () {&#xd;
+                                // Disable the button, to avoid a cascade of clicks from impatient users&#xd;
+                                trigger.disabled = true;&#xd;
+                            },&#xd;
+                            onSuccess: function () {&#xd;
+                                // Remove the corresponding HTML element from the UI&#xd;
+                                trigger.up("li").remove();&#xd;
+                            },&#xd;
+                            onComplete: function () {&#xd;
+                                // In the end: re-enable the button&#xd;
+                                trigger.disabled = false;&#xd;
+                            }&#xd;
+                        },&#xd;
+                        /* Interaction parameters */&#xd;
+                        {&#xd;
+                            confirmationText: "$services.localization.render('xe.activity.messages.delete.confirm')"&#xd;
+                        }&#xd;
+                    );&#xd;
+                }&#xd;
+            });&#xd;
+        }&#xd;
+    });&#xd;
+    // End XWiki augmentation.&#xd;
+    return XWiki;&#xd;
+}(XWiki || {}));&#xd;
+&#xd;
+var strTitle = `&#xd;
+&lt;span style="font-size: 18px;&#xd;
+    color: #000;&#xd;
+    line-height: 59px;&#xd;
+    margin-bottom: 0;&#xd;
+    cursor: pointer;">所有更新&lt;/span>&#xd;
+&lt;div class="btn-group xwiki-main-refesh" style="&#xd;
+    margin-left: 56px;&#xd;
+">&lt;a id="main-all-refresh" class="btn btn-default">&#xd;
+    &lt;span class="icon icon-refresh">&lt;/span>&#xd;
+    &lt;span class="btn-label">刷新&lt;/span>&lt;/a>&lt;/div>&#xd;
+`;&#xd;
+&#xd;
+var circle = `&lt;div id="waite" style="height: 46px;width: 46px;margin: 200px 0 30px calc(50vw - 175px);">&#xd;
+            &lt;svg viewBox="0 0 50 50">&#xd;
+                &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
+                      -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      stroke-dasharray: 80px 200px;&#xd;
+                      stroke-dashoffset: 0;&#xd;
+                      ">&lt;/circle>&#xd;
+            &lt;/svg>&#xd;
+    &lt;/div>`;&#xd;
+&#xd;
+var showMoreDiv = `&lt;div id="showMoreActivity">&lt;span>查看更多&lt;span>&lt;/div>`;&#xd;
+&#xd;
+var descIcon = `&lt;span class="icon icon-description" style="color: #5266D4; padding-bottom: 4px;">&lt;/span>`;&#xd;
+&#xd;
+var edit_doc_icon = `&lt;div class="activity-opera-div  activity-icon-edit">&lt;span class="icon icon-mode_edit activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var create_doc_icon = `&lt;div class="activity-opera-div  activity-icon-add">&lt;span class="icon icon-playlist_add activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_doc_icon = `&lt;div class="activity-opera-div  activity-icon-delete">&lt;span class="icon icon-delete activity-opera-icon">&lt;/span>&lt;/div>`&#xd;
+var edit_comment_icon = `&lt;div class="activity-opera-div activity-icon-edit">&lt;span class="icon icon-textsms activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var add_comment_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-add_comment activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_comment_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-delete_commet activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var edit_attachment_icon = `&lt;div class="activity-opera-div activity-icon-edit">&lt;span class="icon icon-border_color activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var add_attachment_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-add_attach activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_attachment_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-delete_attach activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var edit_annotation_icon = `&lt;div class="activity-opera-div activity-icon-edit">&lt;span class="icon icon-speaker_notes activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var add_annotation_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-speaker_notes activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_annotation_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-speaker_notes activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+&#xd;
+require(['jquery'], function ($) {&#xd;
+    //增加元素&#xd;
+    if (document.getElementsByClassName("document-header")[0] != null) {&#xd;
+        document.getElementById("document-title").innerHTML = strTitle;&#xd;
+    }&#xd;
+&#xd;
+    //打开页面时获取activity&#xd;
+    $("#xwikicontent").html(circle);&#xd;
+    fetchActivityData(false);&#xd;
+&#xd;
+    //点击刷新按钮时获取activity&#xd;
+    var allrefresh=document.getElementById("main-all-refresh");&#xd;
+    if(allrefresh){&#xd;
+        allrefresh.onclick = function () {&#xd;
+            $("#xwikicontent").html(circle);&#xd;
+            fetchActivityData(false);&#xd;
+        }&#xd;
+    }&#xd;
+});&#xd;
+&#xd;
+function fetchActivityData(moreFetch) {&#xd;
+    var fetchUrl = "/bin/get/ChoerodonConfig/ChoerodonFetchData/AllActivity";&#xd;
+    if(moreFetch) {&#xd;
+        fetchUrl = fetchUrl + "?more=true"&#xd;
+    }&#xd;
+    require(['jquery'], function ($) {&#xd;
+        $.ajax({&#xd;
+            typy: "GET",&#xd;
+            url: fetchUrl,&#xd;
+            async: true,&#xd;
+            success: function (data) {&#xd;
+                //获取所有更新的结果&#xd;
+                $("#xwikicontent").html(data);&#xd;
+                var activityLis = $("#xwikicontent>div.activity>ul.activityList>li.activityPage");&#xd;
+                if(activityLis &amp;&amp; activityLis.length >=5 &amp;&amp; !moreFetch) {&#xd;
+                    $("#xwikicontent").append(showMoreDiv);&#xd;
+                    //点击更多按钮时获取activity&#xd;
+                    var showMoreBtn = document.getElementById("showMoreActivity");&#xd;
+                    if (showMoreBtn) {&#xd;
+                        showMoreBtn.onclick = function () {&#xd;
+                            //todo 将查看更多的按钮状态改一下&#xd;
+                            changeMoreBtn(showMoreBtn);&#xd;
+                            fetchActivityData(true);&#xd;
+                        }&#xd;
+                    }&#xd;
+                }&#xd;
+&#xd;
+                // document.observe('xwiki:dom:loaded', function() {&#xd;
+                new XWiki.Activity();&#xd;
+                //});&#xd;
+&#xd;
+                //插入页面前面的图标&#xd;
+                var typePage = document.getElementsByClassName("typePage");&#xd;
+                for (var i = 0; i &lt; typePage.length; i++) {&#xd;
+                    typePage[i].insertAdjacentHTML('afterBegin', descIcon);&#xd;
+                }&#xd;
+&#xd;
+                var activityAction = document.getElementsByClassName("activityAction");&#xd;
+                for (var i = 0; i &lt; activityAction.length; i++) {&#xd;
+                    if (activityAction[i].getElementsByTagName("a").length != 0) {&#xd;
+                        activityAction[i].getElementsByTagName("a")[0].innerHTML = '  (查看更新)';&#xd;
+                    }&#xd;
+                }&#xd;
+&#xd;
+                var litleIcon = document.getElementsByClassName("activityActionAvatar");&#xd;
+                for (var i = 0; i &lt; litleIcon.length; i++) {&#xd;
+                    if (litleIcon[i].alt == "编辑页面") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', edit_doc_icon);&#xd;
+                    } else if (litleIcon[i].alt == "创建页面") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', create_doc_icon);&#xd;
+                    } else if (litleIcon[i].alt == "删除页面") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', delete_doc_icon);&#xd;
+                    } else if (litleIcon[i].alt == "添加评论") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', add_comment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "编辑评论") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', edit_comment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "删除评论") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', delete_comment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "添加附件") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', add_attachment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "编辑附件") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', edit_attachment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "删除附件") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', delete_attachment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "添加注释") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', add_annotation_icon);&#xd;
+                    } else if (litleIcon[i].alt == "编辑注释") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', edit_annotation_icon);&#xd;
+                    } else if (litleIcon[i].alt == "删除注释") {&#xd;
+                        litleIcon[i].style.display = "none";&#xd;
+                        litleIcon[i].insertAdjacentHTML('afterEnd', delete_annotation_icon);&#xd;
+                    }&#xd;
+                }&#xd;
+            }&#xd;
+        });&#xd;
+    });&#xd;
+}&#xd;
+&#xd;
+function changeMoreBtn(showMoreBtn) {&#xd;
+    require(['jquery'], function ($) {&#xd;
+        $(showMoreBtn).html(`&lt;span>加载中...&lt;span>`);&#xd;
+    });&#xd;
+}</code>
+    </property>
+    <property>
+      <name>获取所有更新内容JS</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+  <object>
+    <name>Main.所有更新.WebHome</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>9516ac8b-82bc-443f-9ecb-07e3cdc83517</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>#showMoreActivity {&#xd;
+    width : 710px;&#xd;
+    margin: 5px 0;&#xd;
+    display: flex;&#xd;
+    align-items: center;&#xd;
+    cursor: pointer;&#xd;
+    height: 36px;&#xd;
+    background: #FAFAFA;&#xd;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.20), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);&#xd;
+}&#xd;
+&#xd;
+#showMoreActivity>span {&#xd;
+    margin: 0 auto;&#xd;
+    font-weight: 500;&#xd;
+    font-family: Monospaced Number,Chinese Quote,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;&#xd;
+    font-size: 14px;&#xd;
+    color: #303F9F;&#xd;
+    line-height: 36px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activity h2 {&#xd;
+    font-size: 18px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activity .activitySummary {&#xd;
+    padding-top: 10px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .typePage .icon {&#xd;
+    font-size: 20px;&#xd;
+}&#xd;
+&#xd;
+.breadcrumb-expandable{&#xd;
+   display: none;&#xd;
+}&#xd;
+&#xd;
+.xdocLastModification{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.xcontent>hr{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.xdocCreation{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.doc-tags{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#xwikidata,#xdocFooter{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.sticky {&#xd;
+	position: fixed;&#xd;
+	top: 0;&#xd;
+    z-index: 5;&#xd;
+    background: #fff;&#xd;
+    width: 81%;&#xd;
+    padding-top: 20px;&#xd;
+    height: 118px;&#xd;
+}&#xd;
+&#xd;
+#body.hideright.panel-left-width-Medium .main {&#xd;
+    padding-left: 250px !important;&#xd;
+    left: 0 !important;&#xd;
+    width: 100% !important;&#xd;
+    padding-right:0px !important;&#xd;
+}&#xd;
+&#xd;
+.xcontent{&#xd;
+  margin-top:0px !important;&#xd;
+}&#xd;
+&#xd;
+.document-header .document-menu, .document-header .document-info {&#xd;
+    margin-top: 0px;&#xd;
+}&#xd;
+&#xd;
+.document-header #document-title h1 {&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+.row {&#xd;
+   margin-left: 0px !important; &#xd;
+   margin-right: 0px !important; &#xd;
+}&#xd;
+&#xd;
+.activityList li{&#xd;
+    width: 710px;&#xd;
+    margin-bottom: 0;&#xd;
+}&#xd;
+&#xd;
+#contentcolumn .main {&#xd;
+    margin-left: 0px;&#xd;
+}&#xd;
+&#xd;
+.activityAuthor a{&#xd;
+  font-size: 16px;&#xd;
+    color: #000000;&#xd;
+    line-height: 24px;&#xd;
+    text-decoration: none;&#xd;
+}&#xd;
+&#xd;
+.activityTime{&#xd;
+    font-size: 13px;&#xd;
+    color: #5E6C84 !important;&#xd;
+    line-height: 20px;&#xd;
+}&#xd;
+&#xd;
+.activityAction{&#xd;
+  font-size: 12px;&#xd;
+  color: rgba(0,0,0,0.65);&#xd;
+  text-align: left;&#xd;
+}&#xd;
+&#xd;
+.activitySnapshot img {&#xd;
+    border-radius: 12px;&#xd;
+    height: 24px;&#xd;
+    width: 24px;&#xd;
+}&#xd;
+&#xd;
+.activitySnapshot .activityActionAvatar {&#xd;
+    bottom: 6px;&#xd;
+    height: 10px;&#xd;
+    right: -12px;&#xd;
+    width: 10px;&#xd;
+    border-width:0;&#xd;
+}&#xd;
+&#xd;
+.activityAction a {&#xd;
+    text-decoration: none;&#xd;
+}&#xd;
+&#xd;
+#changescontent{&#xd;
+  margin-left: 30px;&#xd;
+  margin-right: 10px;&#xd;
+}&#xd;
+&#xd;
+#mainContentArea>hr{&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+#contentmenu{&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .typePage {&#xd;
+    background-image: none;&#xd;
+    font-family: PingFangSC-Regular;&#xd;
+    font-size: 16px;&#xd;
+    color: #000000;&#xd;
+    line-height: 24px;&#xd;
+    padding-left: 26px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .typePage:hover {&#xd;
+  text-decoration: none;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityAuthor>.wikilink>a {&#xd;
+  font-family: PingFangSC-Regular;&#xd;
+  font-size: 14px;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityAuthor>.wikilink>a:hover {&#xd;
+  text-decoration: none;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+#lastupdate, #treeReader {&#xd;
+  font-family: PingFangSC-Medium;&#xd;
+  font-size: 18px;&#xd;
+  color: #000000;&#xd;
+  line-height: 24px;&#xd;
+  padding-bottom: 11px&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityTime {&#xd;
+  padding: 12px 50px 0 0;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .toolExpand {&#xd;
+  padding: 8px 28px 0 0;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activitySnapshot img {&#xd;
+    border-radius: 50%;&#xd;
+    height: 24px;&#xd;
+    width: 24px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityPage>.activityHeader {&#xd;
+  padding-top: 20px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent>.activity>.activityList>.activityPage {&#xd;
+  padding: 0px 0 20px 18px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent>.activity>.activityList>.activityPage:hover{&#xd;
+  background: #FAFAFA;&#xd;
+}&#xd;
+&#xd;
+&#xd;
+#xwikicontent {&#xd;
+    margin-top: 10px;&#xd;
+}&#xd;
+&#xd;
+&#xd;
+#xwikidata, #xdocFooter, .xdocLastModification {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityPage .activityContent .activityAuthor, #xwikicontent .activityPage .activityContent .activityAction {&#xd;
+  padding-left: 10px;&#xd;
+}&#xd;
+&#xd;
+.activity-icon-add {&#xd;
+  background: #1AB16F;&#xd;
+}&#xd;
+&#xd;
+.activity-icon-edit {&#xd;
+  background: #4D90FE;&#xd;
+}&#xd;
+&#xd;
+.activity-icon-delete {&#xd;
+  background: #F44336;&#xd;
+}&#xd;
+&#xd;
+.activity-opera-div {&#xd;
+    position: absolute;&#xd;
+    right: -16px;&#xd;
+    bottom: -5px;&#xd;
+    width: 13px;&#xd;
+    height: 13px;&#xd;
+    border-radius: 50%;&#xd;
+}&#xd;
+&#xd;
+.activity-opera-icon {&#xd;
+    -webkit-transform: scale(0.8);&#xd;
+    transform: scale(0.8);&#xd;
+    position: absolute;&#xd;
+    left: 0.5px;&#xd;
+    font-size: 12px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+}&#xd;
+&#xd;
+.icon-add_comment, .icon-textsms, .icon-delete_commet {&#xd;
+  transform: scale(0.7);&#xd;
+  top: 1px;&#xd;
+  left: 0;&#xd;
+}&#xd;
+&#xd;
+.icon-delete {&#xd;
+  left: 0.3px;&#xd;
+}&#xd;
+&#xd;
+&#xd;
+#xwikicontent > div > ul > li > div.activityContent > ul > li > div.activityHeader > span.activityTime,&#xd;
+#xwikicontent > div > ul > li > div.activityContent > ul > li > div.activityHeader > a.toolExpand{&#xd;
+      margin-right: 18px;&#xd;
+}&#xd;
+&#xd;
+.activityList .attachment {&#xd;
+    padding: 3px 0 0 10px !important;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent p {&#xd;
+    padding-left: 10px;&#xd;
+}</code>
+    </property>
+    <property>
+      <contentType>CSS</contentType>
+    </property>
+    <property>
+      <name>所有更新CSS</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+</xwikidoc>

@@ -1,0 +1,172 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.Notifications.Code.NotificationFilterPreferenceLivetableResults" locale="">
+  <web>XWiki.Notifications.Code</web>
+  <name>NotificationFilterPreferenceLivetableResults</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755150000</creationDate>
+  <parent>XWiki.Notifications.Code.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755150000</date>
+  <contentUpdateDate>1534755150000</contentUpdateDate>
+  <version>1.1</version>
+  <title>NotificationFilterPreferenceLivetableResults</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity wiki="false"}}
+#if ($xcontext.action == 'get')
+##
+## Offset = item # at which to start displaying data
+##
+#set ($offset = $numbertool.toNumber($request.get('offset')))
+## offset starts from 0 in velocity and 1 in javascript
+#set ($offset = $offset - 1)
+#if ($offset &lt; 0)
+  #set ($offset = 0)
+#end
+##
+## Limit = # of items to display
+##
+#set ($limit = $numbertool.toNumber($request.get('limit')))
+#set ($limitOffset = $offset + $limit)
+##
+## Build the list of NotificationFilterPreference related to the given user.
+##
+#set ($document = $xwiki.getDocument($services.model.resolveDocument($request.user)))
+#set ($elements = [])
+#set ($index = 0)
+## First: get the list of available toggeable filters for the user
+## We display them first because we don't want them to be hidden by thousands of page filters the autowatch option
+## might have created. It would be not good to have to go to the last page of the livetable to find out these commonly
+## used filters.
+#set ($filters = $services.notification.filters.getToggleableNotificationFilters())
+#foreach ($filter in $filters)
+  #set ($index = $index + 1)
+  ## Optimization to render only displayed rows (between $offset and $limitOffset)
+  #if ($index > $offset and $index &lt;= $limitOffset)
+    #set ($checked = $filter.isEnabledByDefault())
+    #set ($objectNumber = '')
+    #set ($obj = $document.getObject('XWiki.Notifications.Code.ToggleableFilterPreferenceClass', 'filterName', $filter.name))
+    #if ($obj)
+      #set ($checked = $obj.getValue('isEnabled') != 0)
+      #set ($objectNumber = $!obj.reference.objectNumber)
+    #end
+    #if ($checked)
+      #set ($checked = 'checked = "checked"')
+    #else
+      #set ($checked = '')
+    #end
+    #set ($checkbox = "&lt;input type='checkbox' class='toggleableFilterPreferenceCheckbox' data-objectNumber='${objectNumber}' data-filtername='${filter.name}' $checked />")
+    #set ($name = $services.localization.render("notifications.filters.name.$filter.name"))
+    #set ($element = {
+      'filterPreferenceName': $name,
+      'name'                : $name,
+      'filterType'          : $services.localization.render("notifications.filters.description.$filter.name"),
+      'eventTypes'          : "#displayNotificationsEventTypeList($filter.eventTypes)",
+      'notificationFormats' : "#displayNotificationFormatsList($filter.formats)",
+      'isEnabled'           : $checkbox,
+      'doc_viewable'        : true,
+      'doc_hasdelete'       : false
+    })
+    #set ($discard = $elements.add($element))
+  #end
+#end
+## Also get the list of available filters for the user
+#set ($filters = $collectionstool.arrayList)
+#set ($discard = $filters.addAll($services.notification.filters.filters))
+#set ($filters = $sorttool.sort($filters, ['name']))
+#set ($displayHiddenDocument = "$xwiki.getUserPreference('displayHiddenDocuments')" == '1')
+#foreach ($filter in $filters)
+  #set ($filtersPreferences = $collectionstool.arrayList)
+  #set ($discard = $filtersPreferences.addAll($services.notification.filters.getFilterPreferences($filter)))
+  #set ($filtersPreferences = $sorttool.sort($filtersPreferences, ['filterPreferenceName']))
+  #foreach ($preference in $filtersPreferences)
+    #set ($pages = $preference.getProperties('PAGE'))
+    #set ($spaces = $preference.getProperties('SPACE'))
+    #if (!$displayHiddenDocument &amp;&amp; ($pages.size() == 1 &amp;&amp; $xwiki.getDocument($pages[0]).isHidden() 
+      || $spaces.size() == 1 &amp;&amp; $xwiki.getDocument($services.model.resolveSpace($spaces[0], 'default')).isHidden()))
+      ## Don't display a preference for an hidden page or space.
+      ## Why? If a user has the autowatch option enabled and create a new hidden document (for example, when she creates an application with AWM, hidden code pages are created as well),
+      ## we don't want to pollute the livetable with these hidden pages that the user don't know about. Moreover, the notifications will filter events concerning hidden pages,
+      ## so even if the filter exists, it has no effect to the user.
+      ## Here we handle only the case where pages.size() == 1 or spaces.size() == 1.
+      ## In the case there are several elements in the lists, they might have different "hidden" properties, and we don't handle it
+      ## Note: in the current implementation of watched entities, it's never the case.
+      ## TODO: handle these cases too in case custom filters need this.
+    #else
+      #set ($index = $index + 1)
+      ## Optimization to render only displayed rows (between $offset and $limitOffset)
+      #if ($index > $offset and $index &lt;= $limitOffset)
+        #set ($display = $services.rendering.render($services.notification.filters.displayFilterPreference($filter, $preference), 'html/5.0'))
+        #set ($isEnabled = '')
+        #set ($isDisabled = '')
+        ## The watchlist bridge does not handle disabling a specific filter
+        #if ($preference.filterPreferenceName.startsWith('watchlist_'))
+          #set ($isDisabled = 'disabled = "disabled"')
+        #end
+        #if ($preference.isEnabled())
+          #set ($isEnabled = 'checked = "checked"')
+        #end
+        #set ($isEnabled = "&lt;input type='checkbox' class='notificationFilterPreferenceCheckbox' data-preferenceName='${preference.getName()}' $isEnabled $isDisabled />")
+        #set ($element = {
+          'filterPreferenceName': $preference.filterPreferenceName,
+          'name'                : $display,
+          'filterType'          : $services.localization.render("notifications.filters.type.$!preference.getFilterType().name().toLowerCase()"),
+          'eventTypes'          : "#displayNotificationsEventTypeList($preference.getProperties('EVENT_TYPE'))",
+          'notificationFormats' : "#displayNotificationFormatsList($preference.getFilterFormats())",
+          'isEnabled'           : $isEnabled,
+          'doc_viewable'        : true
+        })
+        #set ($discard = $elements.add($element))
+      #end
+    #end
+  #end
+#end
+##
+## JSON.
+##
+#set ($discard = $response.setContentType('application/json'))
+#set ($offset = $numbertool.toNumber($request.offset))
+#if (!$offset)
+  #set ($offset = 1)
+#end
+$jsontool.serialize({
+  'totalrows'   : $index,
+  'reqNo'       : $request.reqNo,
+  'returnedrows': $elements.size(),
+  'offset'      : $offset,
+  'rows'        : $elements
+})
+#end
+##
+## MACROS
+##
+#macro (displayNotificationsEventTypeList $list)
+  &lt;ul class="list-unstyled">
+  #if ($list.isEmpty())
+    &lt;li>$escapetool.xml($services.localization.render('notifications.filters.preferences.allEvents'))&lt;/li>
+  #else
+    #set ($types = {})
+    #foreach ($descriptor in $services.eventstream.getRecordableEventDescriptors($xcontext.isMainWiki()))
+      #set ($discard = $types.put($descriptor.eventType, "$!services.localization.render($descriptor.description)"))
+    #end
+    #foreach ($eventType in $list)
+      &lt;li>$escapetool.xml($types.get($eventType))&lt;/li>
+    #end
+  #end
+  &lt;/ul>
+#end
+#macro (displayNotificationFormatsList $formatList)
+  &lt;ul class="list-unstyled">
+  #foreach ($notificationFormat in $formatList)
+    &lt;li>$services.localization.render("notifications.format.$!notificationFormat.name().toLowerCase()")&lt;/li>
+  #end
+  &lt;/ul>
+#end
+{{/velocity}}</content>
+</xwikidoc>

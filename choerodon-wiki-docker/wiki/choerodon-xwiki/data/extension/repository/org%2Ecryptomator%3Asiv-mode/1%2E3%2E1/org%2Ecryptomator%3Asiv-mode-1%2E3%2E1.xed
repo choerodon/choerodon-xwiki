@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.cryptomator:siv-mode</id>
+<version>1.3.1</version>
+<type>jar</type>
+<name>SIV Mode</name>
+<summary>RFC 5297 SIV mode: deterministic authenticated encryption</summary>
+<website>https://github.com/cryptomator/siv-mode</website>
+<authors>
+<author>
+<name>Sebastian Stenzel</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>The MIT License</name>
+</license>
+</licenses>
+<scm>
+<url>git@github.com:cryptomator/siv-mode.git</url>
+<connection>
+<system>git</system>
+<path>git@github.com:cryptomator/siv-mode.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>git@github.com:cryptomator/siv-mode.git</path>
+</developerconnection>
+</scm>
+<dependencies>
+<dependency>
+<id>org.bouncycastle:bcprov-jdk15on</id>
+<version>1.60</version>
+<optional type="boolean">true</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>org.cryptomator</maven.groupid>
+<maven.artifactid>siv-mode</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754769</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

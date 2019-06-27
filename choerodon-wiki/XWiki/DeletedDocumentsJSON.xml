@@ -1,0 +1,213 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.DeletedDocumentsJSON" locale="">
+  <web>XWiki</web>
+  <name>DeletedDocumentsJSON</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755103000</creationDate>
+  <parent>XWiki.DeletedDocuments</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755103000</date>
+  <contentUpdateDate>1534755103000</contentUpdateDate>
+  <version>1.1</version>
+  <title>JSON Generation for the Deleted Documents Livetable</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity wiki="false"}}
+#if($request.list)
+## ============================================================================================
+## This page is called from live table via Ajax with the argument xpage=plain. It returns a
+## set of results serialized in JSON.
+## @programming This service page needs to be saved by a user with the programming access level
+## to work as expected
+## ============================================================================================
+#if("$!{request.get('xpage')}" == 'plain')
+$response.setContentType('application/json')
+#set($offset = $mathtool.toInteger($request.get('offset')))
+## offset starts from 0 in velocity and 1 in javascript
+#set($offset = $offset - 1)
+#if (!$offset || $offset &lt; 0)
+  #set ($offset = 0)
+#end
+#set($limit = $mathtool.toInteger($request.get('limit')))
+#if (!$limit)
+  #set ($limit = 15)
+#end
+#set($docNameFilter = $request.get('ddoc.fullName'))
+#set($dateFilter = $request.get('ddoc.date'))
+#set($deleterFilter = $request.get('ddoc.deleter'))
+#set($sql = '')
+#set($params = [])
+#if("$!{docNameFilter}" != '')
+  #set($sql = "and lower(ddoc.fullName) like '%${docNameFilter.trim().toLowerCase()}%' ")
+#end
+#if("$!{dateFilter}" != '')
+  #set($dates = $dateFilter.split('-'))
+  #if($dates.size() == 2)
+    ## Date range matching
+    #set($sql = "${sql} and ddoc.date between ? and ? ")
+    #set($discard = $params.add($datetool.toDate($numbertool.toNumber($dates[0]))))
+    #set($discard = $params.add($datetool.toDate($numbertool.toNumber($dates[1]))))
+  #else
+    ## Single value matching
+    #set($sql = "${sql} and upper(str(ddoc.date)) like upper(str(?)) ")
+    #set($discard = $params.add($dateFilter))
+  #end
+#end
+#if("$!{deleterFilter}" != '')
+  #set($sql = $sql + "and lower(ddoc.deleter) like '%${deleterFilter.trim().toLowerCase()}%' ")
+#end
+#set($batchIdFilter = $request.get('ddoc.batchId'))
+#if ("$!batchIdFilter" != '')
+  #set($sql = "${sql} and lower(ddoc.batchId) like '%${batchIdFilter.trim().toLowerCase()}%' ")
+#end
+#if("$!{request.sort}" != '')
+  #set($order = $request.sort)
+#else
+  #set($order = 'ddoc.id')
+#end
+#if("$!{request.dir}" != '')
+  #set($dir = $request.dir)
+#else
+  #set($dir = 'asc')
+#end
+#set($selectSql = "select ddoc.id from XWikiDeletedDocument as ddoc where 1=1 " + $sql + " order by $order $dir")
+#set($countSql = "select count(*) from XWikiDeletedDocument as ddoc where 1=1 " + $sql)
+#set($items = $services.query.hql($selectSql).bindValues($params).setLimit($limit).setOffset($offset).execute())
+#set($totalItems = $services.query.hql($countSql).bindValues($params).execute().get(0))
+#set($returnedItems = $items.size())
+## ==============================================
+## json starts
+## ==============================================
+{
+"totalrows": $totalItems,
+"returnedrows": $returnedItems,
+"offset": ${mathtool.add($offset, 1)},
+"reqNo": ${request.reqNo},
+"rows": [
+#foreach($item in $items)
+  #set($ddoc = $xwiki.getDeletedDocument($item))
+  #if($velocityCount > 1) , #end
+  {
+     #set($originalDocument = $ddoc.getDocument())
+     "fullname"  : "$escapetool.javascript($originalDocument.fullName)",
+     "title"  : "$escapetool.javascript($originalDocument.displayTitle)",
+     "url" : "$escapetool.javascript($originalDocument.getURL('viewrev', $escapetool.url({'rev' : "deleted:${item}"})))",
+     "originalUrl" : "$escapetool.javascript($originalDocument.getURL())",
+     "canDelete" : $ddoc.canDelete(),
+     "deleteUrl" : "$escapetool.javascript($originalDocument.getURL('delete', "id=${item}&amp;form_token=$!{services.csrf.getToken()}"))",
+     "canRestore" : $ddoc.canUndelete(),
+     #set ($ddocReferenceWithLocale = $services.model.createDocumentReference($originalDocument.documentReference, $originalDocument.locale))
+     #set ($exists = $xwiki.exists($ddocReferenceWithLocale))
+     "alreadyExists" : ${exists},
+     ## If a document to be undeleted is a translation and the main document of that translation is not yet created or undeleted, restoring this translation 
+     ## will leave it inaccessible from the UI, thus "orphaned", until the main document is created or undeleted.
+     #set ($causesOrphanedTranslation = false)
+     #if (!$exists)
+       #set ($mainDocumentExists = $xwiki.exists($originalDocument.documentReference))
+       #set ($causesOrphanedTranslation = $originalDocument.isTranslation() &amp;&amp; !$mainDocumentExists)
+     #end
+     "causesOrphanedTranslation" : $causesOrphanedTranslation,
+     "restoreUrl" : "$escapetool.javascript($originalDocument.getURL('undelete', "id=${item}&amp;form_token=$!{services.csrf.getToken()}"))",
+     "date" : "$escapetool.javascript($xwiki.formatDate($ddoc.date, $dateFormat))",
+     "deleter" : "$escapetool.javascript($ddoc.deleter)",
+     "deletername" : "$escapetool.javascript($xwiki.getUserName($ddoc.deleter, false))",
+     "deleterurl" : "$escapetool.javascript($xwiki.getURL($ddoc.deleter, 'view'))",
+     "language" : "$ddoc.locale",
+     "batchId" : "$!ddoc.batchId",
+     "batchId_url" : "$escapetool.javascript($originalDocument.getURL('undelete', "id=${item}&amp;showBatch=true"))"
+   }
+#end
+]}
+## ==============================================
+## json ended
+## ==============================================
+#end## xpage=plain
+#end## request.list
+{{/velocity}}</content>
+  <object>
+    <name>XWiki.DeletedDocumentsJSON</name>
+    <number>0</number>
+    <className>XWiki.XWikiRights</className>
+    <guid>cfb9a2a9-0b52-4223-9c85-1bce8cb2bc80</guid>
+    <class>
+      <name>XWiki.XWikiRights</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <allow>
+        <defaultValue>1</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>allow</displayType>
+        <name>allow</name>
+        <number>4</number>
+        <prettyName>Allow/Deny</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </allow>
+      <groups>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>input</displayType>
+        <multiSelect>1</multiSelect>
+        <name>groups</name>
+        <number>1</number>
+        <picker>1</picker>
+        <prettyName>Groups</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <size>5</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.GroupsClass</classType>
+      </groups>
+      <levels>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>1</multiSelect>
+        <name>levels</name>
+        <number>2</number>
+        <prettyName>Levels</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <size>3</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.LevelsClass</classType>
+      </levels>
+      <users>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>input</displayType>
+        <multiSelect>1</multiSelect>
+        <name>users</name>
+        <number>3</number>
+        <picker>1</picker>
+        <prettyName>Users</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <size>5</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.UsersClass</classType>
+      </users>
+    </class>
+    <property>
+      <allow>1</allow>
+    </property>
+    <property>
+      <groups>XWiki.XWikiAdminGroup</groups>
+    </property>
+    <property>
+      <levels>view,edit</levels>
+    </property>
+  </object>
+</xwikidoc>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.nibor.autolink:autolink</id>
+<version>0.6.0</version>
+<type>jar</type>
+<name>autolink-java</name>
+<summary>Java library to extract links (URLs, email addresses) from plain text;
+        fast, small and smart about recognizing where links end</summary>
+<website>https://github.com/robinst/autolink-java</website>
+<authors>
+<author>
+<name>Robin Stocker</name>
+<url>https://github.com/robinst/</url>
+</author>
+</authors>
+<licenses>
+<license>
+<name>The MIT License</name>
+</license>
+</licenses>
+<scm>
+<url>https://github.com/robinst/autolink-java</url>
+<connection>
+<system>git</system>
+<path>git@github.com:robinst/autolink-java.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>git@github.com:robinst/autolink-java.git</path>
+</developerconnection>
+</scm>
+<properties>
+<maven.groupid>org.nibor.autolink</maven.groupid>
+<maven.artifactid>autolink</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407812316</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

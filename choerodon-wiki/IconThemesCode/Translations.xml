@@ -1,0 +1,67 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="IconThemesCode.Translations" locale="">
+  <web>IconThemesCode</web>
+  <name>Translations</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755052000</creationDate>
+  <parent>IconThemes.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755052000</date>
+  <contentUpdateDate>1534755052000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content>platform.icon.picker.preview=Preview with:
+platform.icon.picker.loading=Loading
+
+rendering.macro.iconPicker.name=Icon Picker
+rendering.macro.iconPicker.description=Select an icon within the XWiki icon set.
+rendering.macro.iconPicker.parameter.id.name=Id
+rendering.macro.iconPicker.parameter.id.description=DOM id of the input field where the picker will apply to
+rendering.macro.iconPicker.parameter.class.name=Class
+rendering.macro.iconPicker.parameter.class.description=CSS class of inputs where the picker will apply to
+rendering.macro.iconPicker.parameter.prefix.name=Prefix
+rendering.macro.iconPicker.parameter.prefix.description=Prefix to add before the name of the icon in the input field (default: "image:icon:")</content>
+  <object>
+    <name>IconThemesCode.Translations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>9daf1330-1b67-4c29-b417-ad80cadbb338</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+</xwikidoc>

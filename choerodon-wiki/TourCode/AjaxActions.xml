@@ -1,0 +1,83 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="TourCode.AjaxActions" locale="">
+  <web>TourCode</web>
+  <name>AjaxActions</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755085000</creationDate>
+  <parent>TourCode.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755085000</date>
+  <contentUpdateDate>1534755085000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{include reference="TourCode.Macros"/}}
+
+{{velocity}}
+#set ($action = $request.action)
+#set ($tourName = $request.tourName)
+#if ("$!tourName" != '')
+  #set ($tourDoc = $xwiki.getDocument($tourName))
+  #if ($action == 'editStep')
+    ## Save step
+    #set ($nbSteps       = $request.nbSteps)
+    #set ($stepOrder     = $request.stepOrder)
+    #set ($prevStepOrder = $nbSteps)
+    #set ($stepID = $mathtool.toInteger($request.stepID))
+    #set ($isNewStep = true)
+    #if ("$!stepID" != '') ## Edit
+      #set ($stepObj = $tourDoc.getObject('TourCode.StepClass', $stepID))
+      #if ($stepObj)
+        #set ($isNewStep = false)
+        #set ($prevStepOrder = $stepObj.getValue('order'))
+      #end
+    #end
+    #if ($isNewStep)
+      ## New step
+      #set ($stepObj = $tourDoc.newObject('TourCode.StepClass'))
+    #end
+    #set ($discard = $stepObj.set('element', $request.element))
+    #set ($discard = $stepObj.set('title', $request.title))
+    #set ($discard = $stepObj.set('placement', $request.placement))
+    #set ($discard = $stepObj.set('targetPage', $request.targetPage))
+    #set ($discard = $stepObj.set('backdrop', $request.backdrop))
+    #set ($discard = $stepObj.set('content', $request.content))
+    #if ($prevStepOrder != $stepOrder)
+      ## Update the step objects
+      #set ($stepObj2 = $tourDoc.getObject('TourCode.StepClass', 'order', "$stepOrder"))
+      #if ("$!stepObj2" != '')
+        #set ($discard = $stepObj2.set('order', $prevStepOrder))
+      #end
+      #set ($discard = $stepObj.set('order', $stepOrder))
+    #else
+      #if ($isNewStep)
+        #set ($discard = $stepObj.set('order', $nbSteps))
+      #end
+    #end
+  #elseif ($action == 'deleteStep')
+    #set ($stepID = $mathtool.toInteger($request.stepID))
+    #set ($stepObj = $tourDoc.getObject('TourCode.StepClass', $stepID))
+    #if ($stepObj)
+      #set ($discard = $tourDoc.removeObject($stepObj))
+      ## Update other steps order
+      #set ($steps = $tourDoc.getObjects('TourCode.StepClass'))
+      #set ($sortedSteps = [])
+      #sortXWikiObjectsList($steps, 'order', $sortedSteps)
+      #foreach ($step in $sortedSteps)
+        #set ($discard = $step.set('order', $foreach.index))
+      #end
+    #end
+  #end
+  #set ($discard = $tourDoc.save())
+  #set ($pageMode = 'edit')
+  {{include reference="TourCode.StepsListing"/}}
+#end
+{{/velocity}}</content>
+</xwikidoc>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>net.sourceforge.nekohtml:nekohtml</id>
+<version>1.9.12</version>
+<type>jar</type>
+<name>Neko HTML</name>
+<website>http://nekohtml.sourceforge.net/</website>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>http://nekohtml.svn.sourceforge.net/viewvc/nekohtml/</url>
+</scm>
+<dependencies>
+<dependency>
+<id>xerces:xercesImpl</id>
+<version>2.8.1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>net.sourceforge.nekohtml</maven.groupid>
+<maven.artifactid>nekohtml</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754994</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

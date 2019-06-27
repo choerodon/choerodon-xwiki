@@ -1,0 +1,65 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.OfficeImporterTranslations" locale="">
+  <web>XWiki</web>
+  <name>OfficeImporterTranslations</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755109000</creationDate>
+  <parent>XWiki.OfficeImporter</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755109000</date>
+  <contentUpdateDate>1534755109000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content>office.createForm.type.name=Page from Office
+office.createForm.type.description=Import Office documents into wiki pages
+office.form.error.noDocument=You must use the {0}create action{1} to import an Office document.
+office.form.append.hint=The document already exists! Append the result to the existing wiki page
+
+office.config.serverType.hint=The Office server type. It can be internally managed (local) or external (remote).
+office.config.serverPort.hint=The port number used for connecting to the Office server instance
+office.config.autoStart.hint=Specify if the Office server should be started / connected automatically at XWiki startup
+office.config.serverPath.hint=The path to the Office installation</content>
+  <object>
+    <name>XWiki.OfficeImporterTranslations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>76d3e929-b155-4bda-b55c-c7a59f95ef2f</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+</xwikidoc>

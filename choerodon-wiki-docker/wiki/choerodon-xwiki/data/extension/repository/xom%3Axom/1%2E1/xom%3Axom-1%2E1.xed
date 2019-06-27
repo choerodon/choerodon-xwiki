@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>xom:xom</id>
+<version>1.1</version>
+<type>jar</type>
+<name>xom</name>
+<website>http://www.xom.nu</website>
+<authors>
+<author>
+<name>Elliotte Rusty Harold</name>
+</author>
+</authors>
+<dependencies>
+<dependency>
+<id>xerces:xmlParserAPIs</id>
+<version>2.6.2</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>xerces:xercesImpl</id>
+<version>2.6.2</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>xalan:xalan</id>
+<version>2.7.0</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>jaxen:jaxen</id>
+<version>1.1-beta-8</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>xom</maven.groupid>
+<maven.artifactid>xom</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754966</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

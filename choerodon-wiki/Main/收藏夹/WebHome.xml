@@ -1,0 +1,763 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Main.收藏夹.WebHome" locale="">
+  <web>Main.收藏夹</web>
+  <name>WebHome</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.superadmin</creator>
+  <creationDate>1540872326000</creationDate>
+  <parent>Main.所有更新.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1547196227000</date>
+  <contentUpdateDate>1547196166000</contentUpdateDate>
+  <version>10.1</version>
+  <title>收藏夹</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{velocity}}&#xd;
+{{html clean="false"}}&#xd;
+  &lt;div id="collect-search">&lt;span class="icon icon-search" style="&#xd;
+    font-size: 24px;&#xd;
+    margin-left: 16px;&#xd;
+  ">&lt;/span>&lt;input&#xd;
+      type="text" name="text" id="collect-search-input" placeholder="搜索收藏内容" autocomplete="off" />&#xd;
+  &lt;/div>&#xd;
+  #set($folderId = $request.folderId)&#xd;
+  #set($currentUser = $xcontext.getUser())&#xd;
+  &lt;ul class="collect-list" id="collect_list">&#xd;
+     #if($folderId != 0)&#xd;
+        #set ($query = $xwiki.queryManager.createQuery("select doc.page from ChoerodonConfig.ChoerodonTables.CollectClass.WebHome doc where doc.user = '$currentUser' and doc.folder_id='$folderId' order by doc.date asc ","hql"))&#xd;
+     #else&#xd;
+        #set ($query = $xwiki.queryManager.createQuery("select doc.page from ChoerodonConfig.ChoerodonTables.CollectClass.WebHome doc where doc.user = '$currentUser' and doc.folder_id is null order by doc.date asc ","hql"))&#xd;
+     #end&#xd;
+     #set ($collects = $query.execute())&#xd;
+     #if ($collects.size() > 0 || $showEmptyPanels)&#xd;
+&#xd;
+       &lt;li class = "group-wrapper stickable">&#xd;
+         &lt;ul class = "group-container-period-today">&#xd;
+             #foreach ($docName in $collects)&#xd;
+                #if ($xwiki.hasAccessLevel('view', $docName))&#xd;
+                  #set ($recentDoc = $xwiki.getDocument($docName).getTranslatedDocument())&#xd;
+                  #if(!$recentDoc.isNew())&#xd;
+                  &lt;li class="item">&#xd;
+                     &lt;div class="item-block" title="$escapetool.xml($recentDoc.plainTitle)">&#xd;
+                       &lt;a href="$recentDoc.getURL()" class="item-clickable">&#xd;
+                         &lt;div class="item-content">&#xd;
+                           &lt;span class="icon icon-description" style="color: #5266D4;">&lt;/span>&#xd;
+                         &lt;/div>&#xd;
+                         &lt;div class = "item-content" style="margin-left: 4px;">&#xd;
+                           &lt;div class="item-text">&#xd;
+                             &lt;span class="item-title">$escapetool.xml($recentDoc.plainTitle)&lt;/span>&#xd;
+                           &lt;/div>&#xd;
+                         &lt;/div>&#xd;
+                       &lt;/a>&#xd;
+                       &lt;div class="item-actions" title="$docName">&#xd;
+                          &lt;span style="margin-top:-5px;color:white;" class="icon icon-close close-notify-btn" title="取消收藏">&lt;/span>     &#xd;
+                       &lt;/div>&#xd;
+                     &lt;/div>&#xd;
+                   &lt;/li>   &#xd;
+                #end&#xd;
+               #end&#xd;
+              #end               &#xd;
+           &lt;/ul>&#xd;
+         &lt;/li>&#xd;
+        #end&#xd;
+   &#xd;
+  &lt;/ul>&#xd;
+  &lt;div id="delete-collect-pop">&#xd;
+    &lt;div class="ant-modal-mask ant-modal-mask-hidden">&lt;/div>&#xd;
+    &lt;div class="ant-modal-wrap" style="display:none">&#xd;
+      &lt;div class="ant-modal" style="width:521px;top:200px">&#xd;
+        &lt;div class="ant-modal-content">&#xd;
+          &lt;div style="font-weight: 400;font-size: 20px;line-height:32px;">确定删除收藏夹吗？&#xd;
+          &lt;/div>&#xd;
+          &lt;div style="margin-top:15px;text-align:right;">&#xd;
+            &lt;button class="ant-btn ant-btn-flat btn-close" onclick="closeModal('delete-collect-pop')">取消&lt;/button>&#xd;
+            &lt;button class="ant-btn ant-btn-flat btn-ok" onclick="handleFolderDeleteClick()">删除&lt;/button>&#xd;
+          &lt;/div>&#xd;
+        &lt;/div>&#xd;
+&#xd;
+      &lt;/div>&#xd;
+    &lt;/div>&#xd;
+  &lt;/div>&#xd;
+  &lt;div id="edit-collect-pop">&#xd;
+    &lt;div class="ant-modal-mask ant-modal-mask-hidden">&lt;/div>&#xd;
+    &lt;div class="ant-modal-wrap" style="display:none">&#xd;
+      &lt;div class="ant-modal-sidebar ant-modal ant-modal-sidebar-open">&#xd;
+        &lt;div class="ant-modal-content">&#xd;
+          &lt;div class="ant-modal-header">&#xd;
+            &lt;div class="ant-modal-title">&#xd;
+              编辑收藏夹&#xd;
+            &lt;/div>&#xd;
+          &lt;/div>&#xd;
+          &lt;div class="ant-modal-body">&#xd;
+            &lt;div class="page-content">&#xd;
+              &lt;div class="page-content-header">&#xd;
+                &lt;div class="title">&#xd;
+                  编辑一个收藏夹&#xd;
+                &lt;/div>&#xd;
+                &lt;div class="description">&#xd;
+                  编辑一个收藏夹。&#xd;
+                &lt;/div>&#xd;
+              &lt;/div>&#xd;
+            &lt;/div>&#xd;
+            &lt;form id="edit-collect-pop-form">&#xd;
+              &lt;div class="ant-input-wrapper" style="width:512px;">&#xd;
+                &lt;label for="collect_name" class="ant-input-label">收藏夹名称&lt;/label>&#xd;
+                &lt;input class="ant-input" name="collect_name" type="text" maxlength="30" style="width:521px" />&#xd;
+&lt;span class="ant-input-icon">&#xd;
+ &lt;span class="ant-input-icon-copy ant-input-length-info">&lt;/span>&#xd;
+&lt;/span>&#xd;
+              &lt;/div>              &#xd;
+            &lt;/form>&#xd;
+          &lt;/div>&#xd;
+          &lt;div class="ant-modal-footer">&#xd;
+            &lt;div>&#xd;
+              &lt;button class="ant-btn ant-btn-primary btn-ok" onclick="editCollectFolder()">修改&lt;/button>&#xd;
+              &lt;button class="ant-btn ant-btn-raised btn-close" onclick="closeModal('edit-collect-pop')">取消&lt;/button>&#xd;
+            &lt;/div>&#xd;
+          &lt;/div>&#xd;
+        &lt;/div>&#xd;
+      &lt;/div>&#xd;
+    &lt;/div>&#xd;
+  &lt;/div>&#xd;
+{{/html}}&#xd;
+{{/velocity}}</content>
+  <object>
+    <name>Main.收藏夹.WebHome</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>85c52056-f7a8-4036-8097-61abb08b1a61</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>forbid</cache>
+    </property>
+    <property>
+      <code>//增加元素&#xd;
+&#xd;
+var strTitle = "\n&lt;span style=\"font-size: 18px;\n    color: #000;\n    line-height: 59px;\n    margin-bottom: 0;\n    cursor: pointer;\">" + getParams(location.search).folderName + "&lt;/span>\n&lt;div onclick=\"reloadPage()\" class=\"btn-group xwiki-main-refesh\" style=\"\n    margin-left: 56px;\n\">&lt;a class=\"btn btn-default\">\n    &lt;span class=\"icon icon-refresh\">&lt;/span>\n    &lt;span class=\"btn-label\">\u5237\u65B0&lt;/span>&lt;/a>&lt;/div>\n&lt;div class=\"btn-group\" id=\"tmMoreActions\">&lt;a id=\"main-more\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"false\" aria-expanded=\"true\" role=\"button\">\n    &lt;span class=\"icon icon-more_vert\">&lt;/span>\n    &lt;span class=\"btn-label\">\u66F4\u591A&lt;/span>&lt;/a>\n&lt;ul class=\"dropdown-menu dropdown-menu-right\">\n &lt;li onclick=\"handleEditClick()\">\n&lt;a>\n\u7F16\u8F91\n&lt;/a>\n&lt;/li>\n &lt;li onclick=\"openModal('delete-collect-pop')\">\n &lt;a>\n\u5220\u9664\n&lt;/a>\n&lt;/li>\n&lt;/ul>\n&lt;/div>\n";&#xd;
+&#xd;
+//增加元素&#xd;
+var strTitle2 = "\n&lt;span style=\"font-size: 18px;\n    color: #000;\n    line-height: 59px;\n    margin-bottom: 0;\n    cursor: pointer;\">" + getParams(location.search).folderName + "&lt;/span>\n&lt;div onclick=\"reloadPage()\" class=\"btn-group xwiki-main-refesh\" style=\"\n    margin-left: 56px;\n\">&lt;a  class=\"btn btn-default\">\n    &lt;span class=\"icon icon-refresh\">&lt;/span>\n    &lt;span class=\"btn-label\">\u5237\u65B0&lt;/span>&lt;/a>&lt;/div>\n";&#xd;
+if (document.getElementsByClassName("document-header")[0] != null) {&#xd;
+    if (getParams(location.search).folderId == 0) {&#xd;
+        document.getElementById("document-title").innerHTML = strTitle2;&#xd;
+    } else {&#xd;
+        document.getElementById("document-title").innerHTML = strTitle;&#xd;
+    }&#xd;
+&#xd;
+}&#xd;
+function getParams(url) {&#xd;
+    const theRequest = {};&#xd;
+    if (url.indexOf('?') !== -1) {&#xd;
+        const str = url.split('?')[1];&#xd;
+        const strs = str.split('&amp;');&#xd;
+        for (let i = 0; i &lt; strs.length; i += 1) {&#xd;
+            theRequest[strs[i].split('=')[0]] = decodeURI(strs[i].split('=')[1]);&#xd;
+        }&#xd;
+    }&#xd;
+    return theRequest;&#xd;
+}&#xd;
+function reloadPage() {&#xd;
+    location.reload();&#xd;
+}&#xd;
+function renderLi(title) {&#xd;
+    return `&lt;li class = "group-wrapper stickable">&#xd;
+         &lt;ul class = "group-container-period-today">&#xd;
+                  &lt;li class="item">&#xd;
+                     &lt;div class="item-block" title="${title}">&#xd;
+                       &lt;a href="/bin/view/${title}" class="item-clickable">&#xd;
+                         &lt;div class="item-content">&#xd;
+                           &lt;span class="icon icon-description" style="color: #5266D4;">&lt;/span>&#xd;
+                         &lt;/div>&#xd;
+                         &lt;div class = "item-content" style="margin-left: 4px;">&#xd;
+                           &lt;div class="item-text">&#xd;
+                             &lt;span class="item-title">${title}&lt;/span>&#xd;
+                           &lt;/div>&#xd;
+                         &lt;/div>&#xd;
+                       &lt;/a>&#xd;
+                       &lt;div class="item-actions" title="${title}">&#xd;
+                          &lt;span style="&#xd;
+                               background: 0;&#xd;
+                               cursor: pointer;&#xd;
+                               font-size: 14px;&#xd;
+                               position: relative;&#xd;
+                               vertical-align: text-top;&#xd;
+                               color: #fff;" title="取消收藏">X&lt;/span>     &#xd;
+                       &lt;/div>&#xd;
+                     &lt;/div>&#xd;
+                   &lt;/li>                  &#xd;
+           &lt;/ul>&#xd;
+         &lt;/li>`&#xd;
+}&#xd;
+require(['jquery'], function ($) {&#xd;
+    var circle = `&lt;div id="waite" style="height: 46px;width: 46px;margin: 200px 0 30px calc(50vw - 175px);">&#xd;
+            &lt;svg viewBox="0 0 50 50">&#xd;
+                &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
+                      -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      stroke-dasharray: 80px 200px;&#xd;
+                      stroke-dashoffset: 0;&#xd;
+                      ">&lt;/circle>&#xd;
+            &lt;/svg>&#xd;
+    &lt;/div>`;&#xd;
+    $("#collect-search-input").bind('input propertychange', function () {&#xd;
+        var search_val = $.trim($("#collect-search-input").val());&#xd;
+        var collects = document.getElementsByClassName("item-block");&#xd;
+        for (var i = 0; i &lt; collects.length; i++) {&#xd;
+            var val = collects[i].title;&#xd;
+            var flag = false;&#xd;
+            if (val.toLowerCase().indexOf(search_val.toLowerCase()) != -1) {&#xd;
+                flag = true&#xd;
+                collects[i].style.display = 'block';&#xd;
+            } else {&#xd;
+                collects[i].style.display = 'none';&#xd;
+            }&#xd;
+        }&#xd;
+    });&#xd;
+&#xd;
+    $(document).on('click', '.item-actions', function (e) {&#xd;
+        var curruser = '$xcontext.getUser()';&#xd;
+        var currpage = e.currentTarget.title;&#xd;
+        var d = {&#xd;
+            "user": curruser,&#xd;
+            "page": currpage&#xd;
+        }&#xd;
+        options = {&#xd;
+            type: "POST",&#xd;
+            contentType: "application/json; charset=utf-8",&#xd;
+            data: JSON.stringify(d),&#xd;
+            dataType: "json",&#xd;
+            url: "/collect/page?type=delete",&#xd;
+            success: function (data) {&#xd;
+                if (data == "1") {&#xd;
+                    window.location.reload();&#xd;
+                }&#xd;
+            },&#xd;
+            error: function (err) {&#xd;
+                require(['toastMsg'], function (toastMsg) {&#xd;
+                    toastMsg.toast('删除失败！');&#xd;
+                })&#xd;
+            }&#xd;
+        };&#xd;
+&#xd;
+        $.ajax(options);&#xd;
+    });&#xd;
+&#xd;
+&#xd;
+    var mainCollect = document.getElementById("main-collect");&#xd;
+    if (mainCollect) {&#xd;
+        mainCollect.onclick = function () {&#xd;
+            $("#xwikicontent").html(circle);&#xd;
+            $.ajax({&#xd;
+                typy: "GET",&#xd;
+                url: "/bin/get/ChoerodonConfig/ChoerodonFetchData/CollectPage",&#xd;
+                async: true,&#xd;
+                success: function (data) {&#xd;
+                    //获取最近空间的结果&#xd;
+                    $("#xwikicontent").html(data);&#xd;
+                    $("#collect-search-input").bind('input propertychange', function () {&#xd;
+                        var search_val = $.trim($("#collect-search-input").val());&#xd;
+                        var collects = document.getElementsByClassName("item-block");&#xd;
+                        for (var i = 0; i &lt; collects.length; i++) {&#xd;
+                            var val = collects[i].title;&#xd;
+                            var flag = false;&#xd;
+                            if (val.toLowerCase().indexOf(search_val.toLowerCase()) != -1) {&#xd;
+                                flag = true&#xd;
+                                collects[i].style.display = 'block';&#xd;
+                            } else {&#xd;
+                                collects[i].style.display = 'none';&#xd;
+                            }&#xd;
+                        }&#xd;
+                    });&#xd;
+&#xd;
+&#xd;
+                    $(document).on('click', '.item-actions', function (e) {&#xd;
+                        var curruser = '$xcontext.getUser()';&#xd;
+                        var currpage = e.currentTarget.title;&#xd;
+                        var da = {&#xd;
+                            "user": curruser,&#xd;
+                            "page": currpage&#xd;
+                        }&#xd;
+                        options = {&#xd;
+                            type: "POST",&#xd;
+                            contentType: "application/json; charset=utf-8",&#xd;
+                            data: JSON.stringify(da),&#xd;
+                            dataType: "json",&#xd;
+                            url: "/collect/page?type=delete",&#xd;
+                            success: function (data) {&#xd;
+                                if (data == "1") {&#xd;
+                                    window.location.reload();&#xd;
+                                }&#xd;
+                            },&#xd;
+                            error: function (err) {&#xd;
+                                require(['toastMsg'], function (toastMsg) {&#xd;
+                                    toastMsg.toast('删除失败！');&#xd;
+                                })&#xd;
+                            }&#xd;
+                        };&#xd;
+&#xd;
+                        $.ajax(options);&#xd;
+                    });&#xd;
+&#xd;
+&#xd;
+                }&#xd;
+            });&#xd;
+        }&#xd;
+    }&#xd;
+});&#xd;
+function handleEditClick() {&#xd;
+    var folderName = getParams(location.search).folderName;&#xd;
+    var ele = jQuery("#edit-collect-pop-form input[name=collect_name]");&#xd;
+    ele.parent().addClass("ant-input-has-value");&#xd;
+    var maxlength=ele.attr('maxlength');&#xd;
+    ele.next('.ant-input-icon').find('.ant-input-length-info').text(folderName.length+'/'+maxlength);&#xd;
+    ele.attr("value", folderName);&#xd;
+    openModal("edit-collect-pop")&#xd;
+}&#xd;
+function handleFolderDeleteClick() {&#xd;
+    var curruser = '$xcontext.getUser()';&#xd;
+    var da = {&#xd;
+        "user": curruser,&#xd;
+        "id": getParams(location.search).folderId&#xd;
+    }&#xd;
+    options = {&#xd;
+        type: "POST",&#xd;
+        contentType: "application/json; charset=utf-8",&#xd;
+        data: JSON.stringify(da),&#xd;
+        dataType: "json",&#xd;
+        url: "/collect/page?folderType=delete",&#xd;
+        success: function (data) {&#xd;
+            if (data == "1") {&#xd;
+                window.location.href = `/bin/view/Main/收藏夹/?folderId=0&amp;folderName=我的收藏`;&#xd;
+                closeModal("delete-collect-pop")&#xd;
+            } else if (data == "2") {&#xd;
+                require(['toastMsg'], function (toastMsg) {&#xd;
+                    toastMsg.toast('收藏夹内有数据，不可删除！');&#xd;
+                })&#xd;
+            } else {&#xd;
+                closeModal("delete-collect-pop")&#xd;
+            }&#xd;
+        },&#xd;
+        error: function (err) {&#xd;
+            require(['toastMsg'], function (toastMsg) {&#xd;
+                toastMsg.toast('删除失败！');&#xd;
+            })&#xd;
+        }&#xd;
+    };&#xd;
+    jQuery.ajax(options);&#xd;
+}</code>
+    </property>
+    <property>
+      <name>collectJs</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+  <object>
+    <name>Main.收藏夹.WebHome</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>3c5ef3ac-cb02-4fd3-bbca-a2c48de68e68</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>#xwikicontent .collect-list {&#xd;
+    position: relative;&#xd;
+    top: 0px;&#xd;
+    opacity: 1;&#xd;
+    list-style: none;&#xd;
+    padding-left: 0px;&#xd;
+    margin-top: 16px;&#xd;
+}&#xd;
+&#xd;
+.typePage {&#xd;
+    background-image: url(/resources/icons/silk/page_white_text.png);&#xd;
+}&#xd;
+&#xd;
+.type {&#xd;
+    background-repeat: no-repeat;&#xd;
+    padding-left: 15px;&#xd;
+}&#xd;
+&#xd;
+.sticky {&#xd;
+	position: fixed;&#xd;
+	top: 0;&#xd;
+    z-index: 5;&#xd;
+    background: #fff;&#xd;
+    width: 81%;&#xd;
+    padding-top: 20px;&#xd;
+    height: 118px;&#xd;
+}&#xd;
+&#xd;
+.group-wrapper {&#xd;
+    padding: 0 0 18px 0;&#xd;
+}&#xd;
+&#xd;
+.stickable {&#xd;
+    position: relative;&#xd;
+}&#xd;
+&#xd;
+li {&#xd;
+    display: list-item;&#xd;
+    text-align: -webkit-match-parent;&#xd;
+}&#xd;
+&#xd;
+.sticky-header-period-today {&#xd;
+    font-size: 18px;&#xd;
+    color: #000000;&#xd;
+    line-height: 24px;&#xd;
+    letter-spacing: 0;&#xd;
+    text-transform: uppercase;&#xd;
+    cursor: pointer;&#xd;
+    padding-left: 15px;&#xd;
+}&#xd;
+&#xd;
+.item-block {&#xd;
+    display: block;&#xd;
+    height: 40px;&#xd;
+}&#xd;
+&#xd;
+.item{&#xd;
+  border-radius: 3px;&#xd;
+  text-decoration: none;&#xd;
+  display: block;&#xd;
+  cursor: pointer;&#xd;
+}&#xd;
+&#xd;
+.item:hover{&#xd;
+  background: #f4f5f7;&#xd;
+}&#xd;
+&#xd;
+.item:hover  .item-actions{&#xd;
+    display: inline-block;&#xd;
+    width: 20px;&#xd;
+    height: 20px;&#xd;
+    float: right;&#xd;
+    margin-top: 10px;&#xd;
+    margin-right: 10px;&#xd;
+    text-align: center;&#xd;
+    border-radius: 20px;&#xd;
+    background-color: #727272;&#xd;
+}&#xd;
+&#xd;
+.item-text{&#xd;
+  display: block;&#xd;
+  width: auto;&#xd;
+  overflow: hidden;&#xd;
+  white-space: nowrap;&#xd;
+  text-overflow: ellipsis;&#xd;
+  margin-right: 6px;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+.item-title {&#xd;
+    overflow: hidden;&#xd;
+    white-space: nowrap;&#xd;
+    font-size: 13px;&#xd;
+}&#xd;
+&#xd;
+.item-content {&#xd;
+    display: inline-block;&#xd;
+    vertical-align: middle;&#xd;
+    padding-top: 10px;&#xd;
+    padding-bottom: 10px;&#xd;
+}&#xd;
+&#xd;
+.item-clickable {&#xd;
+    display: inline-block;&#xd;
+    width: calc(100% - 30px);&#xd;
+    padding-left: 36px;&#xd;
+}&#xd;
+&#xd;
+.group-container-period-today{&#xd;
+    width: 512px;&#xd;
+    padding-left: 0;&#xd;
+}&#xd;
+&#xd;
+.item-block>a:link {color: #5e6c84; text-decoration:none;}&#xd;
+.item-block>a:active:{color: #5e6c84; text-decoration:none;}&#xd;
+.item-block>a:visited {color:#5e6c84;text-decoration:none;}&#xd;
+.item-block>a:hover {color: #5e6c84; text-decoration:none;}&#xd;
+&#xd;
+.breadcrumb-expandable{&#xd;
+   display: none;&#xd;
+}&#xd;
+&#xd;
+.xdocLastModification{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.xcontent>hr{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.xdocCreation{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.doc-tags{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#xwikidata,#xdocFooter{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#body.hideright.panel-left-width-Medium .main {&#xd;
+    padding-left: 250px !important;&#xd;
+    left: 0 !important;&#xd;
+    width: 100% !important;&#xd;
+    padding-right:0px !important;&#xd;
+}&#xd;
+&#xd;
+.xcontent{&#xd;
+  margin-top:0px !important;&#xd;
+}&#xd;
+&#xd;
+.document-header .document-menu, .document-header .document-info {&#xd;
+    margin-top: 0px;&#xd;
+}&#xd;
+&#xd;
+.document-header #document-title h1 {&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+.row {&#xd;
+   margin-left: 0px !important; &#xd;
+   margin-right: 0px !important; &#xd;
+}&#xd;
+&#xd;
+#contentcolumn .main {&#xd;
+    margin-left: 0px;&#xd;
+}&#xd;
+&#xd;
+#xwikidata {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#changescontent{&#xd;
+  margin-left: 30px;&#xd;
+  margin-right: 10px;&#xd;
+}&#xd;
+&#xd;
+#mainContentArea>hr{&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+#contentmenu{&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+.item-actions {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#collect-search{&#xd;
+  width: 512px;&#xd;
+  height: 38px;&#xd;
+  margin-top: 22px;&#xd;
+  background: #FFFFFF;&#xd;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.20);&#xd;
+  border-radius: 2px;&#xd;
+}&#xd;
+&#xd;
+#collect-search-input{&#xd;
+  width: 472px;height: 38px;&#xd;
+      font-size: 15px;&#xd;
+      color: rgba(0,0,0,0.54);&#xd;
+      text-align: left;&#xd;
+      line-height: 15px;&#xd;
+      border: none;&#xd;
+     box-shadow: none;&#xd;
+      background: white;&#xd;
+    outline: none;&#xd;
+}&#xd;
+.dropdown-menu  a{&#xd;
+  cursor:pointer;&#xd;
+}</code>
+    </property>
+    <property>
+      <contentType>CSS</contentType>
+    </property>
+    <property>
+      <name>collectStyle</name>
+    </property>
+    <property>
+      <parse/>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+</xwikidoc>

@@ -1,0 +1,205 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Main.SolrTranslations" locale="">
+  <web>Main</web>
+  <name>SolrTranslations</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1536801655000</creationDate>
+  <parent>Main.SolrSearch</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1540966440000</date>
+  <contentUpdateDate>1540966440000</contentUpdateDate>
+  <version>4.1</version>
+  <title>Solr Search Translations</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content>solr.admin.title=搜索管理&#xd;
+solr.admin.submit=Apply&#xd;
+solr.admin.error.notallowed=您不允许执行此操作&#xd;
+solr.admin.error.norights=访问本节需要管理权限&#xd;
+&#xd;
+solr.admin.status.title=状态&#xd;
+solr.admin.status.queueSize.label=队列长度&#xd;
+solr.admin.status.queueSize.hint=需要索引、重新索引或从索引中删除的实体的数量(取决于执行的操作)。&#xd;
+&#xd;
+solr.admin.indexing.title=索引&#xd;
+solr.admin.indexing.action.label=活动&#xd;
+solr.admin.indexing.action.hint=对索引执行的操作。&#xd;
+solr.admin.indexing.action.select_index=添加索引&#xd;
+solr.admin.indexing.action.select_delete=根据索引删除&#xd;
+solr.admin.indexing.action.select_reindex=重选索引&#xd;
+solr.admin.indexing.wiki.label=Wiki&#xd;
+solr.admin.indexing.wiki.hint=wiki所有文档都将受到所选操作的影响。&#xd;
+solr.admin.indexing.wiki.select_farm=整个文件&#xd;
+solr.admin.indexing.query.label=自定义查询&#xd;
+solr.admin.indexing.query.hint=可选查询，以限制受索引中所选操作影响的文档。&#xd;
+&#xd;
+solr.sortBy=排序:&#xd;
+solr.sortBy.score=关联&#xd;
+solr.sortBy.title_sort=标题&#xd;
+solr.sortBy.date=最后修改日期&#xd;
+solr.sortBy.author_display_sort=最后作者&#xd;
+solr.sortBy.filename_sort=文件名&#xd;
+solr.sortBy.attsize_sort=文件大小&#xd;
+solr.sortBy.attdate_sort=上传日期&#xd;
+solr.sortBy.attauthor_display_sort=上传人&#xd;
+solr.sortOrder.asc=升序&#xd;
+solr.sortOrder.desc=降序&#xd;
+&#xd;
+solr.options=展示:&#xd;
+solr.options.highlight=高亮&#xd;
+solr.options.highlight.title=显示每个结果中匹配的内容&#xd;
+solr.options.facet=Facets&#xd;
+solr.options.facet.title=允许对结果进行额外的过滤&#xd;
+&#xd;
+solr.result.language=Language&#xd;
+solr.result.locatedIn=位置&#xd;
+solr.result.author=Modified by {0} on {1}&#xd;
+solr.result.mediaType=File of type {0}&#xd;
+solr.result.uploadedBy=Uploaded by {0} on {1} ({2})&#xd;
+solr.result.highlightAll=匹配高亮&#xd;
+&#xd;
+solr.facets.title=筛选&#xd;
+solr.facets.hint=在搜索结果中筛选&#xd;
+solr.facets.resetAll=重置&#xd;
+solr.facets.expandAll=展开&#xd;
+solr.facets.collapseAll=折叠&#xd;
+solr.facets.emptyValue=空&#xd;
+solr.facets.moreValues={0} 更多&#xd;
+&#xd;
+solr.filterBy.type.document=文件&#xd;
+solr.filterBy.type.attachment=附件&#xd;
+solr.filterBy.type.object=对象&#xd;
+solr.filterBy.type.object_property=对象属性&#xd;
+&#xd;
+solr.filterBy.fileType.image=Image&#xd;
+solr.filterBy.fileType.audio=Audio&#xd;
+solr.filterBy.fileType.video=Video&#xd;
+solr.filterBy.fileType.text=Text&#xd;
+solr.filterBy.fileType.office=Office&#xd;
+solr.filterBy.fileType.word=Word&#xd;
+solr.filterBy.fileType.presentation=描述&#xd;
+solr.filterBy.fileType.spreadsheet=表格&#xd;
+solr.filterBy.fileType.archive=Archive&#xd;
+solr.filterBy.fileType.font=Font&#xd;
+solr.filterBy.fileType.other=Other&#xd;
+solr.facet.fileType.text.plain=Plain Text&#xd;
+solr.facet.fileType.text.javascript=JavaScript&#xd;
+solr.facet.fileType.text.java-source=Java Source&#xd;
+solr.facet.fileType.text.sh=Shell Script&#xd;
+solr.facet.fileType.image.icon=Icon&#xd;
+solr.facet.fileType.archive.java-archive=JAR&#xd;
+solr.facet.fileType.archive.xara=XAR&#xd;
+solr.facet.fileType.other.octet-stream=Binary Data&#xd;
+&#xd;
+solr.facet.date.today=Today&#xd;
+solr.facet.date.last7Days=最近7天&#xd;
+solr.facet.date.last30Days=最近30天&#xd;
+solr.facet.date.olderThan30Days=30天以上&#xd;
+solr.facet.date.customInterval=自定义日期和时间间隔&#xd;
+solr.facet.date.start=开始日期&#xd;
+solr.facet.date.end=结束日期&#xd;
+solr.facet.date.applyCustomInterval=确定&#xd;
+solr.facet.date.between=从{0} 到 {1}&#xd;
+solr.facet.date.after={0}之后&#xd;
+solr.facet.date.before= {0}之前&#xd;
+solr.facet.date.any=任何时间&#xd;
+&#xd;
+solr.facet.size.tiny=极小&#xd;
+solr.facet.size.small=小&#xd;
+solr.facet.size.medium=中等&#xd;
+solr.facet.size.large=大&#xd;
+solr.facet.size.between={0}和{1}之间&#xd;
+solr.facet.size.lessThan=比{0}小&#xd;
+solr.facet.size.moreThan=比{0}大&#xd;
+solr.facet.size.any=任何大小&#xd;
+&#xd;
+solr.field.type=结果类型&#xd;
+solr.field.locale=语言&#xd;
+solr.field.locale.emptyValue=空&#xd;
+solr.field.locale.emptyValue.hint=有些文档没有语言集，因为它们包含脚本(不是用自然语言编写的)，或者它们组成了用当前语言显示的用户界面(比如这个页面)。&#xd;
+solr.field.wiki=Wiki&#xd;
+solr.field.spaces=位置&#xd;
+solr.field.space_exact=位置&#xd;
+solr.field.space_facet=位置&#xd;
+solr.field.name=页&#xd;
+solr.field.name_exact=页&#xd;
+solr.field.title=标题&#xd;
+solr.field.author=最后一个作者&#xd;
+solr.field.author_display=最后一个作者&#xd;
+solr.field.creator=创建者&#xd;
+solr.field.creator_display=创建者&#xd;
+solr.field.date=最后修改日期&#xd;
+solr.field.creationdate=创建日期&#xd;
+solr.field.doccontent=显示文档内容&#xd;
+solr.field.doccontentraw=原始文档内容&#xd;
+solr.field.class=对象类型&#xd;
+solr.field.class.definedBy=Defined by {0} \u00BB {1}&#xd;
+solr.field.propertyname=属性名称&#xd;
+solr.field.propertyvalue=属性值&#xd;
+solr.field.filename=附件名称&#xd;
+solr.field.attcontent=附件内容&#xd;
+solr.field.comment=评论&#xd;
+solr.field.objcontent=对象&#xd;
+solr.field.mimetype=文件类型&#xd;
+solr.field.attauthor=上传者&#xd;
+solr.field.attauthor_display=更新人&#xd;
+solr.field.attdate=上传日期&#xd;
+solr.field.attsize=文件大小&#xd;
+&#xd;
+solr.uix.docdoesnotexist.title=你是在找以下哪一页?&#xd;
+solr.uix.attachmentdoesnotexist.title=您是否正在寻找以下附件之一?&#xd;
+&#xd;
+## Used to indicate where deprecated keys start&#xd;
+#@deprecatedstart&#xd;
+&#xd;
+## until 7.2M3&#xd;
+solr.result.location=Located in {0} \u00BB {1} \u00BB {2}&#xd;
+&#xd;
+## until 7.2RC1&#xd;
+solr.field.space=位置&#xd;
+&#xd;
+## Used to indicate where deprecated keys end&#xd;
+#@deprecatedend&#xd;
+</content>
+  <object>
+    <name>Main.SolrTranslations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>54715b8e-2403-4d0f-9b46-26f2b0e9e339</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+</xwikidoc>

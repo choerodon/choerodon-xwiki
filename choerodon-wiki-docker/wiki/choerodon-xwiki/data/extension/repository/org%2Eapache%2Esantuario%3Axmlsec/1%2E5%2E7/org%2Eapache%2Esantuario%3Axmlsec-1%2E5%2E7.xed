@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.apache.santuario:xmlsec</id>
+<version>1.5.7</version>
+<type>jar</type>
+<name>Apache XML Security for Java</name>
+<summary>Apache XML Security for Java supports XML-Signature Syntax and Processing,
+        W3C Recommendation 12 February 2002, and XML Encryption Syntax and
+        Processing, W3C Recommendation 10 December 2002. As of version 1.4,
+        the library supports the standard Java API JSR-105: XML Digital Signature APIs.</summary>
+<website>http://santuario.apache.org/</website>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>http://svn.apache.org/repos/asf/santuario/xml-security-java/tags/xmlsec-1.5.7</url>
+<connection>
+<system>svn</system>
+<path>http://svn.apache.org/repos/asf/santuario/xml-security-java/tags/xmlsec-1.5.7</path>
+</connection>
+<developerconnection>
+<system>svn</system>
+<path>https://svn.apache.org/repos/asf/santuario/xml-security-java/tags/xmlsec-1.5.7</path>
+</developerconnection>
+</scm>
+<issuemanagement>
+<system>JIRA</system>
+<url>https://issues.apache.org/jira/browse/SANTUARIO</url>
+</issuemanagement>
+<dependencies>
+<dependency>
+<id>commons-logging:commons-logging</id>
+<version>1.1.1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>org.apache.santuario</maven.groupid>
+<maven.artifactid>xmlsec</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754850</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

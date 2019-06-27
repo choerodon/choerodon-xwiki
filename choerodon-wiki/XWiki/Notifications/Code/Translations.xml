@@ -1,0 +1,247 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.Notifications.Code.Translations" locale="">
+  <web>XWiki.Notifications.Code</web>
+  <name>Translations</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755153000</creationDate>
+  <parent>XWiki.Notifications.Code.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755153000</date>
+  <contentUpdateDate>1534755153000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content>
+platform.core.profile.category.notifications=Notifications
+notifications.filters.cancel=Cancel
+notifications.filters.submit=Save
+notifications.filters.type.label=Filter type:
+notifications.filters.type.hint=How the filter should act towards an event in the given location
+notifications.filters.location.label=Filter scope:
+notifications.filters.location.hint=What part of the wiki should be concerned by the filter?
+
+## Advanced filters options
+notifications.settings.filters.advanced=Advanced filtering options
+notifications.filters.advanced.toggles.hint=These filters are activated by default, you can disable them by using the button next to each filter.
+notifications.filters.advanced.toggles.table.name=Filter name
+notifications.filters.advanced.toggles.table.description=Description
+notifications.filters.advanced.toggles.table.toggle=Toggle
+notifications.filters.advanced.modal.close=Close
+
+## Filters names
+notifications.filters.name.systemUserNotificationFilter=System Filter
+notifications.filters.description.systemUserNotificationFilter=Hide notifications from the System user
+notifications.filters.name.ownEventsNotificationFilter=Own Events Filter
+notifications.filters.description.ownEventsNotificationFilter=Hide notifications about your own activity
+notifications.filters.name.eventReadAlertFilter=Read Event Filter (Alert)
+notifications.filters.description.eventReadAlertFilter=Hide notifications that you have marked as read
+notifications.filters.name.eventReadEmailFilter=Read Event Filter (Email)
+notifications.filters.description.eventReadEmailFilter=Hide notifications that you have marked as read
+notifications.filters.name.minorEventAlertNotificationFilter=Minor Event (Alert)
+notifications.filters.description.minorEventAlertNotificationFilter=Hide notifications concerning minor changes on pages
+notifications.filters.name.minorEventEmailNotificationFilter=Minor Event (Email)
+notifications.filters.description.minorEventEmailNotificationFilter=Hide notifications concerning minor changes on pages
+
+## Filter Types
+notifications.filters.type.inclusive=Inclusive
+notifications.filters.type.exclusive=Exclusive
+
+## Translation keys for the scopeNotificationFilter
+notifications.filters.preferences.scopeNotificationFilter.name=Scope Notification Filter
+notifications.filters.preferences.scopeNotificationFilter.page=Page only
+notifications.filters.preferences.scopeNotificationFilter.space=Page and children
+notifications.filters.preferences.scopeNotificationFilter.wiki=Wiki
+
+notifications.filters.preferences.allEvents=-
+
+notifications.filters.preferences.addPreference.filterType.inclusive=Inclusive
+notifications.filters.preferences.addPreference.filterType.exclusive=Exclusive
+notifications.filters.preferences.addPreference.notificationFormat.label=Notification format
+notifications.filters.preferences.addPreference.notificationFormat.hint=On which format of notification the filter should apply?
+notifications.filters.preferences.addPreference.eventType.label=Event Type
+notifications.filters.preferences.addPreference.eventType.hint=Which event type should be targeted by the filter?
+notifications.filters.preferences.addPreference.location.label=Filter Scope
+notifications.filters.preferences.addPreference.location.hint=Which page should be targeted by the filter?
+notifications.filters.preferences.delete.inProgress=Deleting...
+notifications.filters.preferences.delete.done=Filter preference deleted!
+notifications.filters.preferences.delete.error=Failed to delete the filter preference
+notifications.filters.preferences.setEnabled.inProgress=Saving...
+notifications.filters.preferences.setEnabled.done=Filter preference saved!
+notifications.filters.preferences.setEnabled.error=Failed to save the filter preference
+
+## Notifications toggles
+notifications.toggle.disabled.hint=You need to enable notifications in your settings if you wish to watch these locations
+
+## Notifications formats
+notifications.format.alert=Alert
+notifications.format.email=Email
+
+## Filter preferences settings
+notifications.settings.filters.preferences.title=Filters
+notifications.settings.filters.preferences.hint=Create filters to more precisely control when the active events should trigger notifications.
+notifications.settings.filters.preferences.forGuest=Log in or register to handle your notification filters.
+
+## Header definition for notification filter preferences
+notifications.settings.filters.preferences.table.name=Name
+notifications.settings.filters.preferences.table.filterType=Filter Type
+notifications.settings.filters.preferences.table.eventTypes=Events
+notifications.settings.filters.preferences.table.notificationFormats=Formats
+notifications.settings.filters.preferences.table.isEnabled=Is enabled?
+notifications.settings.filters.preferences.table._actions=Actions
+
+notifications.menu.header=Notifications
+notifications.menu.header.settings=Settings
+notifications.menu.clear=Clear All
+notifications.menu.clearing=Clearing the notifications
+notifications.menu.cleared=Notifications have been cleared
+notifications.menu.nothing=No notifications available!
+notifications.menu.more=Load older notifications
+notifications.menu.details=Details ({0})
+notifications.settings.title=Notifications Preferences
+notifications.settings.error.notAdmin=You need to be administrator to see this.
+notifications.settings.menu=Notification menu
+notifications.settings.menu.hint=The notification menu is located on the top right of the page, and you can see it by clicking on the bell ({0})
+notifications.settings.email=Email
+notifications.settings.email.forGuest=Log in or register to handle your notification settings.
+notifications.settings.email.disabled=The notifications emails are disabled. Please contact your administrator.
+notifications.settings.email.hint=An email is sent to you regularly with a summary of what happened on the wiki
+notifications.settings.email.title=Email Preferences
+notifications.settings.email.frequency=Email Frequency
+notifications.settings.email.frequency.hint=Choose how often you want to receive an email with the summary of what happened on the wiki.
+notifications.settings.email.diffType.hint=Select the level of detail you want to receive about all the changes in the email.
+notifications.settings.saving=Your settings are being saved...
+notifications.settings.saved=Saved!
+notifications.settings.savingfailed=Failed to save your settings
+notifications.settings.filters=Filters ({0})
+notifications.settings.addFilter=Add filter
+notifications.settings.errorFilterWiki=Error: you must select a wiki, not a page
+notifications.settings.preferences=Preferences
+notifications.settings.preferences.hint=Capture what events are happening and deliver them in the stream or by email.
+notifications.settings.applications.title=Applications
+notifications.settings.applications.hint=This is the list of applications that can send notifications. You can enable or disable any of them.
+notifications.settings.applications.forGuest=Log in or register to handle your notification settings.
+notifications.settings.applications.appName=Name
+notifications.settings.events=Events
+notifications.settings.watch.title=Watched Pages
+notifications.settings.watch.autowatchmode=Automatic page watching
+notifications.settings.watch.autowatchmode.hint=Decide if you wish to watch a page after you have worked on it
+notifications.events.by=edited by {0}.
+notifications.events.lastChange=Last change: {0}.
+notifications.events.lastComment=Last comment: {0}.
+notifications.preferences.scope.table.scope=Scope
+notifications.preferences.scope.table.location=Location
+notifications.preferences.scope.table.scopeFilterType=Filter Type
+notifications.preferences.scope.table._actions=Actions
+notifications.email.title=Event(s) on the wiki:
+notifications.email.subject={0} event(s) on the wiki
+notifications.email.seeChanges=Changes: {0}
+notifications.email.linkDetails=See details
+notifications.rss.feedLink=RSS Feed
+notifications.rss.feedLinkDescription=Event feed for notifications
+notifications.rss.feedTitle=Notifications RSS feed
+notifications.rss.feedDescription=This RSS feed can be customized on your profile page.
+notifications.rss.seeChanges=Changes: {0}
+notifications.globalsettings.email=Notifications Email
+XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_daily=Daily
+XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_hourly=Hourly
+XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_weekly=Weekly
+XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_live=Live
+XWiki.Notifications.Code.NotificationEmailPreferenceClass_diffType=Details of the changes
+XWiki.Notifications.Code.NotificationEmailPreferenceClass_diffType_NOTHING=Nothing
+XWiki.Notifications.Code.NotificationEmailPreferenceClass_diffType_STANDARD=Standard
+XWiki.Notifications.Code.NotificationPreferenceScopeClass_scopeFilterType_inclusive=Inclusive
+XWiki.Notifications.Code.NotificationPreferenceScopeClass_scopeFilterType_exclusive=Exclusive
+XWiki.Notifications.Code.AutomaticWatchModeClass_automaticWatchMode_NONE=Never
+XWiki.Notifications.Code.AutomaticWatchModeClass_automaticWatchMode_ALL=Every time I make a modification
+XWiki.Notifications.Code.AutomaticWatchModeClass_automaticWatchMode_MAJOR=Every time I make a major modification
+XWiki.Notifications.Code.AutomaticWatchModeClass_automaticWatchMode_NEW=Only when I create a new page
+
+## User profile
+notifications.userprofile.following=Following
+notifications.userprofile.notfollowing=Not following
+notifications.userprofile.follow=Start following
+notifications.userprofile.unfollow=Stop following
+notifications.userprofile.done=Done
+notifications.userprofile.saving=Saving...
+notifications.userprofile.error=Error saving the notification setting
+
+## Macros description
+rendering.macro.notificationsApplicationsPreferences.name=Notifications Applications Preferences
+rendering.macro.notificationsApplicationsPreferences.description=Display the preferences of the current user about notification applications.
+rendering.macro.notificationsApplicationsPreferences.parameter.target.name=Target
+rendering.macro.notificationsApplicationsPreferences.parameter.target.description=Target of the macro (could be "user" for the current user or "wiki" for the current wiki)
+
+rendering.macro.notifications.name=Notifications
+rendering.macro.notifications.description=Display notifications about events happened on the wiki.
+rendering.macro.notifications.parameter.count.name=Count
+rendering.macro.notifications.parameter.count.description=Maximum number of events to display by default
+rendering.macro.notifications.parameter.useUserPreferences.name=Use the preferences of the user
+rendering.macro.notifications.parameter.useUserPreferences.description=If true, the preferences of the user about notifications are used
+rendering.macro.notifications.parameter.displayOwnEvents.name=Display own events
+rendering.macro.notifications.parameter.displayOwnEvents.description=If true, the events of the current user are displayed like the others. They are hidden otherwise.
+rendering.macro.notifications.parameter.displayMinorEvents.name=Display minor events
+rendering.macro.notifications.parameter.displayMinorEvents.description=If true, the events concerning minor revisions of pages are displayed like the others. They are hidden otherwise.
+rendering.macro.notifications.parameter.displaySystemEvents.name=Display system events
+rendering.macro.notifications.parameter.displaySystemEvents.description=If true, the events triggered by the XWiki software are displayed like the others. They are hidden otherwise.
+rendering.macro.notifications.parameter.displayReadEvents.name=Display read events
+rendering.macro.notifications.parameter.displayReadEvents.description=If true, the events that the user have already marked as read are displayed like the others. They are hidden otherwise.
+rendering.macro.notifications.parameter.wikis.name=Wikis
+rendering.macro.notifications.parameter.wikis.description=List of wikis (comma-separated) to consider. This parameter is ignored if useUserPreferences is set to "true".
+rendering.macro.notifications.parameter.spaces.name=Spaces
+rendering.macro.notifications.parameter.spaces.description=List of spaces (comma-separated) to consider. This parameter is ignored if useUserPreferences is set to "true".
+rendering.macro.notifications.parameter.pages.name=Pages
+rendering.macro.notifications.parameter.pages.description=List of pages (full references, comma-separated) to consider. This parameter is ignored if useUserPreferences is set to "true".
+rendering.macro.notifications.parameter.displayReadStatus.name=Display "read" status
+rendering.macro.notifications.parameter.displayReadStatus.description=Either or not the status of the events (either it has been marked as read or not) should be displayed
+rendering.macro.notifications.parameter.users.name=Users
+rendering.macro.notifications.parameter.users.description=List of users (comma-separated) to consider. This parameter is ignored if useUserPreferences is set to "true".
+rendering.macro.notifications.parameter.displayWatchedUsersOnly.name=Display followed users only
+rendering.macro.notifications.parameter.displayWatchedUsersOnly.description=Either or not to display only the events done by the given list of users (if empty, the list of followed users of the current user is used)
+
+## Notifications Macro
+notifications.macro.noWatchedUsers=You are not following anybody.
+notifications.macro.whenNotView=Notifications Macro. Could be seen on 'view' mode.
+</content>
+  <object>
+    <name>XWiki.Notifications.Code.Translations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>8e54a70c-75c8-4328-a8b2-1843599c43bc</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+</xwikidoc>

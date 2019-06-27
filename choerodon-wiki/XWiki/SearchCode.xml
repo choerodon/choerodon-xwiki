@@ -1,0 +1,57 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.SearchCode" locale="">
+  <web>XWiki</web>
+  <name>SearchCode</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755113000</creationDate>
+  <parent>Main.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755113000</date>
+  <contentUpdateDate>1534755113000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity output="false"}}
+#set ($searchConfigDoc = $xwiki.getDocument('XWiki.SearchConfig'))
+#set ($searchConfigClass = $xwiki.getDocument('XWiki.SearchConfigClass').xWikiClass)
+
+## Get or create the configuration object
+#set ($searchConfigObj = $searchConfigDoc.getObject($searchConfigClass.name, true))
+#set ($searchEngine = "$!{searchConfigObj.getProperty('engine').value}")
+
+## Default search engine to use in case the configured one is not found:
+## - 'solr' is the preferred default
+## - 'database' is the fall-back default
+#set ($searchExtensions = $services.uix.getExtensions('org.xwiki.platform.search', {'sortByCustomOrder' : "${searchEngine}, solr, database"}))
+#if (!$searchExtensions.isEmpty())
+  #set ($searchExtension = $searchExtensions[0])
+
+  ## Update the configuration if it is out of synch with the reality (installed extensions).
+  #set ($needsUpdate = $searchEngine != $searchExtension.id)
+  #set ($searchEngine = $searchExtension.id)
+  #if ($needsUpdate &amp;&amp; $searchConfigDoc.hasAccessLevel('edit'))
+    #if ($searchConfigDoc.parent == '')
+      $searchConfigDoc.setParent('XWiki.SearchAdmin')
+    #end
+    ## Save the updated configuration. Make sure to set it hidden as it's a technical document.
+    $searchConfigObj.set('engine', $searchEngine)
+    $searchConfigDoc.setHidden(true)
+    $searchConfigDoc.save()
+  #end
+
+  #set ($searchPage = $searchExtension.parameters.search)
+  #set ($searchAdminPage = $searchExtension.parameters.admin)
+#else
+  ## No Search UI Extension was found!
+  #set ($searchPage = '')
+  #set ($searchAdminPage = '')
+#end
+{{/velocity}}</content>
+</xwikidoc>

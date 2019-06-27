@@ -1,0 +1,604 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.XWikiSyntax" locale="">
+  <web>XWiki</web>
+  <name>XWikiSyntax</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755130000</creationDate>
+  <parent>Main.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755130000</date>
+  <contentUpdateDate>1534755130000</contentUpdateDate>
+  <version>1.1</version>
+  <title>$services.localization.render("help.syntaxpage.title")</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{velocity output="false"}}
+#set($SUPPORTED_SYNTAXES = {})
+#set($void = $SUPPORTED_SYNTAXES.put('1.0', 'XWiki Syntax 1.0'))
+#set($void = $SUPPORTED_SYNTAXES.put('2.0', 'XWiki Syntax 2.0'))
+#set($void = $SUPPORTED_SYNTAXES.put('2.1', 'XWiki Syntax 2.1'))
+##
+## needed for sections that contain descriptions valid for several syntaxes
+## basically it is hack to reuse the 2.0 descriptions for 2.1 
+#set($SUPPORTED_SYNTAX_ORDER = ['1.0', '2.0', '2.1'])
+##
+## filter all syntaxes that are not installed/configured
+#set($configuredSyntaxes = $services.rendering.getConfiguredSyntaxes())
+#set($enabledSyntaxIds = [])
+#foreach($syntax in $configuredSyntaxes)
+  #set($discard = $enabledSyntaxIds.add($syntax.toIdString()))
+#end
+#set($unavailableSyntaxes=[])
+#foreach($supportedSyntax in $SUPPORTED_SYNTAX_ORDER)
+  #set($fullSyntaxId = "xwiki/$supportedSyntax")
+  #if(!$enabledSyntaxIds.contains($fullSyntaxId))
+    #set($discard = $unavailableSyntaxes.add($supportedSyntax))
+  #end
+#end
+#foreach($unavailableSyntax in $unavailableSyntaxes)
+  #set($discard = $SUPPORTED_SYNTAX_ORDER.remove($unavailableSyntax))
+  #set($discard = $SUPPORTED_SYNTAXES.removeKey($unavailableSyntax))
+#end
+
+#if ($request.xaction == 'switchContext')
+  $response.sendRedirect($request.target)
+  #stop
+#end
+
+#set ($crtCategoryId = "$!{request.category}")
+#if ($crtCategoryId != '')
+  #set ($crtCategoryId = $mathtool.toInteger($crtCategoryId))
+#end
+#set ($crtSectionId = "$!{request.section}")
+#set ($crtSyntaxVer = "$!{request.syntax}")
+#if (!$SUPPORTED_SYNTAXES.containsKey($crtSyntaxVer))
+  ## Default to the most current one (if we have any)
+  #if(!$SUPPORTED_SYNTAX_ORDER.isEmpty())
+    #set ($crtSyntaxVer = $SUPPORTED_SYNTAX_ORDER.get($mathtool.sub($SUPPORTED_SYNTAX_ORDER.size(),1)))
+  #end
+#end
+#set($crtSyntaxPos = $SUPPORTED_SYNTAX_ORDER.indexOf($crtSyntaxVer))
+
+#set ($extraParamList = []) 
+#if ($request.language)
+  #set ($discard = $extraParamList.add("language=$escapetool.url($request.language)"))
+#end
+#if ($request.xpage)
+  #set ($discard = $extraParamList.add("xpage=$escapetool.url($request.xpage)"))
+#end
+#if ($extraParamList.isEmpty())
+  #set ($extraParams = '')
+#else
+  #set ($extraParams = '&amp;'+$stringtool.join($extraParamList,'&amp;'))
+#end
+
+##
+## Syntax menu map
+##
+#set($syntaxMenu = [])
+#set($catCount = -1)
+#set($catName = "")
+#set($catChildren = [])
+#set($results = $services.query.xwql('from doc.object(XWiki.XWikiSyntaxClass) as syntax order by syntax.category, syntax.section').addFilter('currentlanguage').addFilter('unique').execute())
+
+#if($results.empty)
+  No syntax sections found!
+#else
+  #foreach ($item in $results)
+    #set($sectionDoc = $xwiki.getDocument($item))
+    #set($obj = $sectionDoc.getObject("XWiki.XWikiSyntaxClass"))
+
+    ## detect if we entered a new category
+    #if($catCount &lt; $obj.getProperty("category").value)
+      ## Put previous category into map (if existing), and reset children map
+      #if($catId)
+        #set($cat = { 'id' : $catId, 'name' : $catName, 'children' : $catChildren })
+        $syntaxMenu.add($cat)
+        #set($catChildren = [])
+      #end
+      ## extract new catId and catName values, and sectionTitle as we are already traveling the DOM
+      #foreach($headerBlock in $sectionDoc.getDocument().getXDOM().getBlocks('class:HeaderBlock', 'DESCENDANT'))
+        #if($headerBlock.getLevel().getAsInt() == 1)
+          #set($catId = $headerBlock.getId().substring(1))
+          #set($catName = $services.rendering.render($headerBlock, 'plain/1.0'))
+        #elseif($headerBlock.getLevel().getAsInt() == 2)
+          #set($sectionTitle = $services.rendering.render($headerBlock, 'plain/1.0'))
+          #break
+        #end
+      #end
+      #foreach($headerBlock in $sectionDoc.getTranslatedDocument().getDocument().getXDOM().getBlocks('class:HeaderBlock', 'DESCENDANT'))
+        #if($headerBlock.getLevel().getAsInt() == 1)
+          #set($catName = $services.rendering.render($headerBlock, 'plain/1.0'))
+        #elseif($headerBlock.getLevel().getAsInt() == 2)
+          #set($sectionTitle = $services.rendering.render($headerBlock, 'plain/1.0'))
+          #break ## otherwise finds nested example headlines 
+        #end
+      #end
+      #set($catCount = $obj.getProperty("category").value)
+    #else
+      ## still in same category, only need new section title
+      #foreach($headerBlock in $sectionDoc.getTranslatedDocument().getDocument().getXDOM().getBlocks('class:HeaderBlock', 'DESCENDANT'))
+        #if($headerBlock.getLevel().getAsInt() == 2)
+          #set($sectionTitle = $services.rendering.render($headerBlock, 'plain/1.0'))
+          #break
+        #end
+      #end
+    #end
+
+    ## Add new sections to category children map
+    #set($child = {'id' : $sectionDoc.getName().substring(11), 'minSyntax' : $obj.getProperty("minSyntaxId").value, 'maxSyntax' : $obj.getProperty("maxSyntaxId").value, 'name' : $sectionTitle})
+    $catChildren.add($child)
+  #end
+#end
+#set($cat = { 'id' : $catId, 'name' : $catName, 'children' : $catChildren })
+$syntaxMenu.add($cat)
+
+
+##
+## Filter only the sections that are valid for a Syntax
+##
+#set ($categoriesToRemove = [])
+#foreach ($category in $syntaxMenu)
+  #set ($sectionsToRemove = [])
+  #foreach ($section on $category.children)
+    #set($minSyntaxPos = $SUPPORTED_SYNTAX_ORDER.indexOf($section.minSyntax))
+    #if ($minSyntaxPos > $crtSyntaxPos)
+      #set ($discard = $sectionsToRemove.add($section))
+      #if ($section.id == $crtSectionId)
+        #set ($crtSectionId = '') ## clear section if it doesn't exist (can happen when switching from 2.x to 1.0 syntax)
+      #end
+    #end
+  #end
+  #set ($discard = $category.children.removeAll($sectionsToRemove))
+  #if ($category.children.size() == 0)
+    #set ($discard = $categoriesToRemove.add($category))
+  #end
+#end
+#set ($discard = $syntaxMenu.removeAll($categoriesToRemove))
+#if ("$!crtCategoryId" != '' &amp;&amp; $crtCategoryId >= $syntaxMenu.size())
+  #set ($crtCategoryId = '')
+#end
+
+#if ($crtSectionId != '')
+  #set ($crtItemId = $crtSectionId)
+#elseif ($crtCategoryId != '')
+  #set ($crtItemId = $syntaxMenu.get($crtCategoryId).id)
+#end
+#set ($crtSection = $util.null)
+#set ($crtCategory = $util.null)
+
+
+##
+## Prepare the Syntax menu map for processing
+##
+#foreach ($category in $syntaxMenu)
+  ## "Standard" URLs and icons for categories
+  #set ($category.url = "?syntax=$escapetool.url(${crtSyntaxVer})&amp;category=${mathtool.sub($velocityCount, 1)}${extraParams}")  
+  #set ($category.cssClass = "${category.id}Icon")
+  #if ("$!{crtCategoryId}" != '' &amp;&amp; $velocityCount == $mathtool.add($crtCategoryId, 1))
+    #set ($crtCategory = $category)
+  #end
+  ##
+  ## Process each syntax section
+  #foreach ($section in $category.children)
+    #if ($xwiki.exists("XWiki.XWikiSyntax${section.id}"))
+      #if ($crtSectionId == $section.id)
+        #set ($crtSection = $section)
+        #set ($crtCategory = $category)
+      #end
+      #set ($section.url = "?syntax=$escapetool.url(${crtSyntaxVer})&amp;section=$escapetool.url(${section.id})${extraParams}")
+    #end
+  #end
+#end
+
+#**
+ * Displays the sections from a syntax category
+ *
+ * Expected format:
+ * sections = vector of items
+ * item = map with the following fields:
+ *        'id'       : mandatory
+ *        'name'     : the text displayed for the corresponding menu item;
+ *                     optional, defaults to
+ *                     $services.localization.render("$!{translationPrefix}${item.id}")
+ *
+ * @param $sections the sections list, in the format described above
+ * @param $translationPrefix the translation prefix added to the id of each
+ *        item, in order to generate the name and description; ignored when
+ *        name or description are specified
+ * @param $heading the heading syntax
+ *#
+#macro(syntax_displayCategory $sections $translationPrefix $heading)
+  #foreach ($section in $sections)
+    #syntax_displaySection($section $translationPrefix $heading)
+  #end
+#end
+
+#macro(syntax_displaySection $section $translationPrefix $heading)
+    #set ($displayVersion = $crtSyntaxVer)
+    ## here is the hack to display the description for 2.0 if we have no description for 2.x
+    ## this likely needs more work if e.g. there is a 3.x which is not compatible with 2.x
+    #set($maxSyntaxPos = $SUPPORTED_SYNTAX_ORDER.indexOf($section.maxSyntax))
+    #if ($crtSyntaxPos > $maxSyntaxPos)
+      #set ($displayVersion = $section.maxSyntax)
+    #end
+    #if($heading)
+    (% class="sectionheader" %)
+    $heading $section.name $heading
+
+    #end
+    {{include reference="XWiki.XWikiSyntax${section.id}" section="H${displayVersion}${section.id}"/}}
+#end
+
+
+#**
+ * Displays the syntax categories
+ *
+ * Expected format:
+ * sections = vector of items
+ * item = map with the following fields:
+ *        'id'       : mandatory
+ *        'name'     : the text displayed for the corresponding menu item;
+ *                     optional, defaults to
+ *                     $services.localization.render("$!{translationPrefix}${item.id}")
+ *
+ * @param $sections the sections list, in the format described above
+ * @param $translationPrefix the translation prefix added to the id of each
+ *        item, in order to generate the name and description; ignored when
+ *        name or description are specified
+ *#
+#macro(syntax_displayCategories $syntaxMenu $translationPrefix)
+  #set ($subHeading = '====')
+  #foreach ($category in $syntaxMenu)
+    == $category.name ==
+
+    #syntax_displayCategory($category.children 'syntax.' '===')
+  #end
+#end
+
+#**
+ * Displays the drop down allowing to switch the syntax.
+ *#
+#macro (syntaxSwitch)
+  #set ($crtSelection = "")
+  #if ("$!{crtCategoryId}" != '')
+    #set ($crtSelection = "category=$escapetool.url($!{crtCategoryId})")
+  #elseif ($crtSectionId != '')
+    #set ($crtSelection = "section=$escapetool.url($!{crtSectionId})")
+  #end
+  #if ($crtSelection != "")
+    #set ($crtSelection = "${crtSelection}${extraParams}")
+  #else
+    #set ($crtSelection = "$extraParams")
+  #end
+{{html}}
+  &lt;form id="change-context" class="xformInline" action="$doc.getURL()">
+    &lt;div>
+      &lt;input type="hidden" name="xaction" value="switchContext" />
+      #if ($request.language)
+        &lt;input type="hidden" name="language" value="$escapetool.xml($request.language)" />
+      #end
+      #if ($request.xpage)
+        &lt;input type="hidden" name="xpage" value="$escapetool.xml($request.xpage)" />
+      #end
+      &lt;select id="goto-select" name="target" title="$escapetool.xml($services.localization.render("help.changesyntax"))">
+        &lt;optgroup label="$services.localization.render('help.choose_syntax')">
+        #foreach($syntaxId in $SUPPORTED_SYNTAX_ORDER)
+          #set ($query = "syntax=${escapetool.url($syntaxId)}&amp;${crtSelection}")
+          &lt;option value="$escapetool.xml($doc.getURL('view', $query))"#if($crtSyntaxVer == $syntaxId) selected="selected"#end>$escapetool.html($SUPPORTED_SYNTAXES.get($syntaxId))&lt;/option>
+        #end
+        &lt;/optgroup>
+      &lt;/select>
+      &lt;span class="buttonwrapper">&lt;input type="submit" value="$escapetool.xml($services.localization.render('admin.switchContext'))" class="button" />&lt;/span>
+    &lt;/div>
+  &lt;/form>
+{{/html}}
+#end
+{{/velocity}}
+
+{{velocity}}
+##**************************************************************************************************
+## From the Administration Sheet, used to display a common UI for some wiki features
+## here used to display all categories / sections of the syntax guide
+##**************************************************************************************************
+$xwiki.get('jsx').use($doc.getFullName())##
+$xwiki.get('ssx').use($doc.getFullName())##
+#if ($crtSectionId != '')
+  #set ($sectionName = ${crtSection.name})
+#elseif ($crtCategoryId != '')
+  #set ($sectionName = ${crtCategory.name})
+#else
+  #set ($sectionName = $services.localization.render("help.syntaxall"))
+#end
+#set ($syntaxTitle = $services.localization.render("help.syntaxtitle", ["${crtSyntaxVer}"]))
+#syntaxSwitch()
+(((
+#set ($query = "syntax=$escapetool.url(${crtSyntaxVer})${extraParams}")
+#if ($crtCategory){{html}}&lt;a href="${doc.getURL('view', ${query})}">$syntaxTitle&lt;/a>{{/html}}#{else}(% class="current" %)$syntaxTitle#{end}#if ($crtCategory) » #if ($crtSection){{html}}&lt;a href="${crtCategory.url}">${crtCategory.name}&lt;/a>{{/html}}#{else}(% class="current" %)${crtCategory.name}#{end}#if ($crtSection) » (% class="current" %)${crtSection.name}#end#end
+)))
+== $syntaxTitle: $sectionName ==
+
+#verticalNavigation($syntaxMenu {'translationPrefix' : 'syntax.', 'crtItemId' : "$!crtItemId", 'cssClass' : 'syntax-menu'})
+##-----------------------------------------
+## syntax-page display
+##-----------------------------------------
+  #set ($subHeading = '===')
+  (% id="syntax-page-content" %)(((
+  #if(!$crtSection &amp;&amp; !$crtCategory)
+    #syntax_displayCategories($syntaxMenu 'syntax.')
+  #elseif (!$crtSection)
+    #syntax_displayCategory($crtCategory.children 'syntax.' '==')
+  #else
+      #syntax_displaySection($crtSection 'syntax.' false)      
+  #end
+  ))) ## syntax-page-content
+{{/velocity}}</content>
+  <object>
+    <name>XWiki.XWikiSyntax</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>62f48ea6-d577-48fc-83ac-2bed169a325d</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>/* Administration application custom JavaScript */
+
+document.observe('xwiki:dom:loaded', function() {
+  if($('goto-select')) {
+    Event.observe($('goto-select'), 'change', function (event) {
+      var select = event.element();
+      var i = select.selectedIndex;
+      if (window.location != select.options[i].value) {
+        window.location = select.options[i].value;
+      }
+    });
+    $('goto-select').next().hide();
+  }
+});</code>
+    </property>
+    <property>
+      <name>Syntax Guide javascript</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.XWikiSyntax</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>054720d0-2038-49a9-afc7-c8b6d58012ec</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>#document-title {
+  margin-bottom: 1em;
+}
+#change-context {
+  float: right;
+  padding-top: 0.5em;
+}
+#goto-select optgroup {
+  margin: 0.5ex;
+}
+
+#syntax-page-content {
+  margin-left: 15em;
+}
+#syntax-page-content table {
+  width: 99%;
+}
+#syntax-page-content>h3 {
+  display: none;
+}
+#syntax-page-content>h3.sectionheader {
+  display: block;
+}
+
+/*******************************************************/
+
+.syntax-menu .generalIcon {
+  background-image: url("$xwiki.getSkinFile('icons/silk/page_white_code.gif')");
+}
+
+.syntax-menu .editingIcon {
+  background-image: url("$xwiki.getSkinFile('icons/silk/page_white_edit.gif')");
+}
+
+.syntax-menu .advancedIcon {
+  background-image: url("$xwiki.getSkinFile('icons/silk/wand.gif')");
+}
+
+.syntax-menu .programmingIcon {
+  background-image: url("$xwiki.getSkinFile('icons/silk/page_white_gear.gif')");
+}
+
+/* Firefox panics when it has an overflowing table but the content is pre-formatted. */
+tbody>tr>td>tt {
+    white-space: normal !important;
+}</code>
+    </property>
+    <property>
+      <name>Syntax Guide Stylesheet</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

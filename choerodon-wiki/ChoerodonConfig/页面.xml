@@ -1,0 +1,458 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="ChoerodonConfig.页面" locale="">
+  <web>ChoerodonConfig</web>
+  <name>页面</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534994075000</creationDate>
+  <parent>xwiki:ChoerodonConfig.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534994075000</date>
+  <contentUpdateDate>1534994075000</contentUpdateDate>
+  <version>1.1</version>
+  <title>页面</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{velocity}}&#xd;
+#set ($space = $doc.getSpace())&#xd;
+## 带点的空间如何处理&#xd;
+#set ($spaces = $space.split('\.'))&#xd;
+#set($application = $spaces.get(0))&#xd;
+{{html}}&#xd;
+&lt;div id="lastupdate">最近的更新&lt;/div>&#xd;
+{{/html}}&#xd;
+&#xd;
+{{activity subentries="3" entries="5" spaces=$application/}}&#xd;
+&#xd;
+{{html}}&#xd;
+&lt;div id="treeReader">树状浏览器&lt;/div>&#xd;
+{{/html}}&#xd;
+#set ($openTo = "xwiki:"+$application+".WebHome")&#xd;
+&#xd;
+{{documentTree showTranslations="false" showAttachments="false"  compact="true" root="document:$openTo" /}}&#xd;
+&#xd;
+{{/velocity}}&#xd;
+</content>
+  <object>
+    <name>ChoerodonConfig.页面</name>
+    <number>3</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>bc37ec14-74fa-4850-9c01-23f4dd20f049</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>var descIcon = `&lt;span class="icon icon-description" style="&#xd;
+    color: #5266D4;&#xd;
+    padding-bottom: 4px;&#xd;
+">&lt;/span>`;&#xd;
+var typePage = document.getElementsByClassName("typePage");&#xd;
+for(var i=0; i&lt;typePage.length; i++){&#xd;
+	typePage[i].insertAdjacentHTML('afterBegin', descIcon);&#xd;
+}&#xd;
+&#xd;
+var edit_doc_icon = `&lt;div class="activity-opera-div  activity-icon-edit">&lt;span class="icon icon-mode_edit activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var create_doc_icon = `&lt;div class="activity-opera-div  activity-icon-add">&lt;span class="icon icon-playlist_add activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_doc_icon = `&lt;div class="activity-opera-div  activity-icon-delete">&lt;span class="icon icon-delete activity-opera-icon">&lt;/span>&lt;/div>`&#xd;
+var edit_comment_icon = `&lt;div class="activity-opera-div activity-icon-edit">&lt;span class="icon icon-textsms activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var add_comment_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-add_comment activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_comment_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-delete_commet activity-opera-icon">&lt;/span>&lt;/div>`&#xd;
+var add_attachment_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-add_attach activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_attachment_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-delete_attach activity-opera-icon">&lt;/span>&lt;/div>`&#xd;
+var litleIcon = document.getElementsByClassName("activityActionAvatar");&#xd;
+for(var i=0; i&lt;litleIcon.length; i++){&#xd;
+	if(litleIcon[i].alt == "edited the page"){&#xd;
+		litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', edit_doc_icon);&#xd;
+	}else if (litleIcon[i].alt == "created the page") {&#xd;
+        litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', create_doc_icon);&#xd;
+    } else if(litleIcon[i].alt == "deleted the page") {&#xd;
+        litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', delete_doc_icon);&#xd;
+    } else if (litleIcon[i].alt == "added a comment") {&#xd;
+        litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', add_comment_icon);&#xd;
+    } else if (litleIcon[i].alt == "edited a comment") {&#xd;
+        litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', edit_comment_icon);&#xd;
+    } else if (litleIcon[i].alt == "deleted a comment") {&#xd;
+        litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', delete_comment_icon);&#xd;
+    } else if (litleIcon[i].alt == "added an attachment") {&#xd;
+        litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', add_attachment_icon);&#xd;
+    } else if (litleIcon[i].alt == "deleted an attachment") {&#xd;
+               litleIcon[i].style.display = "none";&#xd;
+        litleIcon[i].insertAdjacentHTML('afterEnd', delete_attachment_icon);&#xd;
+    }&#xd;
+}&#xd;
+</code>
+    </property>
+    <property>
+      <name>页面的js</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+  <object>
+    <name>ChoerodonConfig.页面</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>34f37e24-63ba-4d14-9fa8-0505b1eefedb</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>#xwikicontent .typePage {&#xd;
+    background-image: none;&#xd;
+    font-family: PingFangSC-Regular;&#xd;
+    font-size: 16px;&#xd;
+    color: #000000;&#xd;
+    line-height: 24px;&#xd;
+    padding-left: 26px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .typePage:hover {&#xd;
+  text-decoration: none;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityAuthor>.wikilink>a {&#xd;
+  font-family: PingFangSC-Regular;&#xd;
+  font-size: 14px;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityAuthor>.wikilink>a:hover {&#xd;
+  text-decoration: none;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+#lastupdate, #treeReader {&#xd;
+  font-family: PingFangSC-Medium;&#xd;
+  font-size: 18px;&#xd;
+  color: #000000;&#xd;
+  line-height: 24px;&#xd;
+  padding-bottom: 11px&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityTime {&#xd;
+  padding: 12px 50px 0 0;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .toolExpand {&#xd;
+  padding: 8px 28px 0 0;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activitySnapshot img {&#xd;
+    border-radius: 50%;&#xd;
+    height: 32px;&#xd;
+    width: 32px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .activityPage>.activityHeader {&#xd;
+  padding-top: 10px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent>.activity>h2 {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent>.activity {&#xd;
+  width: 562px;&#xd;
+  background: #FFFFFF;&#xd;
+  box-shadow: 0 1px 0 0 rgba(0,0,0,0.20), 0 0 0 1px rgba(0,0,0,0.12), 0 2px 2px -1px rgba(0,0,0,0.12);&#xd;
+  border-radius: 2px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent>.activity>.activityList>.activityPage {&#xd;
+  padding: 0px 0 15px 18px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent>.activity>.activityList>.activityPage:hover{&#xd;
+  background: #FAFAFA;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent>.jstree-xwiki .jstree-hovered {&#xd;
+  background: #FFFFFF;&#xd;
+  border-radius: 2px;&#xd;
+  box-shadow: inset 0 0 1px #ffffff;&#xd;
+  text-decoration:none;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent {&#xd;
+    margin-top: 10px;&#xd;
+}&#xd;
+&#xd;
+#treeReader {&#xd;
+  position: absolute;&#xd;
+  top: 0;&#xd;
+  left: 606px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .xtree {&#xd;
+  position: absolute;&#xd;
+  top: 35px;&#xd;
+  left: 606px;&#xd;
+  background: #FFFFFF;&#xd;
+  box-shadow: 0 1px 0 0 rgba(0,0,0,0.20), 0 0 0 1px rgba(0,0,0,0.12), 0 2px 2px -1px rgba(0,0,0,0.12);&#xd;
+  border-radius: 2px;&#xd;
+  padding-left: 18px;&#xd;
+  width: 560px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .jstree-anchor {&#xd;
+  font-family: PingFangSC-Medium;&#xd;
+  font-size: 13px;&#xd;
+  color: rgba(0,0,0,0.65);&#xd;
+  line-height: 36px;&#xd;
+  margin-top: -6px;&#xd;
+  padding: 0 5px 0 10px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .jstree-container-ul {&#xd;
+  padding-top: 10px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .jstree-leaf .jstree-ocl {&#xd;
+  visibility: hidden;&#xd;
+}&#xd;
+&#xd;
+#xwikidata, #xdocFooter, .xdocLastModification {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent {&#xd;
+    overflow: hidden;&#xd;
+}&#xd;
+&#xd;
+//&#xd;
+.activity-icon-add {&#xd;
+  background: #1AB16F;&#xd;
+}&#xd;
+&#xd;
+.activity-icon-edit {&#xd;
+  background: #4D90FE;&#xd;
+}&#xd;
+&#xd;
+.activity-icon-delete {&#xd;
+  background: #F44336;&#xd;
+}&#xd;
+&#xd;
+.activity-opera-div {&#xd;
+    position: absolute;&#xd;
+    right: -16px;&#xd;
+    bottom: -5px;&#xd;
+    width: 13px;&#xd;
+    height: 13px;&#xd;
+    border-radius: 50%;&#xd;
+}&#xd;
+&#xd;
+.activity-opera-icon {&#xd;
+    -webkit-transform: scale(0.8);&#xd;
+    transform: scale(0.8);&#xd;
+    position: absolute;&#xd;
+    left: 0.5px;&#xd;
+    font-size: 12px;&#xd;
+    border-radius: 50%;&#xd;
+    color: #fff;&#xd;
+}&#xd;
+&#xd;
+.icon-add_comment, .icon-textsms, .icon-delete_commet {&#xd;
+  transform: scale(0.7);&#xd;
+  top: 1px;&#xd;
+  left: 0;&#xd;
+}&#xd;
+&#xd;
+.icon-delete {&#xd;
+  left: 0.3px;&#xd;
+}&#xd;
+&#xd;
+</code>
+    </property>
+    <property>
+      <contentType>CSS</contentType>
+    </property>
+    <property>
+      <name>页面样式</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+</xwikidoc>

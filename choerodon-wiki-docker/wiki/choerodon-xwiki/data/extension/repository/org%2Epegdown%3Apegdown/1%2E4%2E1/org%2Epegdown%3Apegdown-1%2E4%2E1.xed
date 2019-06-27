@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.pegdown:pegdown</id>
+<version>1.4.1</version>
+<type>jar</type>
+<name>pegdown</name>
+<summary>A Java 1.5+ library providing a clean and lightweight markdown processor</summary>
+<website>http://pegdown.org</website>
+<authors>
+<author>
+<name>Mathias Doenitz</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>git@github.com:sirthias/pegdown.git</url>
+<connection>
+<system>git</system>
+<path>git@github.com:sirthias/pegdown.git</path>
+</connection>
+</scm>
+<dependencies>
+<dependency>
+<id>org.parboiled:parboiled-java</id>
+<version>1.1.5</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>org.pegdown</maven.groupid>
+<maven.artifactid>pegdown</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407812181</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

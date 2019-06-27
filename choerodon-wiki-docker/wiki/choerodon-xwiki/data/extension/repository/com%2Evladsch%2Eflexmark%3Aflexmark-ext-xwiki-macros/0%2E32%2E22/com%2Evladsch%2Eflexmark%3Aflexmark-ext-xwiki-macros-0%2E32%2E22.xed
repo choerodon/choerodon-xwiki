@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>com.vladsch.flexmark:flexmark-ext-xwiki-macros</id>
+<version>0.32.22</version>
+<type>jar</type>
+<name>flexmark-java extension for xwiki application specific macros</name>
+<summary>flexmark-java extension for xwiki application specific macros</summary>
+<website>https://github.com/vsch/flexmark-java/flexmark-ext-xwiki-macros</website>
+<authors>
+<author>
+<name>Vladimir Schneider</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>BSD 2-Clause License</name>
+</license>
+</licenses>
+<scm>
+<url>https://github.com/vsch/flexmark-java/flexmark-ext-xwiki-macros</url>
+<connection>
+<system>git</system>
+<path>git@github.com:vsch/flexmark-java.git/flexmark-ext-xwiki-macros</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>git@github.com:vsch/flexmark-java.git/flexmark-ext-xwiki-macros</path>
+</developerconnection>
+</scm>
+<dependencies>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-util</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-formatter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<manageddependencies>
+<dependency>
+<id>com.vladsch.flexmark:flexmark</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-docx-converter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-abbreviation</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-anchorlink</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-admonition</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-aside</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-attributes</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-autolink</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-definition</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-emoji</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-enumerated-reference</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-escaped-character</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-footnotes</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-gfm-issues</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-gfm-strikethrough</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-gfm-tables</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-gfm-tasklist</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-gfm-users</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-jekyll-front-matter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-jekyll-tag</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-ins</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-xwiki-macros</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-spec-example</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-superscript</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-tables</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-toc</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-typographic</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-wikilink</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-yaml-front-matter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-youtube-embedded</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-ext-zzzzzz</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-formatter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-html-parser</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-jira-converter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-pdf-converter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-profile-pegdown</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-test-util</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-util</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-youtrack-converter</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>com.vladsch.flexmark:flexmark-all</id>
+<version>0.32.22</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>junit:junit</id>
+<version>4.12</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>org.openjdk.jmh:jmh-core</id>
+<version>1.13</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>org.openjdk.jmh:jmh-generator-annprocess</id>
+<version>1.13</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+</manageddependencies>
+<properties>
+<maven.groupid>com.vladsch.flexmark</maven.groupid>
+<maven.artifactid>flexmark-ext-xwiki-macros</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407812497</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

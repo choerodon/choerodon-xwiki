@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>ca.juliusdavies:not-yet-commons-ssl</id>
+<version>0.3.9</version>
+<type>jar</type>
+<name>Not Yet Commons SSL</name>
+<summary>A Java SSL component library</summary>
+<website>http://juliusdavies.ca/commons-ssl</website>
+<authors>
+<author>
+<name>Julius Davies</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License v2</name>
+</license>
+</licenses>
+<scm>
+<url>http://juliusdavies.ca/svn/viewvc.cgi/not-yet-commons-ssl/tags/commons-ssl-0.3.9/</url>
+<connection>
+<system>http</system>
+<path>//juliusdavies.ca/svn/not-yet-commons-ssl/tags/commons-ssl-0.3.9/</path>
+</connection>
+</scm>
+<dependencies>
+<dependency>
+<id>log4j:log4j</id>
+<version>1.2.13</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-httpclient:commons-httpclient</id>
+<version>3.0</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>ca.juliusdavies</maven.groupid>
+<maven.artifactid>not-yet-commons-ssl</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754814</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

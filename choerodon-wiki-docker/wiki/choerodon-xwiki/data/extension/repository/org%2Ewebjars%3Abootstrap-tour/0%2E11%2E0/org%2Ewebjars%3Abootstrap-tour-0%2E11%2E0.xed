@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.webjars:bootstrap-tour</id>
+<version>0.11.0</version>
+<type>jar</type>
+<name>Bootstrap Tour</name>
+<summary>WebJar for Bootstrap Tour</summary>
+<website>http://webjars.org</website>
+<authors>
+<author>
+<name>Guillaume Delhumeau</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>The MIT License</name>
+</license>
+</licenses>
+<scm>
+<url>http://github.com/webjars/bootstrap-tour</url>
+<connection>
+<system>git</system>
+<path>https://github.com/webjars/bootstrap-tour.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>https://github.com/webjars/bootstrap-tour.git</path>
+</developerconnection>
+</scm>
+<dependencies>
+<dependency>
+<id>org.webjars:bootstrap</id>
+<version>2.3.0</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>org.webjars</maven.groupid>
+<maven.artifactid>bootstrap-tour</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534405925986</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

@@ -1,0 +1,128 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.XWikiSyntaxParagraphs" locale="">
+  <web>XWiki</web>
+  <name>XWikiSyntaxParagraphs</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755141000</creationDate>
+  <parent>XWiki.XWikiSyntax</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755141000</date>
+  <contentUpdateDate>1534755141000</contentUpdateDate>
+  <version>1.1</version>
+  <title>XWikiSyntaxParagraphs</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>= Editing =
+
+== Paragraphs ==
+
+=== 1.0 Paragraphs ===
+
+Paragraphs are text elements separated by 2 or more new lines.
+
+{{info}}New lines are not honored in XWiki Syntax 1.0. 
+You need to insert a double backslash instead, like: {{{\\}}}{{/info}}
+
+|=Feature|=XWiki Syntax 1.0|=Result
+|Simple paragraph|This is a paragraph|This is a paragraph
+|Paragraph on multiple lines|Paragraph on{{{\\}}}\\multiple lines|Paragraph on\\multiple lines
+|Two paragraphs|Paragraph one\\\\Paragraph two|Paragraph one\\\\Paragraph two
+|Parametrized paragraph|&lt;p style="text-align:center;color:blue">Centered and blue paragraph&lt;/p>|(% style="text-align:center;color:blue" %)\\Centered and blue paragraph
+
+=== 2.0 Paragraphs ===
+
+Paragraphs are text elements separated by 2 or more new lines.
+
+{{info}}In XWiki Syntax {{velocity}}$crtSyntaxVer{{/velocity}} new lines are honored which is not the case in XWiki Syntax 1.0 and in Creole Syntax.{{/info}}
+
+|=Feature|=XWiki Syntax {{velocity}}$crtSyntaxVer{{/velocity}}|=Result
+|Simple paragraph|This is a paragraph|This is a paragraph
+|Paragraph on multiple lines|Paragraph on\\multiple lines|Paragraph on\\multiple lines
+|Two paragraphs|Paragraph one\\\\Paragraph two|Paragraph one\\\\Paragraph two
+|Parametrized paragraph|{{{(% style="text-align:center;color:blue" %)}}}\\Centered and blue paragraph|(% style="text-align:center;color:blue" %)\\Centered and blue paragraph
+|Different style on some portion of the paragraph content|paragraph with {{{(% style="color:red" %)}}}red{{{(%%)}}} different style inside|paragraph with (% style="color:red" %)red(%%) texte inside</content>
+  <object>
+    <name>XWiki.XWikiSyntaxParagraphs</name>
+    <number>0</number>
+    <className>XWiki.XWikiSyntaxClass</className>
+    <guid>fd4efe02-776d-445c-8faa-f856b4ace8d1</guid>
+    <class>
+      <name>XWiki.XWikiSyntaxClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <category>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>category</name>
+        <number>1</number>
+        <numberType>integer</numberType>
+        <prettyName>Category ID</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </category>
+      <maxSyntaxId>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>maxSyntaxId</name>
+        <number>4</number>
+        <prettyName>Maximum Syntax Version</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </maxSyntaxId>
+      <minSyntaxId>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>minSyntaxId</name>
+        <number>3</number>
+        <prettyName>Minimum Syntax Version</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </minSyntaxId>
+      <section>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>section</name>
+        <number>2</number>
+        <numberType>integer</numberType>
+        <prettyName>Section ID</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </section>
+    </class>
+    <property>
+      <category>1</category>
+    </property>
+    <property>
+      <maxSyntaxId>2.0</maxSyntaxId>
+    </property>
+    <property>
+      <minSyntaxId>1.0</minSyntaxId>
+    </property>
+    <property>
+      <section>0</section>
+    </property>
+  </object>
+</xwikidoc>

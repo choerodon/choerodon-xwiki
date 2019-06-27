@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.webjars:codemirror</id>
+<version>5.24.2</version>
+<type>jar</type>
+<name>CodeMirror</name>
+<summary>WebJar for CodeMirror</summary>
+<website>http://webjars.org</website>
+<authors>
+<author>
+<name>James Ward</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>The MIT License</name>
+</license>
+</licenses>
+<scm>
+<url>http://github.com/webjars/codemirror</url>
+<connection>
+<system>git</system>
+<path>https://github.com/webjars/codemirror.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>https://github.com/webjars/codemirror.git</path>
+</developerconnection>
+</scm>
+<properties>
+<maven.groupid>org.webjars</maven.groupid>
+<maven.artifactid>codemirror</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534405933644</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

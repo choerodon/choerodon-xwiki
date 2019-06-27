@@ -1,0 +1,142 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.XWikiSyntaxVerbatim" locale="">
+  <web>XWiki</web>
+  <name>XWikiSyntaxVerbatim</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755146000</creationDate>
+  <parent>XWiki.XWikiSyntax</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755146000</date>
+  <contentUpdateDate>1534755146000</contentUpdateDate>
+  <version>1.1</version>
+  <title>XWikiSyntaxVerbatim</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>= Advanced =
+
+== Verbatim ==
+
+=== 1.0 Verbatim ===
+
+Allow to enter content that will not be formatted (in other words the XWiki Syntax will not be taken into account).
+
+{{info}}In XWiki Syntax 1.0 the [[Pre macro>>http://extensions.xwiki.org/xwiki/bin/view/Extension/Pre+Macro+%28Radeox%29]] only preserves XWiki Syntax and Radeox macros. However HTML snippets and Groovy/Velocity scripts are still executed.{{/info}}
+
+|=Feature|=XWiki Syntax 1.0|=Result
+|Verbatim inline|{{{Some verbatim {pre}*[not rendered]*{/pre} content}}}|Some verbatim {{{*[not rendered]*}}} content
+|Verbatim block|((({{{
+{pre}
+multi line
+*verbatim*
+content
+{/pre}
+}}}
+{{info}}It's also possible to use the [[Code macro>>http://extensions.xwiki.org/xwiki/bin/view/Extension/Code+Macro+%28Radeox%29]] but it displays its content in a box by default.{{/info}}
+)))|((({{{
+multi line
+*verbatim*
+content
+}}})))
+
+=== 2.0 Verbatim ===
+
+Allow to enter content that will not be formatted (in other words the XWiki Syntax will not be taken into account).
+
+|=Feature|=XWiki Syntax {{velocity}}$crtSyntaxVer{{/velocity}}|=Result
+|Verbatim inline|{{{Some verbatim {{{**[[not rendered]]**}}} content}}}|Some verbatim {{{**[[not rendered]]**}}} content
+|Verbatim block|((({{{
+{{{
+multi line
+**verbatim**
+content
+}}}
+}}})))|((({{{
+multi line
+**verbatim**
+content
+}}})))</content>
+  <object>
+    <name>XWiki.XWikiSyntaxVerbatim</name>
+    <number>0</number>
+    <className>XWiki.XWikiSyntaxClass</className>
+    <guid>1808887e-f225-4ccf-9693-e9500f5b3b78</guid>
+    <class>
+      <name>XWiki.XWikiSyntaxClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <category>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>category</name>
+        <number>1</number>
+        <numberType>integer</numberType>
+        <prettyName>Category ID</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </category>
+      <maxSyntaxId>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>maxSyntaxId</name>
+        <number>4</number>
+        <prettyName>Maximum Syntax Version</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </maxSyntaxId>
+      <minSyntaxId>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>minSyntaxId</name>
+        <number>3</number>
+        <prettyName>Minimum Syntax Version</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </minSyntaxId>
+      <section>
+        <customDisplay/>
+        <disabled>0</disabled>
+        <name>section</name>
+        <number>2</number>
+        <numberType>integer</numberType>
+        <prettyName>Section ID</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <validationMessage/>
+        <validationRegExp/>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </section>
+    </class>
+    <property>
+      <category>2</category>
+    </property>
+    <property>
+      <maxSyntaxId>2.0</maxSyntaxId>
+    </property>
+    <property>
+      <minSyntaxId>1.0</minSyntaxId>
+    </property>
+    <property>
+      <section>0</section>
+    </property>
+  </object>
+</xwikidoc>

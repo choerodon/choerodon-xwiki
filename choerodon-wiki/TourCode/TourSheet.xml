@@ -1,0 +1,56 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="TourCode.TourSheet" locale="">
+  <web>TourCode</web>
+  <name>TourSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755086000</creationDate>
+  <parent>TourClass</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755086000</date>
+  <contentUpdateDate>1534755086000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+{{html wiki="true"}}
+#set ($discard = $doc.use('TourCode.TourClass'))
+#set ($isEditing = $xcontext.action == 'edit')
+(% class="xform" %)
+(((
+  ## Mark tour as hidden
+  &lt;input type="hidden" name="xhidden" id="xhidden" value="1">
+  ; &lt;label #if($isEditing)for="TourCode.TourClass_0_description"#end>$escapetool.xml($doc.displayPrettyName('description', false, false))&lt;/label>
+  : $doc.display('description')
+  #if ($isEditing)
+    ; &lt;label for="TourCode.TourClass_0_isActive">$doc.display('isActive')$escapetool.xml($doc.displayPrettyName('isActive', false, false))&lt;/label>
+  #else
+    ; &lt;label>$escapetool.xml($doc.displayPrettyName('isActive', false, false))&lt;/label>
+    : $doc.display('isActive')
+  #end
+  ; &lt;label #if($isEditing)for="TourCode.TourClass_0_targetPage"#end>$escapetool.xml($doc.displayPrettyName('targetPage', false, false))&lt;/label>
+  : $doc.display('targetPage')
+  ; &lt;label #if($isEditing)for="TourCode.TourClass_0_targetClass"#end>$escapetool.xml($doc.displayPrettyName('targetClass', false, false))&lt;/label>
+  : $doc.display('targetClass')
+
+## Display tour's steps
+&lt;dl>
+  &lt;dt>
+    &lt;label>$services.localization.render('tour.steps')&lt;/label>
+  &lt;/dt>
+  &lt;dd>
+    #set($pageMode = $xcontext.action)
+    {{include reference="TourCode.StepsListing"/}}
+  &lt;/dd>
+&lt;/dl>
+
+)))
+{{/html}}
+{{/velocity}}</content>
+</xwikidoc>

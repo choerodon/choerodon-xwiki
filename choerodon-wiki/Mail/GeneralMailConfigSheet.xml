@@ -1,0 +1,53 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Mail.GeneralMailConfigSheet" locale="">
+  <web>Mail</web>
+  <name>GeneralMailConfigSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755057000</creationDate>
+  <parent>Mail.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755057000</date>
+  <contentUpdateDate>1534755057000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+#set ($configDocName = 'Mail.MailConfig')
+#set ($configDoc = $xwiki.getDocument($configDocName))
+#set ($configClassName = 'Mail.GeneralMailConfigClass')
+#set ($configObj = $configDoc.getObject($configClassName))
+## =======================================================
+## Step 1: Migrate Mail config data
+## =======================================================
+## We bundle Mail.MailConfig without a Mail.GeneralMailConfigClass xobject, allowing us to migrate mail configuration
+## that were previously stored in XWikiPreferences into a Mail.GeneralMailConfigClass xobject.
+#if ($xcontext.action == 'admin' &amp;&amp; "$!configObj" == '')
+  ## Create the xobject
+  #set ($configObj = $configDoc.newObject($configClassName))
+  ## Get the "obfuscate" value from the old location
+  #set ($oldValue = $xwiki.getSpacePreference('obfuscateEmailAddresses'))
+  #if ("$!oldValue" != '')
+    #set ($discard = $configObj.set('obfuscate', $oldValue))
+  #end
+  ## Save the new xobject!
+  #set ($discard = $configDoc.save('Migrated Mail configuration found in XWikiPreferences', true))
+#end
+## =======================================================
+## Step 2: Display form
+## =======================================================
+#set ($params = {
+  'general': ['obfuscate']
+})
+#set ($paramDoc = $configDoc)
+#set ($paramClass = $configClassName)
+{{/velocity}}
+
+{{include reference="XWiki.AdminFieldsDisplaySheet" /}}</content>
+</xwikidoc>

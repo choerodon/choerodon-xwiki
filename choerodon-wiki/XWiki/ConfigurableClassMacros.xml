@@ -1,0 +1,310 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.ConfigurableClassMacros" locale="">
+  <web>XWiki</web>
+  <name>ConfigurableClassMacros</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755101000</creationDate>
+  <parent>XWiki.ConfigurableClass</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755101000</date>
+  <contentUpdateDate>1534755101000</contentUpdateDate>
+  <version>1.1</version>
+  <title>$services.localization.render('xe.admin.configurable.macros.title')</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity output="false"}}
+## Constants:
+#set($redirectParameter = 'xredirect')
+#set($nameOfThisDocument = 'XWiki.ConfigurableClass')
+
+
+#*
+ * Try to determine whether a document was edited by a user who has edit right on this page. This is tricky because
+ * documents are imported with the name XWiki.XWikiGuest who has no access to anything after import.
+ *
+ * @param theDoc - Document who's editor should be checked for edit access on this document.
+ *###
+#macro(checkDocumentSavedByAuthorizedUser, $docToCheck, $currentDoc, $hasAccess)
+  ## The system is started and the only user is XWikiGuest who has admin right but gives it up when he imports the default
+  ## documents, we are checking to see if this looks like the guest imported the document with the first import.
+  #if($docToCheck.getWiki() == $xcontext.getMainWikiName()
+      &amp;&amp; $docToCheck.getVersion() == '1.1'
+      &amp;&amp; $docToCheck.getCreator() != $docToCheck.getContentAuthor()
+      &amp;&amp; $docToCheck.getContentAuthor() == 'XWiki.XWikiGuest')
+  ##
+    #set($userToCheck = $docToCheck.getCreator())
+  #else
+    #set($userToCheck = $docToCheck.getAuthor())
+  #end
+  #set ($hasAccess = $NULL)
+  #setVariable ("$hasAccess" $xwiki.hasAccessLevel('edit', $userToCheck, $currentDoc))
+#end
+
+
+#*
+ * Find names of documents which contain objects of the class 'XWiki.ConfigurableClass'
+ *
+ * @param $section - String - Look for apps which specify that they should be configured in this section,
+ *                            if null or "" then returns them for all sections.
+ *
+ * @param $globaladmin - boolean - If true then we will look for applications which should be configured globally.
+ *
+ * @param $space - String - If not looking for apps which are configured globally, then this is the space where we
+ *                          will look for apps in. If null or "" or if $globaladmin is true, then all spaces will be
+ *                          searched.
+ *
+ * @param $outputList - List - The returns from this macro will be put in this list, passing the list as a parameter
+ *                             a safety measure because macros can't return values.
+ *###
+#macro(findNamesOfAppsToConfigure, $section, $globaladmin, $space, $outputList)
+  ## Use a parameterized sql query to prevent injection.
+  #set($params = [])
+  #if($section &amp;&amp; $section != '')
+    #set($discard = $params.add("$section"))
+    #set($sqlA = ' StringProperty as section,')
+    #set($sqlB = " and section.id=obj.id and section.name='displayInSection' and section.value=?")
+  #else
+    ## Make sure they are "" in case they were set prior to calling the macro.
+    #set($sqlA = '')
+    #set($sqlB = '')
+  #end
+  ## Set up query based on value of $globaladmin
+  #if($globaladmin == true)
+    #set($sqlC = '1')
+  #else
+    #if($space &amp;&amp; $space != '')
+      #set($sqlC = '0 and doc.space = ?')
+      #set($discard = $params.add($space))
+    #else
+      #set($sqlC = '0')
+    #end
+  #end
+  #set($sql = ", BaseObject as obj,$sqlA IntegerProperty as global where "
+              + "doc.fullName=obj.name and obj.className='" + $nameOfThisDocument + "'$sqlB "
+              + "and global.id=obj.id and global.name='configureGlobally' and global.value=$sqlC "
+              + "order by doc.creationDate")
+  ##
+  ## Run the search
+  #set($discard = $outputList.addAll($services.query.hql($sql).bindValues($params).addFilter('unique').execute()))
+  ##
+#end
+
+#*
+ * Augment the $adminMenu variable with all $nameOfThisDocument (i.e. XWiki.ConfigurableClass) xobjects found on this wiki.
+ *###
+#macro(findCustomSectionsToConfigure $adminMenu)
+  #set ($outputList = [])
+  #set ($global = ($editor == 'globaladmin'))
+  #findNamesOfAppsToConfigure('', $global, $currentSpace, $outputList)
+  #set ($sectionsByName = {})
+  #set ($categoriesByName = {})
+  #foreach ($category in $adminMenu)
+    #set ($discard = $categoriesByName.put($category.id, $category))
+    #foreach ($section in $category.children)
+      #set ($discard = $sectionsByName.put($section.id, $section))
+    #end
+  #end
+  ##
+  #set ($query = "editor=$escapetool.url(${editor})")
+  #if ($editor != 'globaladmin')
+    #set ($query = $query + "&amp;space=$escapetool.url(${currentSpace})")
+  #end
+  #foreach ($appName in $outputList)
+    ##
+    ## Get the configurable application
+    #set ($app = $xwiki.getDocument($appName))
+    ##
+    ## If getDocument returns null, then warn the user that they don't have view access to that application.
+    #if (!$app)
+      #set ($discard = $appsUserCannotView.add($appName))
+    #end
+    ##
+    #foreach ($configurableObject in $app.getObjects($nameOfThisDocument))
+      #set ($displayInCategory = $app.getValue('displayInCategory', $configurableObject))
+      ## It's OK to not specify a category, in which case the app will be added to a default one (i.e. "other").
+      #if ("$!displayInCategory" != '')
+        #if ($categoriesByName.containsKey($displayInCategory))
+          ## Add a new section in this category.
+          #set ($appCategory = $categoriesByName.get($displayInCategory))
+        #else
+          ## Add a new category.
+          #set ($key = "admin.$displayInCategory.toLowerCase()")
+          #set ($name = $displayInCategory)
+          #if ($services.localization.get($key))
+            #set ($name = $services.localization.render($key))
+          #end
+          #set ($appCategory= {
+            'id': $displayInCategory,
+            'name': $name,
+            'children': []
+          })
+          #set ($discard = $categoriesByName.put($displayInCategory, $appCategory))
+          ## Insert the category at the end for now. We'll sort the categories after we add all of them.
+          #set ($discard = $adminMenu.add($appCategory))
+        #end
+        #set ($categoryIcon = $app.getValue('categoryIcon', $configurableObject))
+        #if ("$!categoryIcon" != '')
+          #set ($appCategory.icon = $categoryIcon)
+        #end
+        #set ($displayBeforeCategory = $app.getValue('displayBeforeCategory', $configurableObject))
+        #if ("$!displayBeforeCategory" != '')
+          #set ($appCategory.displayBeforeCategory = $displayBeforeCategory)
+        #end
+      #else
+        #set ($appCategory = $categoriesByName.get('other'))
+      #end
+      ##
+      #set ($displayInSection = $app.getValue('displayInSection', $configurableObject))
+      ##
+      ## If there is no section specified in the object, just skip it
+      #if ("$!displayInSection" == '')
+        ## Skip, bad object
+      ## If there is no section for this configurable or if the section cannot be edited, then check if the
+      ## application can be edited by the current user, if so then we display the icon from the current app and
+      ## don't display any message to tell the user they can't edit that section.
+      #elseif ($sectionsByName.containsKey($displayInSection))
+        #set ($appSection = $sectionsByName.get($displayInSection))
+        #set ($appSection.configurable = true)
+        #set ($newSection = false)
+      #else
+        ##
+        ## If there is no section for this configurable, then we will have to add one.
+        #set ($key = "admin.$displayInSection.toLowerCase()")
+        #set ($name = $displayInSection)
+        #if ($services.localization.get($key))
+          #set ($name = $services.localization.render($key))
+        #end
+        #set ($appSection = {
+          'id': $displayInSection,
+          'name': $name,
+          'url': $xwiki.getURL($currentDoc, $adminAction, "${query}&amp;section=$escapetool.url($displayInSection)"),
+          'configurable': true,
+          'order': $configurableObject.getValue('sectionOrder')
+        })
+        #if ($app.getValue('configureGlobally', $configurableObject) != 1)
+          #set ($appSection.perSpace = true)
+        #end
+        #set ($key = "admin.${displayInSection.toLowerCase()}.description")
+        #if ($services.localization.get($key))
+          #set ($appSection.description = $services.localization.render($key))
+        #end
+        #set ($discard = $sectionsByName.put($displayInSection, $appSection))
+        #set ($discard = $appCategory.children.add($appSection))
+        #set ($newSection = true)
+      #end
+      ##
+      ## If an attachment by the filename iconAttachment exists and is an image
+      #set ($attachment = $app.getAttachment("$!app.getValue('iconAttachment', $configurableObject)"))
+      #if ($attachment &amp;&amp; $attachment.isImage())
+        ## Set the icon for this section as the attachment URL.
+        #set ($appSection.iconReference = "${appName}@$attachment.getFilename()")
+      #elseif (!$appSection.iconReference)
+        #set ($appSection.iconReference = 'XWiki.ConfigurableClass@DefaultAdminSectionIcon.png')
+      #end
+      ##
+      ## If the user doesn't have edit access to the application, we want to show a message on the icon
+      #if (!$xcontext.hasAccessLevel('edit', $app.getFullName()) &amp;&amp; $newSection)
+        #set ($appSection.readOnly = true)
+      #elseif ($xcontext.hasAccessLevel('edit', $app.getFullName()) &amp;&amp; $appSection.readOnly)
+        #set ($appSection.readOnly = false)
+      #end
+    #end## Foreach configurable object in this app.
+  #end## Foreach application which is configurable.
+  ##
+  ## Sort the categories
+  ##
+  #foreach ($category in $adminMenu)
+    #set ($category.score = 0)
+  #end
+  #foreach ($round in [1..$adminMenu.size()])
+    #set ($scoreChanged = false)
+    #foreach ($category in $adminMenu)
+      #if ($category.displayBeforeCategory)
+        #set ($newScore = $categoriesByName.get($category.displayBeforeCategory).score + 1)
+        #if ($newScore &amp;&amp; $newScore > $category.score)
+          #set ($category.score = $newScore)
+          #set ($scoreChanged = true)
+        #end
+      #end
+    #end
+    #if (!$scoreChanged)
+      #break
+    #end
+  #end
+  #set ($adminMenu = $sorttool.sort($adminMenu, 'score:desc'))
+#end
+
+
+#*
+ * Show the heading for configuration for a given application.
+ *
+ * $appName (String) Name of the application to show configuration heading for.
+ *
+ * $headingAlreadyShowing (boolean) If true then we don't make another heading. Otherwise it is set to true.
+ *###
+#macro(showHeading, $appName, $headingAlreadyShowing)
+  #if(!$headingAlreadyShowing)
+    #set($headingAlreadyShowing = true)
+
+    = {{translation key="admin.customize"/}} [[$appName>>$appName]]: =
+  #end
+#end
+
+#define($formHtml)
+  #if ($objClass.getPropertyNames().size() > 0)
+    &lt;dl>
+    #foreach($propName in $objClass.getPropertyNames())
+      #if($propertiesToShow.size() > 0 &amp;&amp; !$propertiesToShow.contains($propName))
+        ## Silently skip over this property.
+      #else
+        #set($prettyName = "#evaluate($app.displayPrettyName($propName, $obj))")
+        ##
+        #set($hintKey = "${obj.xWikiClass.name}_${propName}.hint")
+        #set($hint = $services.localization.render($hintKey))
+        #if($hint == $hintKey)
+          #set($hint = $NULL)
+        #end
+        ##
+        ## Further processing of the field display HTML is needed.
+        ## Step 1: Strip &lt;pre> tags which $obj.display inserts, this won't affect content because it's escaped.
+        #set($out = $obj.display($propName, 'edit').replaceAll('&lt;[/]?+pre>', ''))
+        ## Step 2: Select only content between first &lt; and last > because $obj.display inserts html macros.
+        ##         Careful not to remove html macros from the content because they are not escaped!
+        #set ($out = $out.substring($out.indexOf('&lt;'), $mathtool.add(1, $out.lastIndexOf('>'))))
+        ## Step 3: Prepend app name to all ID and FOR attributes to prevent id collision with multiple apps on one page.
+        #set ($oldId = "$objClass.getName()_$obj.getNumber()_$propName")
+        #set ($newId = "${escapedAppName}_$oldId")
+        #set ($out = $out.replaceAll(" (id|for)=('|"")$regextool.quote($oldId)",
+          " ${escapetool.d}1=${escapetool.d}2$regextool.quoteReplacement($newId)"))
+        ## App Name is prepended to for= to make label work with id which is modified to prevent collisions.
+        &lt;dt>&lt;label#if ($out.matches("(?s).*id=['""]${newId}['""].*")) for="${newId}"#end>##
+        #if ($out.indexOf('type=''checkbox''') != -1 &amp;&amp; $out.indexOf('class="xwiki-form-listclass"') == -1)
+          $out ##
+          #set ($out = '')
+        #end
+        $escapetool.xml($prettyName)
+        &lt;/label>
+        #if($linkPrefix != '')
+          #set($linkScript = "$linkPrefix$propName")
+          &lt;a href="$escapetool.xml("#evaluate($linkScript)")" class="xHelp" title="$services.localization.render('admin.documentation')">$services.localization.render('admin.documentation')&lt;/a>
+        #end
+        #if ($hint)
+          &lt;span class="xHint">$hint&lt;/span>
+        #end
+        &lt;/dt>
+        #if ($out != '')
+          &lt;dd>$out&lt;/dd>
+        #end
+      #end## If property is in propertiesToShow
+    #end## Foreach property in this class
+    &lt;/dl>
+  #end
+#end## define $formHtml
+{{/velocity}}</content>
+</xwikidoc>

@@ -1,0 +1,563 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Main.最近工作.WebHome" locale="">
+  <web>Main.最近工作</web>
+  <name>WebHome</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538119061000</creationDate>
+  <parent>Main.所有更新.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1542617554000</date>
+  <contentUpdateDate>1540872326000</contentUpdateDate>
+  <version>5.8</version>
+  <title>最近工作</title>
+  <comment/>
+  <minorEdit>true</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content/>
+  <object>
+    <name>Main.最近工作.WebHome</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>e646d3a4-8dec-488e-b0c5-0eb42a54ccbc</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>//增加元素&#xd;
+var strTitle = `&#xd;
+&lt;span style="font-size: 18px;&#xd;
+    color: #000;&#xd;
+    line-height: 59px;&#xd;
+    margin-bottom: 0;&#xd;
+    cursor: pointer;">最近工作&lt;/span>&#xd;
+&lt;div class="btn-group xwiki-main-refesh" style="&#xd;
+    margin-left: 56px;&#xd;
+">&lt;a id="main-recent-work" class="btn btn-default">&#xd;
+    &lt;span class="icon icon-refresh">&lt;/span>&#xd;
+    &lt;span class="btn-label">刷新&lt;/span>&lt;/a>&lt;/div>&#xd;
+`;&#xd;
+&#xd;
+if (document.getElementsByClassName("document-header")[0] != null) {&#xd;
+   document.getElementById("document-title").innerHTML = strTitle;&#xd;
+}&#xd;
+&#xd;
+require(['jquery'], function($) { &#xd;
+  var circle = `&lt;div id="waite" style="height: 46px;width: 46px;margin: 200px 0 30px calc(50vw - 175px);">&#xd;
+            &lt;svg viewBox="0 0 50 50">&#xd;
+                &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
+                      -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      stroke-dasharray: 80px 200px;&#xd;
+                      stroke-dashoffset: 0;&#xd;
+                      ">&lt;/circle>&#xd;
+            &lt;/svg>&#xd;
+    &lt;/div>`;&#xd;
+    $("#xwikicontent").html(circle);&#xd;
+    $.ajax({&#xd;
+        typy: "GET",&#xd;
+        url: "/bin/get/ChoerodonConfig/ChoerodonFetchData/RecentWork",&#xd;
+        async: true,&#xd;
+        success: function (data) {&#xd;
+          //获取最近空间的结果&#xd;
+            $("#xwikicontent").html(data);&#xd;
+          &#xd;
+          &#xd;
+          //滑动&#xd;
+if (document.getElementById('xwiki-material-icons-today')) {&#xd;
+document.getElementById('xwiki-material-icons-today').onclick = function(){&#xd;
+     $(".group-container-period-today").slideToggle("normal");&#xd;
+     if ($('#xwiki-material-icons-today').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-today').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-today').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+&#xd;
+if (document.getElementById('xwiki-material-icons-yesterday')) {&#xd;
+document.getElementById('xwiki-material-icons-yesterday').onclick = function(){&#xd;
+     $(".group-container-period-yesterday").slideToggle("normal");&#xd;
+    if ($('#xwiki-material-icons-yesterday').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-yesterday').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-yesterday').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+  &#xd;
+if (document.getElementById('xwiki-material-icons-last-week')) {&#xd;
+document.getElementById('xwiki-material-icons-last-week').onclick = function(){&#xd;
+     $(".group-container-period-last-week").slideToggle("normal");&#xd;
+    if ($('#xwiki-material-icons-last-week').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-last-week').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-last-week').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+&#xd;
+if (document.getElementById('xwiki-material-icons-last-month')) {&#xd;
+document.getElementById('xwiki-material-icons-last-month').onclick = function(){&#xd;
+     $(".group-container-period-last-month").slideToggle("normal");&#xd;
+     if ($('#xwiki-material-icons-last-month').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-last-month').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-last-month').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+          &#xd;
+          &#xd;
+        }&#xd;
+    });&#xd;
+  &#xd;
+     var recentWork=document.getElementById("main-recent-work");&#xd;
+  if(recentWork){&#xd;
+     recentWork.onclick = function () {&#xd;
+     $("#xwikicontent").html(circle);&#xd;
+    $.ajax({&#xd;
+        typy: "GET",&#xd;
+        url: "/bin/get/ChoerodonConfig/ChoerodonFetchData/RecentWork",&#xd;
+        async: true,&#xd;
+        success: function (data) {&#xd;
+          //获取最近空间的结果&#xd;
+            $("#xwikicontent").html(data);&#xd;
+          &#xd;
+             //滑动&#xd;
+if (document.getElementById('xwiki-material-icons-today')) {&#xd;
+document.getElementById('xwiki-material-icons-today').onclick = function(){&#xd;
+     $(".group-container-period-today").slideToggle("normal");&#xd;
+     if ($('#xwiki-material-icons-today').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-today').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-today').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+&#xd;
+if (document.getElementById('xwiki-material-icons-yesterday')) {&#xd;
+document.getElementById('xwiki-material-icons-yesterday').onclick = function(){&#xd;
+     $(".group-container-period-yesterday").slideToggle("normal");&#xd;
+    if ($('#xwiki-material-icons-yesterday').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-yesterday').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-yesterday').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+  &#xd;
+if (document.getElementById('xwiki-material-icons-last-week')) {&#xd;
+document.getElementById('xwiki-material-icons-last-week').onclick = function(){&#xd;
+     $(".group-container-period-last-week").slideToggle("normal");&#xd;
+    if ($('#xwiki-material-icons-last-week').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-last-week').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-last-week').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+&#xd;
+if (document.getElementById('xwiki-material-icons-last-month')) {&#xd;
+document.getElementById('xwiki-material-icons-last-month').onclick = function(){&#xd;
+     $(".group-container-period-last-month").slideToggle("normal");&#xd;
+     if ($('#xwiki-material-icons-last-month').attr("class") == 'icon icon-keyboard_arrow_up') {&#xd;
+        $('#xwiki-material-icons-last-month').attr("class", "icon icon-keyboard_arrow_down");&#xd;
+      } else {&#xd;
+        $('#xwiki-material-icons-last-month').attr("class", "icon icon-keyboard_arrow_up");&#xd;
+      }&#xd;
+}&#xd;
+}&#xd;
+          &#xd;
+          &#xd;
+        }&#xd;
+    });&#xd;
+     }&#xd;
+     }&#xd;
+});</code>
+    </property>
+    <property>
+      <name>recentWork</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+  <object>
+    <name>Main.最近工作.WebHome</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>efd7641a-02c5-4cd9-8038-df8aff85aab5</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>#xwikicontent .item-content .icon {&#xd;
+  font-size: 20px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .group-wrapper>ul {&#xd;
+  padding-top: 6px;&#xd;
+}&#xd;
+&#xd;
+#xwikicontent .recent-work-ul {&#xd;
+    position: relative;&#xd;
+    top: 0px;&#xd;
+    opacity: 1;&#xd;
+    list-style: none;&#xd;
+    padding-left: 0px;&#xd;
+    margin-top: 24px;&#xd;
+}&#xd;
+&#xd;
+.typePage {&#xd;
+    background-image: url(/resources/icons/silk/page_white_text.png);&#xd;
+}&#xd;
+&#xd;
+.type {&#xd;
+    background-repeat: no-repeat;&#xd;
+    padding-left: 15px;&#xd;
+}&#xd;
+&#xd;
+.sticky {&#xd;
+	position: fixed;&#xd;
+	top: 0;&#xd;
+    z-index: 5;&#xd;
+    background: #fff;&#xd;
+    width: 81%;&#xd;
+    padding-top: 20px;&#xd;
+    height: 118px;&#xd;
+}&#xd;
+&#xd;
+.group-wrapper {&#xd;
+    padding: 0 0 32px 0;&#xd;
+}&#xd;
+&#xd;
+.stickable {&#xd;
+    position: relative;&#xd;
+}&#xd;
+&#xd;
+li {&#xd;
+    display: list-item;&#xd;
+    text-align: -webkit-match-parent;&#xd;
+}&#xd;
+&#xd;
+.sticky-header-period-today, .sticky-header-period-yesterday,&#xd;
+ .sticky-header-period-last-week,&#xd;
+ .sticky-header-period-last-month {&#xd;
+    font-size: 18px;&#xd;
+    color: #000000;&#xd;
+    line-height: 24px;&#xd;
+    letter-spacing: 0;&#xd;
+    text-transform: uppercase;&#xd;
+    cursor: pointer;&#xd;
+    padding-left: 15px;&#xd;
+}&#xd;
+&#xd;
+.item-block {&#xd;
+    display: block;&#xd;
+    height: 40px;&#xd;
+}&#xd;
+&#xd;
+.item{&#xd;
+  border-radius: 3px;&#xd;
+  text-decoration: none;&#xd;
+  display: block;&#xd;
+  cursor: pointer;&#xd;
+}&#xd;
+&#xd;
+.item:hover{&#xd;
+  background: #f4f5f7;&#xd;
+}&#xd;
+&#xd;
+.item-text{&#xd;
+  display: block;&#xd;
+  width: auto;&#xd;
+  overflow: hidden;&#xd;
+  white-space: nowrap;&#xd;
+  text-overflow: ellipsis;&#xd;
+  margin-right: 6px;&#xd;
+  color: #000000;&#xd;
+}&#xd;
+&#xd;
+.item-title {&#xd;
+    overflow: hidden;&#xd;
+    white-space: nowrap;&#xd;
+    font-size: 13px;&#xd;
+}&#xd;
+&#xd;
+.item-content {&#xd;
+    display: inline-block;&#xd;
+    vertical-align: middle;&#xd;
+    padding-top: 10px;&#xd;
+    padding-bottom: 10px;&#xd;
+}&#xd;
+&#xd;
+.item-clickable {&#xd;
+    display: inline-block;&#xd;
+    width: calc(100% - 20px);&#xd;
+    padding-left: 38px;&#xd;
+}&#xd;
+&#xd;
+.group-container-period-today, .group-container-period-yesterday, .group-container-period-last-week,&#xd;
+.group-container-period-last-month{&#xd;
+    width: 746px;&#xd;
+    padding-left: 0;&#xd;
+}&#xd;
+&#xd;
+.item-block>a:link {color: #5e6c84; text-decoration:none;}&#xd;
+.item-block>a:active:{color: #5e6c84; text-decoration:none;}&#xd;
+.item-block>a:visited {color:#5e6c84;text-decoration:none;}&#xd;
+.item-block>a:hover {color: #5e6c84; text-decoration:none;}&#xd;
+&#xd;
+.breadcrumb-expandable{&#xd;
+   display: none;&#xd;
+}&#xd;
+&#xd;
+.xdocLastModification{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.xcontent>hr{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.xdocCreation{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+.doc-tags{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#xwikidata,#xdocFooter{&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#body.hideright.panel-left-width-Medium .main {&#xd;
+    padding-left: 250px !important;&#xd;
+    left: 0 !important;&#xd;
+    width: 100% !important;&#xd;
+    padding-right:0px !important;&#xd;
+}&#xd;
+&#xd;
+.xcontent{&#xd;
+  margin-top:0px !important;&#xd;
+}&#xd;
+&#xd;
+.document-header .document-menu, .document-header .document-info {&#xd;
+    margin-top: 0px;&#xd;
+}&#xd;
+&#xd;
+.document-header #document-title h1 {&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+.row {&#xd;
+   margin-left: 0px !important; &#xd;
+   margin-right: 0px !important; &#xd;
+}&#xd;
+&#xd;
+#contentcolumn .main {&#xd;
+    margin-left: 0px;&#xd;
+}&#xd;
+&#xd;
+#xwikidata {&#xd;
+  display: none;&#xd;
+}&#xd;
+&#xd;
+#changescontent{&#xd;
+  margin-left: 30px;&#xd;
+  margin-right: 10px;&#xd;
+}&#xd;
+&#xd;
+#mainContentArea>hr{&#xd;
+  display:none;&#xd;
+}&#xd;
+&#xd;
+#contentmenu{&#xd;
+  display:none;&#xd;
+}</code>
+    </property>
+    <property>
+      <contentType>CSS</contentType>
+    </property>
+    <property>
+      <name>recentlyStyle</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+</xwikidoc>

@@ -1,0 +1,130 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Panels.MyRecentModifications" locale="">
+  <web>Panels</web>
+  <name>MyRecentModifications</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755071000</creationDate>
+  <parent>Panels.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755071000</date>
+  <contentUpdateDate>1534755071000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content/>
+  <object>
+    <name>Panels.MyRecentModifications</name>
+    <number>0</number>
+    <className>Panels.PanelClass</className>
+    <guid>53dd65f6-f4c2-4bc9-833a-e6e156537771</guid>
+    <class>
+      <name>Panels.PanelClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <category>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>category</name>
+        <number>1</number>
+        <prettyName>Category</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Information|Navigation|Tools|Administration|Other</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </category>
+      <content>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>25</rows>
+        <size>120</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <description>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>description</name>
+        <number>3</number>
+        <prettyName>Description</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>4</number>
+        <prettyName>Name</prettyName>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <type>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>type</name>
+        <number>5</number>
+        <prettyName>Panel type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>view|edit</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </type>
+    </class>
+    <property>
+      <category>Information</category>
+    </property>
+    <property>
+      <content>{{velocity}}
+#set ($query = $services.query.xwql('where doc.author = :author order by doc.date desc'))
+#set ($recentDocs = $query.addFilter('hidden').addFilter('unique').bindValue('author', $xcontext.user).setLimit(5).execute())
+#if ($recentDocs.size() > 0 || $showEmptyPanels)
+  #panelheader($services.localization.render('xe.panels.modifications.my'))
+  #foreach ($docName in $recentDocs)
+    #set ($recentDoc = $xwiki.getDocument($docName).getTranslatedDocument())
+    #if ($recentDoc)
+      ## We use HTML here because we don't have a tool to escape wiki syntax in document title.
+      * {{html}}&lt;a href="$recentDoc.getURL()">$escapetool.xml($recentDoc.plainTitle)&lt;/a>{{/html}}
+    #end
+  #end
+  #panelfooter()
+#end
+{{/velocity}}</content>
+    </property>
+    <property>
+      <description>List the last 5 documents modified by the current user.</description>
+    </property>
+    <property>
+      <name>My Recent Modifications</name>
+    </property>
+    <property>
+      <type>view</type>
+    </property>
+  </object>
+</xwikidoc>

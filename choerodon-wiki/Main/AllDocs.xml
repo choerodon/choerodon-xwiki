@@ -1,0 +1,83 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Main.AllDocs" locale="">
+  <web>Main</web>
+  <name>AllDocs</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755062000</creationDate>
+  <parent>Main.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755062000</date>
+  <contentUpdateDate>1534755062000</contentUpdateDate>
+  <version>1.1</version>
+  <title>$services.localization.render('platform.index.documents')</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+##================
+## Find which tab to display
+##================
+#if("$!{view}" == '')
+  #set($view = $request.getParameter('view'))
+  #if("$!{view}" == '')
+    #set ($view = 'index')
+  #end
+#end
+##========
+## Set Tab Data
+##========
+#set($tabs = [])
+#macro(addAllDocsTab $tab)
+  #if($xwiki.hasAccessLevel('view', "$!xcontext.user", $tab.get('document')))
+    #set($discard = $tabs.add($tab))
+  #end
+#end
+#addAllDocsTab({'tabName' : 'index', 'idSuffix' : 'index', 'translationKey' : 'platform.index', 'document' : 'XWiki.Tableview'})
+#addAllDocsTab({'tabName' : 'tree', 'idSuffix' : 'treeview', 'translationKey' : 'platform.index.tree', 'document' : 'XWiki.Treeview'})
+#if ($services.parentchild.isParentChildMechanismEnabled())
+  #addAllDocsTab({'tabName' : 'orphans', 'idSuffix' : 'orphansview', 'translationKey' : 'platform.index.orphaned', 'document' : 'XWiki.OrphanedPages'})
+#end
+#addAllDocsTab({'tabName' : 'attachments', 'idSuffix' : 'attachments', 'translationKey' : 'platform.index.attachments', 'document' : 'XWiki.AllAttachments'})
+#addAllDocsTab({'tabName' : 'deletedDocs', 'idSuffix' : 'deletedDocs', 'translationKey' : 'platform.index.documentsTrash', 'document' : 'XWiki.DeletedDocuments'})
+#addAllDocsTab({'tabName' : 'deletedAttachments', 'idSuffix' : 'deletedAttachments', 'translationKey' : 'platform.index.attachmentsTrash', 'document' : 'XWiki.DeletedAttachments'})
+##=============================================
+## Add External Links tab if the LinkChecker module is present.
+## TODO: In the future replace this hardcoded link with Interface Extensions
+##=============================================
+#if($services.rendering.defaultTransformationNames.contains('linkchecker') &amp;&amp; $services.linkchecker)
+  #set ($dummy = $tabs.add({'tabName' : 'externalLinks', 'idSuffix' : 'externalLinks', 'translationKey' : 'platform.linkchecker.indexTab', 'document' : 'XWiki.ExternalLinks'}))
+#end
+##===========
+## Display the Tabs
+##===========
+{{html}}
+&lt;div class="floatcontainer">
+  &lt;ul class="xwikitabbar">
+#foreach ($tab in $tabs)
+  &lt;li id="xwiki$tab['idSuffix']"#if($view == $tab['tabName']) class="active"#end>&lt;a href="$doc.getURL('view', "view=$tab['tabName']&amp;amp;$!param")">$services.localization.render($tab['translationKey'])&lt;/a>&lt;/li>
+#end
+  &lt;/ul>
+&lt;/div>
+{{/html}}
+
+##==========================
+## Include the Tab data for the selected Tab
+##==========================
+{{html wiki="true"}}
+&lt;div class='xwikitabpanescontainer'>
+#foreach ($tab in $tabs)
+  #if ($tab['tabName'] == $view)
+    {{include reference="$tab['document']"/}}
+    #break
+  #end
+#end
+&lt;/div>
+{{/html}}
+#set($docextras=[])
+{{/velocity}}</content>
+</xwikidoc>

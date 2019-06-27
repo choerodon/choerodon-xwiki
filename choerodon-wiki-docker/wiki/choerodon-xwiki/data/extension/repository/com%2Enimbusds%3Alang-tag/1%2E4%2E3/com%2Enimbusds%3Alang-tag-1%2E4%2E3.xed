@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>com.nimbusds:lang-tag</id>
+<version>1.4.3</version>
+<type>jar</type>
+<name>Nimbus LangTag</name>
+<summary>Java implementation of "Tags for Identifying Languages"
+		(RFC 5646).</summary>
+<website>https://bitbucket.org/connect2id/nimbus-language-tags</website>
+<authors>
+<author>
+<name>Vladimir Dzhuvinov</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>https://bitbucket.org/connect2id/nimbus-language-tags.git</url>
+<connection>
+<system>git</system>
+<path>https://bitbucket.org/connect2id/nimbus-language-tags.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>git@bitbucket.org:connect2id/nimbus-language-tags.git</path>
+</developerconnection>
+</scm>
+<dependencies>
+<dependency>
+<id>net.minidev:json-smart</id>
+<version>1.3.1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>com.nimbusds</maven.groupid>
+<maven.artifactid>lang-tag</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754737</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

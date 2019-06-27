@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.parboiled:parboiled-core</id>
+<version>1.1.7</version>
+<type>jar</type>
+<name>parboiled-core</name>
+<summary>Elegant parsing in Java and Scala - lightweight, easy-to-use, powerful</summary>
+<website>http://parboiled.org</website>
+<authors>
+<author>
+<name>Mathias Doenitz</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>git@github.com:sirthias/parboiled.git</url>
+<connection>
+<system>git</system>
+<path>git@github.com:sirthias/parboiled.git</path>
+</connection>
+</scm>
+<properties>
+<maven.groupid>org.parboiled</maven.groupid>
+<maven.artifactid>parboiled-core</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407812144</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

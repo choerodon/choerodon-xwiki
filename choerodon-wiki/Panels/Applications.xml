@@ -1,0 +1,644 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="Panels.Applications" locale="">
+  <web>Panels</web>
+  <name>Applications</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755069000</creationDate>
+  <parent>Panels.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755069000</date>
+  <contentUpdateDate>1534755069000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content/>
+  <object>
+    <name>Panels.Applications</name>
+    <number>0</number>
+    <className>Panels.PanelClass</className>
+    <guid>cbe1606c-2ad6-4a85-8f76-4c2d65829623</guid>
+    <class>
+      <name>Panels.PanelClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <category>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>category</name>
+        <number>1</number>
+        <prettyName>Category</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Information|Navigation|Tools|Administration|Other</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </category>
+      <content>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>25</rows>
+        <size>120</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <description>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>description</name>
+        <number>3</number>
+        <prettyName>Description</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>4</number>
+        <prettyName>Name</prettyName>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <type>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>type</name>
+        <number>5</number>
+        <prettyName>Panel type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>view|edit</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </type>
+    </class>
+    <property>
+      <category>Information</category>
+    </property>
+    <property>
+      <content>{{velocity output="false"}}
+#macro (displayAppPanelEntry $params)
+  #if ($params.icon.startsWith('icon:'))
+    #set ($icon = $services.icon.renderHTML($params.icon.substring(5)))
+  #else
+    #set ($icon = $services.rendering.render($services.rendering.parse("image:${params.icon}", 'xwiki/2.1'),
+      'xhtml/1.0'))
+  #end
+  &lt;li>
+    &lt;a href="$xwiki.getURL($params.target, 'view', "$!params.targetQueryString")" title="$escapetool.xml($params.label)">
+      &lt;span class="application-img">$icon&lt;/span>
+      &lt;span class="application-label">$escapetool.xml($params.label)&lt;/span>
+    &lt;/a>
+  &lt;/li>
+#end
+
+#macro (maybeDisplayAppPanelEntry $uix $configDoc)
+  #set ($params = $uix.getParameters())
+  #set ($blackListObj = $configDoc.getObject('PanelsCode.ApplicationsPanelBlackListClass', 'applicationId', $uix.id))
+  #set ($targetReference = $services.model.resolveDocument($params.target))
+  #if (!$blackListObj &amp;&amp; "$!params.icon" != '' &amp;&amp; "$!params.label" != '' &amp;&amp; "$!params.target" != ''
+      &amp;&amp; $services.security.authorization.hasAccess('view', $targetReference))
+    #displayAppPanelEntry($params)
+  #end
+#end
+
+#macro (displayAppPanelEntries $extensionPointId $configDoc)
+  ## Get all UIX and sort them
+  #set ($apps = [])
+  #foreach ($uix in $services.uix.getExtensions($extensionPointId, {'sortByParameter': 'label'}))
+    #set ($app = {'uix': $uix})
+    #set ($orderObj = $configDoc.getObject('PanelsCode.ApplicationsPanelOrderClass', 'applicationId', $uix.id))
+    #if ($orderObj)
+      #set ($discard = $app.put('order', $orderObj.getValue('order')))
+    #else
+      ## if order is not set, set MAX_INTEGER
+      #set ($discard = $app.put('order', 2147483647))
+    #end
+    #set ($discard = $apps.add($app))
+  #end
+  ## Sort the apps
+  #foreach ($app in $sorttool.sort($apps, 'order'))
+    #maybeDisplayAppPanelEntry($app.uix, $configDoc)
+  #end
+#end
+{{/velocity}}
+
+{{velocity}}
+#set ($discard = $xwiki.ssx.use('Panels.Applications'))
+#set ($discard = $xwiki.jsx.use('Panels.Applications'))
+
+#panelheader($services.localization.render('panels.applications.title'))
+
+{{html}}
+&lt;ul class="applicationsPanel nav nav-pills nav-stacked">
+  ## Get the blacklist configuration
+  #set ($configDoc = $xwiki.getDocument($services.model.createDocumentReference('', 'PanelsCode',
+    'ApplicationsPanelConfiguration')))
+  #displayAppPanelEntries('org.xwiki.platform.panels.Applications' $configDoc)
+&lt;/ul>
+&lt;ul class="applicationsPanel applicationsPanelMoreList nav nav-pills nav-stacked">
+  &lt;li>
+    &lt;a href="$xwiki.getURL($services.model.createDocumentReference('', 'XWiki', 'XWikiPreferences'), 'admin',
+        'editor=globaladmin&amp;section=XWiki.AddExtensions')" class="applicationPanelMoreButton" title="$services.localization.render('panels.applications.more')">
+      &lt;span class="application-img">$services.icon.renderHTML('add')&lt;/span>
+      &lt;span class="application-label">$services.localization.render('panels.applications.more')&lt;/span>
+    &lt;/a>
+    &lt;div class="applicationPanelMoreContainer hidden">
+      &lt;ul class="nav nav-pills nav-stacked">
+        #displayAppPanelEntries('org.xwiki.platform.panels.Applications.more')
+      &lt;/ul>
+    &lt;/div>
+  &lt;/li>
+&lt;/ul>
+{{/html}}
+
+#panelfooter()
+{{/velocity}}</content>
+    </property>
+    <property>
+      <description>Lists the available applications and provides shortcuts to install new ones or to create your own.</description>
+    </property>
+    <property>
+      <name>Applications</name>
+    </property>
+    <property>
+      <type>view</type>
+    </property>
+  </object>
+  <object>
+    <name>Panels.Applications</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>12aa5bbf-26ee-4bc2-b649-1b508cdec8df</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>var XWiki = (function(XWiki) {
+
+var panels = XWiki.panels = XWiki.panels || {};
+
+panels.MoreApplicationsButtonListener = Class.create({
+  initialize: function(button) {
+    this.button = button;
+    this.container = button.up('.applicationsPanelMoreList').down('.applicationPanelMoreContainer');
+
+    var moreAppsCount = this.container.select('.application-label').length;
+    if (moreAppsCount > 0) {
+      this.container.id = 'applicationPanelMoreContainer' + Math.floor(Math.random()*101);
+      this.isToggling = false;
+      this.button.observe('click', function(e) {
+        e.stop();
+        if (!this.isToggling) {
+          this.toggle();
+        }
+      }.bindAsEventListener(this));
+    } else {
+      button.up('.applicationsPanelMoreList').hide();
+    }
+
+    return this;
+  },
+
+  toggle: function() {
+    this.isToggling = true;
+    if (this.container.hasClassName('hidden')) {
+      this.container.style.display = "none";
+      this.container.removeClassName('hidden');
+      Effect.BlindDown(this.container.id, {
+        duration: 0.1,
+        afterFinish: function() {
+          this.isToggling = false;
+        }.bind(this)
+      });
+    } else {
+      Effect.BlindUp(this.container.id, {
+        duration: 0.1,
+        // We do this to be able to get our hidden element back, we don't rely on
+        // display:none since we don't allow nested style in HTML elements.
+        afterFinish: function() {
+          this.container.addClassName('hidden');
+          this.isToggling = false;
+        }.bind(this)
+      });
+    }
+  }
+});
+
+return XWiki;
+}(XWiki || {}));
+
+document.observe('xwiki:dom:loaded', function(e) {
+  $$('.applicationPanelMoreButton').each(function(button) {
+    new XWiki.panels.MoreApplicationsButtonListener(button);
+  });
+});</code>
+    </property>
+    <property>
+      <name>Applications Panel</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <name>Panels.Applications</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>4511aeeb-4b3d-4c11-b76f-dc434d4cc9b0</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>#template('colorThemeInit.vm')
+
+.applicationsPanelMoreList {
+  margin-top: 1em;
+}
+
+.applicationsPanel li img {
+  float: left;
+  width: 16px;
+  height: 16px;
+}
+
+.panel-width-Medium .applicationsPanel li .application-img, 
+.panel-width-Large .applicationsPanel li .application-img {
+  display: block;
+  float: left;
+}
+
+.applicationsPanel li .application-label {
+  margin-left: 0.5em;
+}
+
+.applicationPanelMoreContainer ul {
+  margin-left: 5px;
+}
+
+.applicationPanelMoreContainer li a {
+  font-size: 90%;
+  line-height: 16px;
+}
+
+.panel-width-Small .panel.Applications {
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.panel-width-Small .applicationsPanel li {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+
+.panel-width-Small .applicationsPanel li a {
+  padding: 0.7em 0;
+}
+
+.panel-width-Small .applicationsPanel .application-label {
+  display: inline-block; /* Needed by IE for ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* Needed by IE for ellipsis */
+}
+
+.panel-width-Small .applicationsPanel li img {
+  float: none;
+}
+
+.panel-width-Small .applicationsPanel li .application-img {
+  display: block;
+}
+
+.panel-width-Small .applicationsPanel li .application-label {
+  margin-left: 0;
+}
+
+.panel-width-Small .panel.Applications .xwikipaneltitle {
+  display: none;
+}
+
+.panel-width-Small .panel.Applications .xwikipanelcontents {
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+}
+
+.panel-width-Small .applicationPanelMoreContainer ul {
+  padding: 0;
+  margin: 0;
+  background-color: $theme.pageContentBackgroundColor;
+}
+
+.panel-width-Small .applicationPanelMoreContainer ul li:hover {
+  background-color: $theme.highlightColor;
+}
+
+.panel-width-Small .applicationPanelMoreContainer ul li:hover a {
+  color: $theme.textPrimaryColor;
+}
+
+.panel-width-Small .application-img {
+  font-size: 24px;
+}
+
+.panel-width-Small .application-img img {
+  width: 24px;
+  height: 24px;
+}
+
+.panel-width-Medium .applicationsPanel > li > a,
+.panel-width-Medium .applicationsPanelMoreList > li > a,
+.panel-width-Medium .applicationPanelMoreContainer ul> li > a,
+.panel-width-Large .applicationsPanel > li > a,
+.panel-width-Large .applicationsPanelMoreList > li > a,
+.panel-width-Large .applicationPanelMoreContainer ul > li > a {
+  padding: 0;
+}
+
+.panel-width-Medium .applicationsPanel > li > a:hover,
+.panel-width-Medium .applicationsPanel > li > a:focus,
+.panel-width-Medium .applicationsPanelMoreList > li > a:hover,
+.panel-width-Medium .applicationsPanelMoreList > li > a:focus,
+.panel-width-Medium .applicationPanelMoreContainer ul> li > a:hover,
+.panel-width-Medium .applicationPanelMoreContainer ul> li > a:focus,
+.panel-width-Large .applicationsPanel > li > a:hover,
+.panel-width-Large .applicationsPanel > li > a:focus,
+.panel-width-Large .applicationsPanelMoreList > li > a:hover,
+.panel-width-Large .applicationsPanelMoreList > li > a:focus,
+.panel-width-Large .applicationPanelMoreContainer ul > li > a:hover 
+.panel-width-Large .applicationPanelMoreContainer ul > li > a:focus {
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+/* Phone case */
+@media (max-width: 768px) {
+  .panel-width-Small .applicationsPanel li {
+    float: left;
+    width: 33%;
+  }
+
+  /* no responsive design for colibri */
+  .skin-colibri .panel-width-Small .applicationsPanel li {
+    float: none;
+    width: inherit;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .panel-width-Small .applicationsPanel li{
+    float: left;
+    width: 20%;
+  }
+
+  /* no responsive design for colibri */
+  .skin-colibri .panel-width-Small .applicationsPanel li {
+    float: none;
+    width: inherit;
+  }
+}
+
+/* for colibri */
+
+.skin-colibri .applicationPanelMoreContainer ul {
+  margin-left: 0;
+}
+
+.skin-colibri .panel-width-Medium .applicationPanelMoreContainer ul,
+.skin-colibri .panel-width-Large .applicationPanelMoreContainer ul {
+  margin-left: 20px;
+}
+
+.skin-colibri .panel-width-Small .applicationsPanel {
+  margin: 0;
+}
+
+.skin-colibri .panel-width-Small .applicationsPanel li {
+  padding: 15px 0;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  margin: 1px 0;
+}
+
+.skin-colibri .panel-width-Small .applicationsPanel li.active {
+  background-color: $theme.buttonPrimaryBackgroundColor;  
+}
+
+.skin-colibri .panel-width-Small .applicationsPanel li.active a {
+  color: $theme.buttonPrimaryTextColor
+}
+
+.skin-colibri .panel-width-Small .applicationsPanel li:hover {
+  background-color: $theme.highlightColor;
+}
+
+.skin-colibri .panel-width-Small .applicationsPanel li:hover a {
+  color: $theme.textPrimaryColor; 
+}
+</code>
+    </property>
+    <property>
+      <name>Applications Panel</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

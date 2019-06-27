@@ -1,0 +1,68 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="ChoerodonConfig.ChoerodonFetchData.RecentSpace" locale="">
+  <web>ChoerodonConfig.ChoerodonFetchData</web>
+  <name>RecentSpace</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.superadmin</creator>
+  <creationDate>1540872249000</creationDate>
+  <parent>xwiki:ChoerodonConfig.ChoerodonFetchData.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1540872249000</date>
+  <contentUpdateDate>1540872249000</contentUpdateDate>
+  <version>1.1</version>
+  <title>RecentSpace</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{velocity}}&#xd;
+#macro(isSpace $doc $result)&#xd;
+    #set($liveTable = $doc.getObjects('AppWithinMinutes.LiveTableClass'))&#xd;
+    #if($liveTable.size() > 0)&#xd;
+        #set($result= true)&#xd;
+    #else&#xd;
+        #set($result = false)&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+#macro(displayRecent)&#xd;
+    #set ($rv_maxItems = "$!xwiki.getUserPreference('recent_actions_items')")&#xd;
+    #if ($rv_maxItems == '')&#xd;
+        #set ($rv_maxItems = 20)&#xd;
+    #end&#xd;
+    #set ($recentlyViewed = $xwiki.statsService.getRecentActions('view', $rv_maxItems))&#xd;
+    #if ($recentlyViewed.size() > 0 || $showEmptyPanels)&#xd;
+    &lt;ul class="space-ul recent-space-ul" id="recent-space-ul">&#xd;
+        #foreach ($docName in $recentlyViewed)&#xd;
+            #if ($xwiki.hasAccessLevel('view', $docName))&#xd;
+                #set ($recentDoc = $xwiki.getDocument($docName).getTranslatedDocument())&#xd;
+                #isSpace($recentDoc,$result)&#xd;
+                #if ($result &amp;&amp; $recentDoc.plainTitle != 'spinner.gif' &amp;&amp; $recentDoc.plainTitle != '最近工作' &amp;&amp; $recentDoc.plainTitle != '最近访问' &amp;&amp; $recentDoc.plainTitle != '所有更新' &amp;&amp; $recentDoc.plainTitle != '热门' &amp;&amp; $recentDoc.plainTitle != 'Home')&#xd;
+                    #set($iconArray = $recentDoc.getObject("XWiki.UIExtensionClass").parameters.split("icon=icon:"))&#xd;
+                    #if($iconArray.size() > 1)&#xd;
+                        #set($iconName =  $iconArray.get(1))&#xd;
+                    ##set ($recentIcon = $services.icon.renderHTML($iconName))&#xd;
+                        &lt;li>&#xd;
+                            &lt;div class="space-wrap">&#xd;
+                                &lt;a href="$recentDoc.getURL('view')" class="spaceName space-a">&#xd;
+                                    &lt;span class="application-img">&lt;span class="icon icon-$iconName">&lt;/span>&lt;/span>&#xd;
+                                    &lt;span class="application-label">$escapetool.xml($recentDoc.plainTitle)&lt;/span>&#xd;
+                                &lt;/a>&#xd;
+                            &lt;/div>&#xd;
+                        &lt;/li>&#xd;
+                    #end&#xd;
+                #end&#xd;
+            #end&#xd;
+        #end&#xd;
+    &lt;/ul>&#xd;
+    #end&#xd;
+#end&#xd;
+{{html}}&#xd;
+#displayRecent()&#xd;
+{{/html}}&#xd;
+&#xd;
+{{velocity}}</content>
+</xwikidoc>

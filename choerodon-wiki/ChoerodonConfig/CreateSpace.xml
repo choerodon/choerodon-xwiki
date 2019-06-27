@@ -1,0 +1,954 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="ChoerodonConfig.CreateSpace" locale="">
+  <web>ChoerodonConfig</web>
+  <name>CreateSpace</name>
+  <language/>
+  <defaultLanguage>zh_CN</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.superadmin</creator>
+  <creationDate>1540872247000</creationDate>
+  <parent>ChoerodonConfig.WebHome</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.superadmin</contentAuthor>
+  <date>1548136684000</date>
+  <contentUpdateDate>1548136684000</contentUpdateDate>
+  <version>12.1</version>
+  <title>创建空间</title>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{include reference="AppWithinMinutes.WizardStep"/}}&#xd;
+{{template name="locationPicker_macros.vm"/}}&#xd;
+&#xd;
+{{velocity}}&#xd;
+&#xd;
+{{html wiki="true"}}&#xd;
+&#xd;
+&lt;form action="" id="create-space-form" method="post" class="xform wizard-body">&#xd;
+    &lt;div id="appNameDiv">&#xd;
+        &lt;label for="appName">名字&lt;/label>&#xd;
+        (% class="xHint" %)新建页面标题&#xd;
+        &lt;input id="appName" name="appName" type="text" placeholder="页面标题" oninput="nameOnInput(this)" />&#xd;
+        &lt;span id="appName-validate" style="display: none;">标题为必填项*&lt;/span>&#xd;
+    &lt;/div>&#xd;
+    #locationPicker({&#xd;
+        'id': 'app',&#xd;
+        'preview': {&#xd;
+        'label': '位置',&#xd;
+        'hint': '位置'&#xd;
+    },&#xd;
+        'parent': {&#xd;
+        'label': '位置',&#xd;
+        'hint': '位置',&#xd;
+        'name': 'appParentReference',&#xd;
+        'reference': $doc.documentReference.wikiReference,&#xd;
+        'placeholder': 'appWithinMinutes.createApp.parent.placeholder'&#xd;
+    }&#xd;
+    })&#xd;
+&#xd;
+&#xd;
+    &lt;label for="applicationIcon">ICON&lt;/label>&#xd;
+    (% class="xHint" %)icon&#xd;
+    &lt;input id="applicationIcon" name="applicationIcon" type="text" size="10" value="icon:domain" />&#xd;
+    {{iconPicker id="applicationIcon" prefix="icon:" /}}&#xd;
+    &lt;div class="buttons">&#xd;
+    &lt;span class="buttonwrapper">&#xd;
+      &lt;input type="submit" id="btnSave"  class="button" value="创建" disabled >&#xd;
+    &lt;/span>&#xd;
+        &lt;span class="buttonwrapper">&#xd;
+      &lt;a class="secondary button" id="btnCancel" href="/bin/view/Main/">取消&lt;/a>&#xd;
+    &lt;/span>&#xd;
+    &lt;/div>&#xd;
+&#xd;
+&lt;/form>&#xd;
+&lt;script type="application/javascript">&#xd;
+    function nameOnInput(a) {&#xd;
+        require(['jquery'], function ($) {&#xd;
+            var name = $.trim($('#appName').val());&#xd;
+            if(name.length > 0){&#xd;
+                $('#btnSave').removeAttr("disabled");&#xd;
+                $("#appName-validate").removeClass("validate-span");&#xd;
+                $("#appName").removeClass("validate-input");&#xd;
+            }else {&#xd;
+                $('#btnSave').attr("disabled",true);&#xd;
+                $("#appName-validate").attr("class", "validate-span");&#xd;
+                $("#appName").addClass("validate-input");&#xd;
+            }&#xd;
+        })&#xd;
+    }&#xd;
+&lt;/script>&#xd;
+&#xd;
+{{/html}}&#xd;
+&#xd;
+&#xd;
+#macro (createSpace)&#xd;
+    #if("$!request.appParentReference" != '' )&#xd;
+        #set($appParentReference = $request.appParentReference+".")&#xd;
+    #else&#xd;
+        #set($appParentReference = "")&#xd;
+    #end&#xd;
+&#xd;
+    #set($webHomeStr = $appParentReference+$request.appName+".WebHome")&#xd;
+    #set($newDoc = $xwiki.getDocument($webHomeStr))&#xd;
+    $newDoc.setTitle($request.appName)&#xd;
+&#xd;
+    #set($webPreferencesStr = $appParentReference+$request.appName+".WebPreferences")&#xd;
+    #set($webPreferences = $xwiki.getDocument($webPreferencesStr))&#xd;
+    $webPreferences.setHidden(true)&#xd;
+&#xd;
+##UIExtensionClass&#xd;
+    #set($webhomeObj = $newDoc.newObject("XWiki.UIExtensionClass"))&#xd;
+    #set($targetStr = $request.appName+".WebHome")&#xd;
+    #if("$!request.appParentReference" == $xcontext.getUser().substring(6))&#xd;
+    #set($parameters = "label="+$request.appName+"&#xd;
+target="+$appParentReference+$request.appName+".WebHome&#xd;
+icon="+$request.applicationIcon+"&#xd;
+personal=true")&#xd;
+    #else&#xd;
+#set($parameters = "label="+$request.appName+"&#xd;
+target="+$appParentReference+$request.appName+".WebHome&#xd;
+icon="+$request.applicationIcon)&#xd;
+    #end&#xd;
+    $webhomeObj.set("parameters",$parameters )&#xd;
+    $webhomeObj.set("extensionPointId","org.xwiki.platform.panels.Applications" )&#xd;
+&#xd;
+&#xd;
+&#xd;
+##LiveTableClass&#xd;
+    #set($liveTableClass = $newDoc.newObject("AppWithinMinutes.LiveTableClass"))&#xd;
+    $liveTableClass.set("description",'{{html}}&#xd;
+&lt;div id="home-page-welcome">&#xd;
+   &lt;div style="margin-top: 10px;margin-left: 21px;">&#xd;
+      &lt;span class="icon icon-check_circle" style="color:#5266D4;width:20px;height:20px">&lt;/span>&#xd;
+      &lt;span class="home-page-font" style="margin-left: 6px;">欢迎来到您的新空间！&lt;/span>&#xd;
+   &lt;/div>&#xd;
+   &lt;div class="home-page-left" style="padding: 4px 0;">&#xd;
+         &lt;span class = "home-page-font1" >这是当前空间的主页，下面显示的是最近空间活动。您可以：&lt;/span>&#xd;
+   &lt;/div>&#xd;
+   &lt;div style="margin-bottom:8px;">&#xd;
+      &lt;div class="home-page-left">&#xd;
+         &lt;span class="home-page-font">创建您的首个页面&lt;/span> - &lt;span class = "home-page-font1">点击顶部导航栏上的创建按钮开始。&lt;/span>&#xd;
+      &lt;/div>&#xd;
+      &lt;div class="home-page-left">&#xd;
+         &lt;span class="home-page-font">设置空间权限&lt;/span> - &lt;span class = "home-page-font1">空间管理员可以点击右上方的“更多 - 管理”按钮修改当前空间的访问权限。&lt;/span>&#xd;
+      &lt;/div>&#xd;
+   &lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;div id="home-page-space">&#xd;
+    &lt;div id = "home-page-recent-space">&#xd;
+        &lt;div id="home-page-recent-font">&#xd;
+             最近的空间活动&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+{{/html}}&#xd;
+&#xd;
+{{velocity}}&#xd;
+#set ($space = $doc.getSpace())&#xd;
+&#xd;
+{{activity subentries="4" entries="5" spaces=$space/}}&#xd;
+{{/velocity}}&#xd;
+')&#xd;
+&#xd;
+##JavaScriptExtension&#xd;
+    #set($javaScriptExtensionObj = $newDoc.newObject("XWiki.JavaScriptExtension"))&#xd;
+    $javaScriptExtensionObj.set("name",'appPageJs')&#xd;
+    $javaScriptExtensionObj.set("use",'currentPage')&#xd;
+    $javaScriptExtensionObj.set("code",'var activityAction = document.getElementsByClassName("activityAction");&#xd;
+                    for (var i = 0; i &lt; activityAction.length; i++) {&#xd;
+                    if (activityAction[i].getElementsByTagName("a").length != 0) {&#xd;
+                    activityAction[i].getElementsByTagName("a")[0].innerHTML = "(查看更新)";&#xd;
+                    }&#xd;
+                    }&#xd;
+&#xd;
+&#xd;
+                    //增加元素&#xd;
+                    /*var strTitle = `&#xd;
+                    &lt;span style="font-size: 18px;&#xd;
+                    color: #000;&#xd;
+                    line-height: 59px;&#xd;
+                    margin-bottom: 0;&#xd;
+                    padding-left: 14px;&#xd;
+                    cursor: pointer;">主页&lt;/span>&#xd;
+                    `;&#xd;
+&#xd;
+                    if(document.getElementsByClassName("xwiki-main-refesh")[0] != null){&#xd;
+                    document.getElementsByClassName("xwiki-main-refesh")[0].insertAdjacentHTML("beforeBegin", strTitle);&#xd;
+                    }*/&#xd;
+&#xd;
+                    //最近空间活动&#xd;
+                    var descIcon = `&lt;span class="icon icon-description" style="&#xd;
+                    color: #5266D4;&#xd;
+                    padding-bottom: 4px;&#xd;
+                    ">&lt;/span>`;&#xd;
+                    var typePage = document.getElementsByClassName("typePage");&#xd;
+                    for(var i=0; i&lt;typePage.length; i++){&#xd;
+                    typePage[i].insertAdjacentHTML("afterBegin", descIcon);&#xd;
+                    }&#xd;
+&#xd;
+                    var edit_doc_icon = `&lt;div class="activity-opera-div  activity-icon-edit">&lt;span class="icon icon-mode_edit activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var create_doc_icon = `&lt;div class="activity-opera-div  activity-icon-add">&lt;span class="icon icon-playlist_add activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_doc_icon = `&lt;div class="activity-opera-div  activity-icon-delete">&lt;span class="icon icon-delete activity-opera-icon">&lt;/span>&lt;/div>`&#xd;
+var edit_comment_icon = `&lt;div class="activity-opera-div activity-icon-edit">&lt;span class="icon icon-textsms activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var add_comment_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-add_comment activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_comment_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-delete_commet activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var edit_attachment_icon = `&lt;div class="activity-opera-div activity-icon-edit">&lt;span class="icon icon-border_color activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var add_attachment_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-add_attach activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_attachment_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-delete_attach activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var edit_annotation_icon = `&lt;div class="activity-opera-div activity-icon-edit">&lt;span class="icon icon-speaker_notes activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var add_annotation_icon = `&lt;div class="activity-opera-div activity-icon-add">&lt;span class="icon icon-speaker_notes activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+var delete_annotation_icon = `&lt;div class="activity-opera-div activity-icon-delete">&lt;span class="icon icon-speaker_notes activity-opera-icon">&lt;/span>&lt;/div>`;&#xd;
+                    var litleIcon = document.getElementsByClassName("activityActionAvatar");&#xd;
+                    for(var i=0; i&lt;litleIcon.length; i++){&#xd;
+                    if(litleIcon[i].alt == "编辑页面"){&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", edit_doc_icon);&#xd;
+                    }else if (litleIcon[i].alt == "创建页面") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", create_doc_icon);&#xd;
+                    } else if(litleIcon[i].alt == "删除页面") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", delete_doc_icon);&#xd;
+                    } else if (litleIcon[i].alt == "添加评论") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", add_comment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "编辑评论") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", edit_comment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "删除评论") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", delete_comment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "添加附件") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", add_attachment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "删除附件") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", delete_attachment_icon);&#xd;
+                    } else if (litleIcon[i].alt == "添加注释") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", add_annotation_icon);&#xd;
+                    } else if (litleIcon[i].alt == "编辑注释") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", edit_annotation_icon);&#xd;
+                    } else if (litleIcon[i].alt == "删除注释") {&#xd;
+                    litleIcon[i].style.display = "none";&#xd;
+                    litleIcon[i].insertAdjacentHTML("afterEnd", delete_annotation_icon);&#xd;
+                    }&#xd;
+                    }&#xd;
+&#xd;
+                ')&#xd;
+&#xd;
+##StyleSheetExtension0&#xd;
+    #set($styleSheetExtension0 = $newDoc.newObject("XWiki.StyleSheetExtension"))&#xd;
+    $styleSheetExtension0.set("name",'name')&#xd;
+    $styleSheetExtension0.set("contentType",'CSS')&#xd;
+    $styleSheetExtension0.set("use",'currentPage')&#xd;
+    $styleSheetExtension0.set("cache",'default')&#xd;
+    $styleSheetExtension0.set("code",'.breadcrumb-expandable{&#xd;
+                    display: none;&#xd;
+                    }&#xd;
+&#xd;
+                    .xdocLastModification,#xdocFooter,#xwikidata{&#xd;
+                    display: none;&#xd;
+                    }&#xd;
+&#xd;
+                    .xcontent>hr{&#xd;
+                    display: none;&#xd;
+                    }&#xd;
+&#xd;
+                    #body.hideright.panel-left-width-Medium .main {&#xd;
+                    padding-left: 250px;&#xd;
+                    left: 0 !important;&#xd;
+                    width: 100% !important;&#xd;
+                    padding-right:0px !important;&#xd;
+                    }&#xd;
+&#xd;
+                    .xcontent{&#xd;
+                    margin-top:0px !important;&#xd;
+                    }&#xd;
+&#xd;
+                    .document-header .document-menu, .document-header .document-info {&#xd;
+                    margin-top: 0px;&#xd;
+                    }&#xd;
+&#xd;
+                    #contentcolumn .main {&#xd;
+                    margin-left: 0px;&#xd;
+                    }&#xd;
+&#xd;
+                    .document-header #document-title h1 {&#xd;
+                    font-size: 18px;&#xd;
+                    color: #000000;&#xd;
+                    line-height: 59px;&#xd;
+                    padding-left: 0px;&#xd;
+                    }&#xd;
+&#xd;
+                    .xwiki-main-refesh:hover{&#xd;
+                    background-color: #DDDDDD;&#xd;
+                    border-radius: 3px;&#xd;
+                    }&#xd;
+&#xd;
+                    .xdocLastModification{&#xd;
+                    line-height: 0px;&#xd;
+                    padding-top: 12px;&#xd;
+                    }&#xd;
+&#xd;
+                    #actionBox,#xwikicontent>p,#HEntries,#tmEdit{&#xd;
+                    display:none;&#xd;
+                    }')&#xd;
+&#xd;
+&#xd;
+##StyleSheetExtension1&#xd;
+    #set($styleSheetExtension1 = $newDoc.newObject("XWiki.StyleSheetExtension"))&#xd;
+    $styleSheetExtension1.set("name",'name')&#xd;
+    $styleSheetExtension1.set("contentType",'CSS')&#xd;
+    $styleSheetExtension1.set("use",'currentPage')&#xd;
+    $styleSheetExtension1.set("cache",'default')&#xd;
+    $styleSheetExtension1.set("code",'#home-page-welcome{&#xd;
+                    background: rgba(140,158,255,0.08);&#xd;
+                    border: 1px solid #5266D4;&#xd;
+                    border-radius: 2px;&#xd;
+                    margin-top: 13px;&#xd;
+                    }&#xd;
+&#xd;
+                    .home-page-left{&#xd;
+                    margin-left:51px;&#xd;
+                    }&#xd;
+&#xd;
+                    .home-page-font{&#xd;
+                    font-size: 14px;&#xd;
+                    color: #000000;&#xd;
+                    line-height: 20px;&#xd;
+                    }&#xd;
+&#xd;
+                    .home-page-font1{&#xd;
+                    font-size: 13px;&#xd;
+                    color: rgba(0,0,0,0.65);&#xd;
+                    line-height: 20px;&#xd;
+                    }&#xd;
+&#xd;
+                    #home-page-space{&#xd;
+                    margin-top: 20px;&#xd;
+                    width: 98%;&#xd;
+                    }&#xd;
+&#xd;
+                    #home-page-recent-space{&#xd;
+                    width: 710px;&#xd;
+                    height: 503px;&#xd;
+                    float: left;&#xd;
+                    border: 1px solid #E3E3E3;&#xd;
+                    }&#xd;
+&#xd;
+                    #home-page-space-contributor{&#xd;
+                    width: 38%;&#xd;
+                    height:298px;&#xd;
+                    background: #FAFAFA;&#xd;
+                    float: left;&#xd;
+                    margin-left:20px;&#xd;
+                    }&#xd;
+&#xd;
+                    #home-page-recent-font{&#xd;
+                    font-size: 16px;&#xd;
+                    color: #000000;&#xd;
+                    line-height: 24px;&#xd;
+                    margin-left:18px;&#xd;
+                    margin-top:20px;&#xd;
+                    }&#xd;
+&#xd;
+                    #xdocAuthors{&#xd;
+                    display:none;&#xd;
+                    }&#xd;
+&#xd;
+                    .doc-tags {&#xd;
+                    clear: both;&#xd;
+                    }&#xd;
+&#xd;
+                    #xwikidatacontents{&#xd;
+                    margin-left: 20px;&#xd;
+                    width: 92%;&#xd;
+                    }&#xd;
+&#xd;
+                    #xwikidata{&#xd;
+                    background-color: white;&#xd;
+                    margin-top: -18px;&#xd;
+                    }&#xd;
+&#xd;
+                    #docExtraTabs{&#xd;
+                    margin-left: -16px;&#xd;
+                    }&#xd;
+&#xd;
+                    #docExtrasTabsUl>li>a{&#xd;
+                    background-color: white;&#xd;
+                    }&#xd;
+&#xd;
+                    #docextrapanes {&#xd;
+                    box-shadow: none;&#xd;
+                    }&#xd;
+&#xd;
+                    .activity{&#xd;
+                    clear: both;&#xd;
+                    width: 674px;&#xd;
+                    margin-top: 54px;&#xd;
+                    position: absolute;&#xd;
+                    margin-left: 18px;&#xd;
+                    }&#xd;
+&#xd;
+                    .activity>h2{&#xd;
+                    display: none;&#xd;
+                    }&#xd;
+&#xd;
+&#xd;
+                    .activityAuthor a{&#xd;
+                    font-size: 16px;&#xd;
+                    color: #000000;&#xd;
+                    line-height: 24px;&#xd;
+                    text-decoration: none;&#xd;
+                    }&#xd;
+&#xd;
+                    .activityTime{&#xd;
+                    font-size: 13px;&#xd;
+                    color: #5E6C84 !important;&#xd;
+                    line-height: 20px;&#xd;
+                    }&#xd;
+&#xd;
+                    .activityAction{&#xd;
+                    font-size: 12px;&#xd;
+                    color: rgba(0,0,0,0.65);&#xd;
+                    text-align: left;&#xd;
+                    }&#xd;
+&#xd;
+                    .activitySnapshot img {&#xd;
+                    border-radius: 12px;&#xd;
+                    height: 24px;&#xd;
+                    width: 24px;&#xd;
+                    }&#xd;
+&#xd;
+                    .activitySnapshot .activityActionAvatar {&#xd;
+                    bottom: 6px;&#xd;
+                    height: 10px;&#xd;
+                    right: -12px;&#xd;
+                    width: 10px;&#xd;
+                    border-width:0;&#xd;
+                    }&#xd;
+&#xd;
+                    .activityAction a {&#xd;
+                    text-decoration: none;&#xd;
+                    }&#xd;
+&#xd;
+                    .typePage {&#xd;
+                    background-image: none;&#xd;
+                    }&#xd;
+&#xd;
+                    #xwikicontent {&#xd;
+                    overflow: hidden;&#xd;
+                    }&#xd;
+&#xd;
+                    .activity-icon-add {&#xd;
+                    background: #1AB16F;&#xd;
+                    }&#xd;
+&#xd;
+                    .activity-icon-edit {&#xd;
+                    background: #4D90FE;&#xd;
+                    }&#xd;
+&#xd;
+                    .activity-icon-delete {&#xd;
+                    background: #F44336;&#xd;
+                    }&#xd;
+&#xd;
+                    .activity-opera-div {&#xd;
+                    position: absolute;&#xd;
+                    right: -16px;&#xd;
+                    bottom: -5px;&#xd;
+                    width: 13px;&#xd;
+                    height: 13px;&#xd;
+                    border-radius: 50%;&#xd;
+                    }&#xd;
+&#xd;
+                    .activity-opera-icon {&#xd;
+                    -webkit-transform: scale(0.8);&#xd;
+                    transform: scale(0.8);&#xd;
+                    position: absolute;&#xd;
+                    left: 0.5px;&#xd;
+                    font-size: 12px;&#xd;
+                    border-radius: 50%;&#xd;
+                    color: #fff;&#xd;
+                    }&#xd;
+&#xd;
+                    .icon-add_comment, .icon-textsms, .icon-delete_commet {&#xd;
+                    transform: scale(0.7);&#xd;
+                    top: 1px;&#xd;
+                    left: 0;&#xd;
+                    }&#xd;
+&#xd;
+                    .icon-delete {&#xd;
+                    left: 0.3px;&#xd;
+                    }&#xd;
+&#xd;
+                    .activityItem {&#xd;
+                    margin: 0;&#xd;
+                    }')&#xd;
+&#xd;
+&#xd;
+&#xd;
+    $newDoc.save()&#xd;
+    $webPreferences.save()&#xd;
+    $response.sendRedirect($xwiki.getURL($newDoc))&#xd;
+#end&#xd;
+&#xd;
+&#xd;
+#if("$!request.appName" != '' )&#xd;
+    #if("$!request.appParentReference" != '' )&#xd;
+        #set($appParentReference = $request.appParentReference+".")&#xd;
+    #else&#xd;
+        #set($appParentReference = "")&#xd;
+    #end&#xd;
+&#xd;
+    #set($webHomeStr = $appParentReference+$request.appName+".WebHome")&#xd;
+&#xd;
+    #if(!$xwiki.exists($webHomeStr))&#xd;
+        #createSpace()&#xd;
+    #else&#xd;
+        #stop&#xd;
+    #end&#xd;
+&#xd;
+#end&#xd;
+&#xd;
+{{/velocity}}</content>
+  <object>
+    <name>ChoerodonConfig.CreateSpace</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>e1b9be77-8172-4e42-af86-c0841c9a9259</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>default</cache>
+    </property>
+    <property>
+      <code>.document-info .document-menu {&#xd;
+    display: none;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space #document-title{&#xd;
+    height: 59px;&#xd;
+    line-height: 59px;&#xd;
+    border-bottom: 1px solid #d3d3d3;&#xd;
+    margin-top: -20px;&#xd;
+    padding-top: 26px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space #create{&#xd;
+    margin-top:18px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space #targetTitle{&#xd;
+    box-shadow: none;&#xd;
+    border: none;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-radius: 0;&#xd;
+    height: 26px;&#xd;
+    line-height: 26px;&#xd;
+    padding: 0;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space #targetTitle:focus{&#xd;
+    box-shadow: none;&#xd;
+    border: none;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space #targetTitle::-webkit-input-placeholder{&#xd;
+    color: #000000;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .breadcrumb {&#xd;
+    padding: 4px 0;&#xd;
+    list-style: none;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    background-color: white;&#xd;
+    border-radius: 0;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .location-actions {&#xd;
+    padding: 5px 15px 0px 15px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .row .col-lg-6 {&#xd;
+    float: none;&#xd;
+    width: 100%;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-adaptable-medium{&#xd;
+    margin-top: 6px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-filter{&#xd;
+    height: 48px;&#xd;
+    font-size: 15px;&#xd;
+    border-radius: 2px;&#xd;
+    width:50% !important;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-options {&#xd;
+    border: 0;&#xd;
+    border-radius: 0;&#xd;
+    box-shadow: none;&#xd;
+    padding: 0;&#xd;
+    overflow-x: hidden;&#xd;
+    overflow-y: hidden;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-option {&#xd;
+    cursor: pointer;&#xd;
+    width: 230px;&#xd;
+    height: 70px;&#xd;
+    border: 1px solid #ccc;&#xd;
+    margin-left: 32px;&#xd;
+    margin-top: 16px;&#xd;
+    min-height: 0;&#xd;
+    max-height: none;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .buttons{&#xd;
+    padding: 12px 0px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-option-selected {&#xd;
+    background-color: white;&#xd;
+    border: 2px solid #3F51B5 !important;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .span-icon-check {&#xd;
+    position: absolute;&#xd;
+    left: 270px;&#xd;
+    margin-top: -18px;&#xd;
+    background-color: #3f51b5;&#xd;
+    color: #fff;&#xd;
+    width: 25px;&#xd;
+    height: 25px;&#xd;
+    border-radius: 50%;&#xd;
+    display: -webkit-box;&#xd;
+    display: -webkit-flex;&#xd;
+    display: -ms-flexbox;&#xd;
+    display: flex;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .span-icon-check .icon {&#xd;
+    font-size: 25px!important;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-option-icon {&#xd;
+    padding-left: 8px;&#xd;
+    padding-top: 4px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-option-icon + div {&#xd;
+    padding-top: 6px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-option-icon + div>p {&#xd;
+    padding-top: 6px;&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .location-picker{&#xd;
+    width:50%&#xd;
+}&#xd;
+&#xd;
+#c7n-create-space .xwiki-select-adaptable-medium .xwiki-select-options {&#xd;
+    min-height: min-content;&#xd;
+    max-height: max-content;&#xd;
+}&#xd;
+&#xd;
+/*隐藏评论等*/&#xd;
+.xdocLastModification {&#xd;
+        display: none;&#xd;
+    }&#xd;
+div#xdocFooter {&#xd;
+    display: none;&#xd;
+}&#xd;
+div#xwikidata {&#xd;
+    display: none;&#xd;
+}&#xd;
+&#xd;
+/*form样式*/&#xd;
+#appNameDiv{&#xd;
+  margin-bottom: 20px;&#xd;
+}&#xd;
+#create-space-form label {&#xd;
+  font-family: PingFangSC-Medium;&#xd;
+  font-size: 15px;&#xd;
+  color: #000000;&#xd;
+  text-align: left;&#xd;
+  font-weight: normal!important;&#xd;
+  text-transform: unset!important;&#xd;
+  margin-top: 12px;&#xd;
+  margin-bottom: 16px;&#xd;
+}&#xd;
+#create-space-form #appName{&#xd;
+    box-shadow: none;&#xd;
+    border: 0;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-radius: 0;&#xd;
+    height: 26px;&#xd;
+    line-height: 26px;&#xd;
+    width: 512px;&#xd;
+    padding: 0;&#xd;
+    display: block;&#xd;
+}&#xd;
+&#xd;
+#create-space-form .location-actions{&#xd;
+  margin-left: 445px;&#xd;
+  position: absolute;&#xd;
+  padding: 5px 15px 0 15px;&#xd;
+}&#xd;
+&#xd;
+#create-space-form .location-picker .breadcrumb {&#xd;
+    margin-bottom: 0;&#xd;
+    padding: 4px 0;&#xd;
+    list-style: none;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    background-color: white;&#xd;
+    border-radius: 0;&#xd;
+    width: 512px;&#xd;
+}&#xd;
+&#xd;
+#create-space-form #applicationIcon {&#xd;
+    box-shadow: none;&#xd;
+    border: 0;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-radius: 0;&#xd;
+    height: 26px;&#xd;
+    line-height: 26px;&#xd;
+    width: 512px;&#xd;
+    padding: 0;&#xd;
+    display: block;&#xd;
+}&#xd;
+#btnSave{&#xd;
+      background: #3f51b5;&#xd;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.20), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);&#xd;
+    border-radius: 2px;&#xd;
+    font-family: PingFangSC-Medium;&#xd;
+    font-size: 13px;&#xd;
+    color: #fff;&#xd;
+    text-align: left;&#xd;
+    line-height: 15px;&#xd;
+    border: 0;&#xd;
+}&#xd;
+&#xd;
+#create-space-form .buttons {&#xd;
+    margin-top: 32px;&#xd;
+}&#xd;
+#create-space-form a.secondary.button{&#xd;
+    background: #fff;&#xd;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.20), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);&#xd;
+    border-radius: 2px;&#xd;
+    font-family: PingFangSC-Medium;&#xd;
+    font-size: 13px;&#xd;
+    color: #3f51b5;&#xd;
+    text-align: left;&#xd;
+    line-height: 15px;&#xd;
+    border: 0;&#xd;
+}&#xd;
+&#xd;
+#create-space-form .validate-span{&#xd;
+    color: red;&#xd;
+    position: absolute;&#xd;
+    margin-top: -21px;&#xd;
+    margin-left: 435px;&#xd;
+    display: block!important;&#xd;
+}&#xd;
+&#xd;
+#create-space-form .validate-input{&#xd;
+  border-bottom: 1.4px solid #ff0000!important;&#xd;
+}&#xd;
+&#xd;
+/*selectpage*/&#xd;
+.viewbody .modal-dialog{&#xd;
+    -moz-transition-property: width!important ; /* Firefox 4 */&#xd;
+    -webkit-transition-property:width!important ; /* Safari and Chrome */&#xd;
+    -o-transition-property:width!important ; /* Opera */&#xd;
+}&#xd;
+ &#xd;
+.viewbody .modal-content{&#xd;
+    height: 100%;&#xd;
+    border-radius: 0px;&#xd;
+    margin:0 auto;&#xd;
+    border: none;&#xd;
+    transition-property:width!important ;&#xd;
+    -moz-transition-property: width!important ; /* Firefox 4 */&#xd;
+    -webkit-transition-property:width!important ; /* Safari and Chrome */&#xd;
+    -o-transition-property:width!important ; /* Opera */&#xd;
+}&#xd;
+.viewbody .modal {&#xd;
+    overflow-x: unset;&#xd;
+    overflow-y: unset;&#xd;
+}&#xd;
+.viewbody .fade{&#xd;
+    padding-right: 0px;&#xd;
+}&#xd;
+.viewbody .modal-dialog{&#xd;
+    height: 100%;&#xd;
+    right: -18px;&#xd;
+    width: 70%;&#xd;
+    float: right;&#xd;
+    margin: 0 auto;&#xd;
+}&#xd;
+.viewbody .modal-header .close{&#xd;
+    display: none;&#xd;
+    height:58px;&#xd;
+}&#xd;
+&#xd;
+.viewbody .modal-footer {&#xd;
+    text-align: left;&#xd;
+    height: 55px;&#xd;
+    padding: 10px 0 5px 15px;&#xd;
+}&#xd;
+&#xd;
+.viewbody .modal .modal-body{&#xd;
+    height: calc(100% - 120px)!important;&#xd;
+}&#xd;
+&#xd;
+.viewbody .modal .modal-body .xtree-finder{&#xd;
+    border: 0;&#xd;
+    border-bottom: 1px solid rgba(0,0,0,0.54);&#xd;
+    border-radius: 0;&#xd;
+    box-shadow: none;&#xd;
+    height:30px;&#xd;
+}&#xd;
+.viewbody .modal .modal-body .location-tree{&#xd;
+    height: calc(100% - 30px)!important;&#xd;
+    overflow: auto;&#xd;
+}&#xd;
+.viewbody .modal .modal-footer .btn-primary{&#xd;
+    background: #3F51B5;&#xd;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.20), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);&#xd;
+    color: #fff;&#xd;
+    background-color: #3f51b5;&#xd;
+    border-color: #3f51b5;&#xd;
+    border: none;&#xd;
+    display: inline-block;&#xd;
+    font-weight: 500;&#xd;
+    text-align: center;&#xd;
+    background-image: none;&#xd;
+    cursor: pointer;&#xd;
+    white-space: nowrap;&#xd;
+    border-radius: 2px;&#xd;
+    height: 32px;&#xd;
+    width: 50px;&#xd;
+}&#xd;
+&#xd;
+.viewbody .modal .modal-footer .btn-default{&#xd;
+    background: #FFFFFF;&#xd;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.20), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);&#xd;
+    border-radius: 2px;&#xd;
+    border: none;&#xd;
+    color: #3f51b5;&#xd;
+    font-weight: 500;&#xd;
+    background-image: none;&#xd;
+    display: inline-block;&#xd;
+}&#xd;
+&#xd;
+&#xd;
+</code>
+    </property>
+    <property>
+      <contentType>CSS</contentType>
+    </property>
+    <property>
+      <name>创建空间的样式</name>
+    </property>
+    <property>
+      <parse>0</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+</xwikidoc>

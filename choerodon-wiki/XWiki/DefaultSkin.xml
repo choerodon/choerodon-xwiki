@@ -1,0 +1,4330 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.DefaultSkin" locale="">
+  <web>XWiki</web>
+  <name>DefaultSkin</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1538119098000</creationDate>
+  <parent>XWiki.XWikiPreferences</parent>
+  <author>XWiki.superadmin</author>
+  <contentAuthor>XWiki.9204</contentAuthor>
+  <date>1548056194000</date>
+  <contentUpdateDate>1538119098000</contentUpdateDate>
+  <version>20.1</version>
+  <title/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content/>
+  <attachment>
+    <filename>icons.xwiki.favicon.ico</filename>
+    <author>XWiki.9204</author>
+    <date>1553063386000</date>
+    <version>1.3</version>
+    <comment/>
+    <content/>
+    <filesize>0</filesize>
+  </attachment>
+  <attachment>
+    <filename>icons.xwiki.favicon.svg</filename>
+    <author>XWiki.9204</author>
+    <date>1553063387000</date>
+    <version>1.3</version>
+    <comment/>
+    <content/>
+    <filesize>0</filesize>
+  </attachment>
+  <attachment>
+    <filename>icons.xwiki.favicon144.png</filename>
+    <author>XWiki.9204</author>
+    <date>1553063387000</date>
+    <version>1.3</version>
+    <comment/>
+    <content/>
+    <filesize>0</filesize>
+  </attachment>
+  <attachment>
+    <filename>icons.xwiki.favicon16.png</filename>
+    <author>XWiki.9204</author>
+    <date>1553063387000</date>
+    <version>1.3</version>
+    <comment/>
+    <content/>
+    <filesize>0</filesize>
+  </attachment>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>3</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>8c490e2d-d53f-4970-967a-e92be8be8aff</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>#**&#xd;
+ * Default displayer for a notification&#xd;
+ *&#xd;
+ *#&#xd;
+&#xd;
+#macro(displayNotificationEvent $compositeEvent)&#xd;
+  ###&#xd;
+  ### Icons&#xd;
+  ###&#xd;
+  #set ($eventDescriptor = $services.eventstream.getDescriptorForEventType($compositeEvent.type, $xcontext.isMainWiki()))&#xd;
+  #if ($eventDescriptor)&#xd;
+      #if($compositeEvent.type == "update")&#xd;
+          #set ($mainIcon = $update)&#xd;
+      #elseif($compositeEvent.type == "create")&#xd;
+          #set ($mainIcon = $create)&#xd;
+      #elseif($compositeEvent.type == "delete")&#xd;
+          #set ($mainIcon =$delete)&#xd;
+      #elseif($compositeEvent.type == "addComment")&#xd;
+          #set ($mainIcon = $addComment)&#xd;
+      #elseif($compositeEvent.type == "deleteComment")&#xd;
+          #set ($mainIcon = $deleteComment)&#xd;
+      #elseif($compositeEvent.type == "updateComment")&#xd;
+          #set ($mainIcon = $updateComment)&#xd;
+      #elseif($compositeEvent.type == "addAttachment")&#xd;
+          #set ($mainIcon = $addAttachment)&#xd;
+      #elseif($compositeEvent.type == "updateAttachment")&#xd;
+          #set ($mainIcon = $updateAttachment)&#xd;
+      #elseif($compositeEvent.type == "addAnnotation")&#xd;
+          #set ($mainIcon = $addAnnotation)&#xd;
+      #elseif($compositeEvent.type == "updateAnnotation")&#xd;
+          #set ($mainIcon = $updateAnnotation)&#xd;
+      #elseif($compositeEvent.type == "deleteAnnotation")&#xd;
+          #set ($mainIcon = $deleteAnnotation)&#xd;
+      #else&#xd;
+          #set ($mainIcon = $elseIcon)&#xd;
+      #end&#xd;
+  #end&#xd;
+  ###&#xd;
+  ### Content&#xd;
+  ###&#xd;
+  #define($content)&#xd;
+    #set ($document = $xwiki.getDocument($compositeEvent.document))&#xd;
+    &lt;div class="c7n-notification-info">&#xd;
+        &lt;div class="c7n-notification-page">&#xd;
+            &lt;a class="page-name" href="$!escapetool.xml($document.getURL())" &#xd;
+ title='$!escapetool.xml($document.getRenderedTitle('html/5.0'))'>$!escapetool.xml($document.getRenderedTitle('html/5.0'))&lt;/a>&#xd;
+        &lt;/div>&#xd;
+        &lt;div class="c7n-notification-action">&#xd;
+          #if ($compositeEvent.users.size() == 1)&#xd;
+            $services.localization.render("notifications.events.${compositeEvent.type}.description.by.1user", ["#displayNotificationEventUsers($compositeEvent.users, true, false)"])&#xd;
+          #else&#xd;
+            &lt;div>&#xd;
+              $services.localization.render("notifications.events.${compositeEvent.type}", [$compositeEvent.users.size()])&#xd;
+            &lt;/div>&#xd;
+##            &lt;div>&#xd;
+##              #displayNotificationEventUsers($compositeEvent.users, true, true)&#xd;
+##            &lt;/div>&#xd;
+          #end&#xd;
+    ##      &lt;div>&lt;small class="text-muted">$escapetool.xml($datetool.whenIs($compositeEvent.dates.get(0)))&lt;/small>&lt;/div>&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+  #end&#xd;
+  ###&#xd;
+  ### Details&#xd;
+  ###&#xd;
+  #define($details)&#xd;
+    #displayNotificationEventDetails($compositeEvent)&#xd;
+  #end&#xd;
+  ###&#xd;
+  ### Display&#xd;
+  ###&#xd;
+  #displayNotificationEventSkeleton($mainIcon, $smallIcon, $content, $details)&#xd;
+#end&#xd;
+#**&#xd;
+ * Display a skeleton for a notification&#xd;
+ * @param $mainIcon the name of the main icon&#xd;
+ * @param $smallIcon the name of the small icon&#xd;
+ * @param $content the content of the notification&#xd;
+ * @param $details (optional) the "details" part at the botton&#xd;
+ *#&#xd;
+#macro(displayNotificationEventSkeleton $mainIcon $smallIcon $content $details)&#xd;
+  #set ($details = $details.toString())&#xd;
+  &lt;div class="c7n-notification-content">&#xd;
+    &lt;div class="c7n-notification-wrap-1">&#xd;
+        &lt;div class="c7n-notification-icon">&#xd;
+              $mainIcon&#xd;
+        &lt;/div>&#xd;
+        &lt;div class="c7n-notification-description">&#xd;
+          $content&#xd;
+          #if ($stringtool.isNotBlank($details))&#xd;
+          &lt;div class="c7n-toggle-notification-event-details closed" type="submit">&#xd;
+            &lt;span class="icon icon-keyboard_arrow_down close">&lt;/span>&#xd;
+            &lt;span class="icon icon-keyboard_arrow_right open">&lt;/span>&#xd;
+          &lt;/div>&#xd;
+          &lt;span class="text-muted action-time">$escapetool.xml($datetool.whenIs($compositeEvent.dates.get(0)))&lt;/span>&#xd;
+          #end&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+    #if ($stringtool.isNotBlank($details))&#xd;
+      $details&#xd;
+    #end&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+#**&#xd;
+ * Default displayer for the notification details&#xd;
+ * @param $compositeEvent the event&#xd;
+ *#&#xd;
+#macro(displayNotificationEventDetails $compositeEvent)&#xd;
+  #set ($basicTypes = ['update', 'create'])&#xd;
+  #set ($compositeEventType = $compositeEvent.type)&#xd;
+  #define($rows)&#xd;
+    #foreach($event in $compositeEvent.events)&#xd;
+      ## Display the event only on some conditions.&#xd;
+      ## See: https://jira.xwiki.org/browse/XWIKI-14846&#xd;
+      #if (!$basicTypes.contains($event.type) or $event.type == $compositeEventType)&#xd;
+        ## Diff URL&#xd;
+        #set ($diffUrl = $xwiki.getURL($event.document, 'view', "viewer=changes&amp;rev2=${event.documentVersion}"))&#xd;
+        &lt;tr class="nototy-line">&#xd;
+          #set ($description = $services.localization.render("notifications.events.${event.type}.description"))&#xd;
+          #if ("$!description" == '')&#xd;
+            #set ($description = $event.type)&#xd;
+          #end&#xd;
+          #set ($eventDescriptor = $services.eventstream.getDescriptorForEventType($compositeEvent.type, $xcontext.isMainWiki()))&#xd;
+          &lt;td class="notofy-detail-user">#displayNotificationEventUser($event.user)&lt;/td>&#xd;
+          &lt;td class="description notify-detail-action">$escapetool.xml($description)&lt;/td>&#xd;
+          &lt;td class="text-right text-muted notify-detail-date">&#xd;
+#if($diffUrl!='')&lt;a href="$escapetool.xml($diffUrl)">#end&#xd;
+&lt;span style="color: #000;cursor: pointer;margin-top: -4px;" title="查看记录" class="icon icon-find_in_page">&lt;/span>#if($diffUrl!='')&lt;/a>#end&lt;/td>&#xd;
+          &lt;td class="notofy-detail-date">$escapetool.xml($xwiki.formatDate($event.date))&lt;/td>&#xd;
+        &lt;/tr>&#xd;
+      #end&#xd;
+    #end&#xd;
+  #end&#xd;
+  #displayNotificationEventDetailsSkeletons($events.size(), $rows)&#xd;
+#end&#xd;
+#**&#xd;
+ * Display a skeleton for the notification details.&#xd;
+ * @param $number the number of events in the details list&#xd;
+ * @param $rows the details rows to display inside the table&#xd;
+ *#&#xd;
+#macro(displayNotificationEventDetailsSkeletons $number $rows)&#xd;
+&lt;div class="c7n-notify-details">&#xd;
+  &lt;table class="notification-event-details">&#xd;
+    $rows&#xd;
+  &lt;/table>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+#**&#xd;
+ * Display a line with a user (its name and a small avatar)&#xd;
+ * @param $user the reference of the user to display&#xd;
+ *#&#xd;
+#macro(displayNotificationEventUser $user $onlyAvatar)&#xd;
+  #set ($userDoc = $xwiki.getDocument($user))&#xd;
+  #getUserAvatarURL($userDoc.documentReference, $avatarURL, 40)&#xd;
+  #set ($userName = $xwiki.getUserName($user))&#xd;
+  &lt;span class="notification-event-user">&lt;a href="$userDoc.getURL()">$userName&lt;/a>&lt;/span>##&#xd;
+#end&#xd;
+#**&#xd;
+ * Display a line with the name of all users&#xd;
+ * @param $users the users to display&#xd;
+ * @param $link (since 9.5) either or not an HTML link to the user must be generated (default: true)&#xd;
+ *#&#xd;
+#macro(displayNotificationEventUsers $users $link $onlyAvatars)##&#xd;
+## The indent is bad to not introduce space charaters in the results&#xd;
+#if("$!link" == '')#set ($link = true)#end&#xd;
+#foreach ($user in $users)##&#xd;
+#if ($link)&#xd;
+#set ($onlyAvatars = $users.size() > 1 || $onlyAvatars)&#xd;
+#displayNotificationEventUser($user, $onlyAvatars)##&#xd;
+#else&#xd;
+$xwiki.getPlainUserName($user)##&#xd;
+#end&#xd;
+#end##&#xd;
+#end##&#xd;
+&#xd;
+&#xd;
+##define action icons&#xd;
+#define($update)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-update">&#xd;
+    &lt;span class="icon icon-mode_edit doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($create)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-create">&#xd;
+    &lt;span class="icon icon-playlist_add doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($delete)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-delete">&#xd;
+    &lt;span class="icon icon-delete_sweep doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($addComment)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-create">&#xd;
+    &lt;span class="icon icon-add_comment doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($deleteComment)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-update">&#xd;
+    &lt;span class="icon icon-textsms doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($updateComment)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-delete">&#xd;
+    &lt;span class="icon icon-delete_commet doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($addAttachment)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-create">&#xd;
+    &lt;span class="icon icon-add_attach doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($updateAttachment)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-update">&#xd;
+    &lt;span class="icon icon-mode_edit doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($addAnnotation)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-create">&#xd;
+    &lt;span class="icon icon-mode_edit doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($updateAnnotation)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-update">&#xd;
+    &lt;span class="icon icon-mode_edit doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($deleteAnnotation)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-delete">&#xd;
+    &lt;span class="icon icon-mode_edit doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#define($elseIcon)&#xd;
+&lt;div class="doc-operate-icon-wrap doc-operate-icon-wrap-update">&#xd;
+    &lt;span class="icon icon-notifications doc-operate-icon">&lt;/span>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+</content>
+    </property>
+    <property>
+      <path>notification/macros.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>4</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>8bbf8dc0-3ef3-4c4a-ac14-b99572f19db4</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>###&#xd;
+### Rename document template, step 1: choose new name + updated backlinks + updated parents&#xd;
+###&#xd;
+## TODO: check if this information should be displayed?&#xd;
+#set($titleToDisplay = $services.localization.render('core.rename.title', [$escapetool.xml($doc.plainTitle), $doc.getURL()]))&#xd;
+&lt;script>&#xd;
+    function renamePage() {&#xd;
+        jQuery('#c7n-rename-form-button .first-button').css("display","");&#xd;
+        jQuery('#c7n-rename-form-button .second-button').css("display","none");&#xd;
+        jQuery('#c7n-rename-form-button #waite').css("display","");&#xd;
+        var formData = new FormData(document.getElementById("rename"));&#xd;
+        var targetLocal = formData.get("newSpaceName")+"."+formData.get("newPageName")&#xd;
+        document.getElementById("page-local").innerText = targetLocal;&#xd;
+        submitRename(formData);&#xd;
+    }&#xd;
+    function submitRename(data) {&#xd;
+        jQuery.ajax({&#xd;
+            type: "POST",&#xd;
+            contentType: false,&#xd;
+            processData: false,&#xd;
+            url: "$doc.getURL()"+"?xpage=rename&amp;step=2",&#xd;
+            data: data,&#xd;
+            success: function (data, textStatus, request) {&#xd;
+                if(request.getResponseHeader("exists")){&#xd;
+                    jQuery('#c7n-rename-warning').show();&#xd;
+                }else {&#xd;
+                    var targetUrl = '$xwiki.getURL($newDocReference,"view")';&#xd;
+                    var stateUrl = '$xwiki.getURL($newDocReference,"get")';&#xd;
+                    var renameId = request.getResponseHeader("renameId");&#xd;
+                    jQuery('#c7n-comfirm-renameId').val(renameId);&#xd;
+                    getState(stateUrl,renameId,targetUrl)&#xd;
+                }&#xd;
+            },error:function (xhr) {&#xd;
+                if(xhr.status == 409){&#xd;
+                    jQuery('#c7n-rename-warning').show();&#xd;
+                }&#xd;
+            }&#xd;
+        });&#xd;
+    }&#xd;
+    function getState(stateUrl,renameId,targetUrl) {&#xd;
+        jQuery.ajax({&#xd;
+            url: stateUrl,&#xd;
+            type: "get",&#xd;
+            data: {xpage: "rename", renameId: renameId},&#xd;
+            async: false,&#xd;
+            success: function (data) {&#xd;
+                if (data.state == "FINISHED" ) {&#xd;
+                    window.location.href = targetUrl;&#xd;
+                } else if (data.state == "RUNNING") {&#xd;
+                    setTimeout(function () {&#xd;
+                        getState(stateUrl,renameId,targetUrl)&#xd;
+                    },1000)&#xd;
+                }else if (data.state == "WAITING") {&#xd;
+                    comfirmOk();&#xd;
+                } else {&#xd;
+                    console.log(data)&#xd;
+                }&#xd;
+            }&#xd;
+        });&#xd;
+    }&#xd;
+    &#xd;
+    &#xd;
+    function comfirmOk() {&#xd;
+        comfirmAjax(false);&#xd;
+    }&#xd;
+    function comfirmCancel() {&#xd;
+        comfirmAjax(true);&#xd;
+        jQuery('#c7n-rename-comfirm').hide();&#xd;
+    }&#xd;
+    function comfirmAjax(isCancel) {&#xd;
+        var targetUrl = '$xwiki.getURL($newDocReference,"view")';&#xd;
+        var stateUrl = '$xwiki.getURL($newDocReference,"get")';&#xd;
+        var renameId = jQuery('#c7n-comfirm-renameId').val();&#xd;
+        jQuery.ajax({&#xd;
+            url:"/job/question/refactoring/rename/"+renameId,&#xd;
+            type: "post",&#xd;
+            data: {form_token:jQuery('#c7n-comfirm-token').val(), cancel: isCancel},&#xd;
+            async: false,&#xd;
+            success: function (result) {&#xd;
+                if(result == null){&#xd;
+                    window.location.href = '$doc.getURL()';&#xd;
+                } else if (result.state == "FINISHED" ) {&#xd;
+                    window.location.href = targetUrl;&#xd;
+                } else if (result.state == "RUNNING") {&#xd;
+                    setTimeout(function () {&#xd;
+                        getState(stateUrl,renameId,targetUrl)&#xd;
+                    },1000)&#xd;
+                }else if (result.state == "WAITING") {&#xd;
+                    comfirmOk()&#xd;
+                } else {&#xd;
+                    console.log(result)&#xd;
+                }&#xd;
+            }&#xd;
+        });&#xd;
+    }&#xd;
+    function warningCancel() {&#xd;
+        jQuery('#c7n-rename-warning').hide();&#xd;
+        jQuery('#c7n-rename-comfirm').hide();&#xd;
+        jQuery('#c7n-rename-form-button .first-button').css("display","none");&#xd;
+        jQuery('#c7n-rename-form-button .second-button').css("display","");&#xd;
+        jQuery('#c7n-rename-form-button #waite').css("display","none");&#xd;
+    }&#xd;
+&lt;/script>&#xd;
+&lt;div class="xcontent">&#xd;
+#template('contentheader.vm')&#xd;
+#template('refactoring_macros.vm')&#xd;
+#template('locationPicker_macros.vm')&#xd;
+#set ($sourcePageIsTerminal = $doc.name != $services.model.getEntityReference('DOCUMENT', 'default').name)&#xd;
+&lt;form action="#" method="post" id="rename" class="xform" onsubmit="return false">&#xd;
+  &lt;div class="hidden">&#xd;
+    ## CSRF prevention&#xd;
+    &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />&#xd;
+    ## Perform the rename asynchronously.&#xd;
+    &lt;input type="hidden" name="async" value="true" />&#xd;
+  &lt;/div>&#xd;
+  &lt;div class="row">&#xd;
+    &lt;div class="col-xs-12 col-lg-6">&#xd;
+      &lt;dl>&#xd;
+        ##------------&#xd;
+        ## Source Page&#xd;
+        ##------------&#xd;
+        #displaySourceDocument({&#xd;
+          'label': 'core.rename.source.label',&#xd;
+          'hint': 'core.rename.source.hint'&#xd;
+        })&#xd;
+        ##---------------&#xd;
+        ## Children field&#xd;
+        ##---------------&#xd;
+        #displayChildrenCheckbox({&#xd;
+          'label': 'core.rename.children.label',&#xd;
+          'hint': 'core.rename.children.hint'&#xd;
+        })&#xd;
+        ##------------&#xd;
+        ## Links field&#xd;
+        ##------------&#xd;
+        #displayLinksCheckbox({&#xd;
+          'label': 'core.rename.links.label',&#xd;
+          'hint': 'core.rename.links.hint'&#xd;
+        })&#xd;
+        ##--------------------&#xd;
+        ## Auto redirect field&#xd;
+        ##--------------------&#xd;
+        #set ($checked = !$request.autoRedirect || $request.autoRedirect == 'true')&#xd;
+        &lt;dt>&#xd;
+          &lt;label>&#xd;
+            &lt;input type="checkbox" name="autoRedirect" value="true" #if ($checked)checked="checked"#end />&#xd;
+            $services.localization.render('core.rename.autoRedirect.label')&#xd;
+          &lt;/label>&#xd;
+          ## The value submitted when the checkbox is not checked, used to preserve the form state.&#xd;
+          &lt;input type="hidden" name="autoRedirect" value="false" />&#xd;
+        &lt;/dt>&#xd;
+        &lt;dd>&#xd;
+          &lt;span class="xHint">$services.localization.render('core.rename.autoRedirect.hint')&lt;/span>&#xd;
+        &lt;/dd>&#xd;
+      &lt;/dl>&#xd;
+    &lt;/div>&#xd;
+    &lt;div class="col-xs-12 col-lg-6">&#xd;
+      ##------------&#xd;
+      ## Target Page&#xd;
+      ##------------&#xd;
+      #set ($parentReference = $doc.documentReference.parent)&#xd;
+      #set ($name = $doc.name)&#xd;
+      #if (!$sourcePageIsTerminal)&#xd;
+        #set ($name = $parentReference.name)&#xd;
+        #set ($parentReference = $parentReference.parent)&#xd;
+      #end&#xd;
+      #locationPicker({&#xd;
+        'id': 'target',&#xd;
+        'title': {&#xd;
+          'label': 'core.rename.target.title.label',&#xd;
+          'hint': 'core.rename.target.title.hint',&#xd;
+          'name': 'newPageTitle',&#xd;
+          'value': $doc.plainTitle,&#xd;
+          'placeholder': 'core.create.name.placeholder'&#xd;
+        },&#xd;
+        'preview': {&#xd;
+          'label': 'core.rename.target.location.label',&#xd;
+          'hint': 'core.rename.target.location.hint'&#xd;
+        },&#xd;
+        'wiki': {&#xd;
+          'label': 'core.rename.target.wiki.label',&#xd;
+          'hint': 'core.rename.target.wiki.hint',&#xd;
+          'name': 'newWikiName',&#xd;
+          'value': $doc.wiki&#xd;
+        },&#xd;
+        'parent': {&#xd;
+          'label': 'core.rename.target.parent.label',&#xd;
+          'hint': 'core.rename.target.parent.hint',&#xd;
+          'name': 'newSpaceName',&#xd;
+          'reference': $parentReference,&#xd;
+          'placeholder': 'core.create.spaceReference.placeholder'&#xd;
+        },&#xd;
+        'name': {&#xd;
+          'label': 'core.rename.target.name.label',&#xd;
+          'hint': 'core.rename.target.name.hint',&#xd;
+          'name': 'newPageName',&#xd;
+          'value': $name,&#xd;
+          'placeholder': 'core.create.name.placeholder'&#xd;
+        }&#xd;
+      })&#xd;
+      ## -------------------------------------&#xd;
+      ## Target Page Type (for advanced users)&#xd;
+      ## -------------------------------------&#xd;
+      #maybeDisplayTerminalCheckbox({&#xd;
+        'label': 'core.rename.target.terminal.label',&#xd;
+        'hint': 'core.rename.target.terminal.hint'&#xd;
+      })&#xd;
+    &lt;/div>&#xd;
+  &lt;/div>&#xd;
+&lt;/form>&#xd;
+    &lt;div id="c7n-rename-form-button" class="buttons">&#xd;
+      &lt;span class="buttonwrapper">&#xd;
+          &lt;div id="waite" style="height: 18px;width: 18px;position: absolute;margin: 20px 0 0 6px;display: none">&#xd;
+            &lt;svg viewBox="0 0 50 50" style="stroke: #fff;">&#xd;
+                &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
+                      -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      stroke-dasharray: 80px 200px;&#xd;
+                      stroke-dashoffset: 0;&#xd;
+                      stroke: #fff;&#xd;
+                      ">&lt;/circle>&#xd;
+            &lt;/svg>&#xd;
+        &lt;/div>&#xd;
+        &lt;input type="submit" value="$services.localization.render('core.rename.submit')" class="button first-button" style="width: 67px;text-align: right;display: none;" />&#xd;
+          &lt;input type="submit" value="$services.localization.render('core.rename.submit')" class="button second-button" onclick="renamePage()"/>&#xd;
+      &lt;/span>&#xd;
+        &lt;span class="buttonwrapper">&#xd;
+        &lt;a class="secondary button" href="$doc.getURL()">$services.localization.render('cancel')&lt;/a>&#xd;
+      &lt;/span>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;div id="c7n-rename-warning" hidden>&#xd;
+    &lt;div id="c7n-rename-warning-title" style="padding: 24px 0 20px 24px;">&#xd;
+        &lt;span>重命名/移动警告&lt;/span>&#xd;
+    &lt;/div>&#xd;
+    &lt;div id="c7n-rename-warning-content" style="padding-left: 24px;">&#xd;
+        &lt;span>页面&lt;span id="page-local">&lt;/span>已存在。&lt;/span>&#xd;
+    &lt;/div>&#xd;
+    &lt;div id="c7n-rename-warning-button" >&#xd;
+        &lt;div class="buttons">&#xd;
+            &lt;span class="buttonwrapper">&#xd;
+              &lt;input type="button" value="取消" class="secondary button cancel" onclick="warningCancel()">&#xd;
+           &lt;/span>&#xd;
+            &lt;span class="buttonwrapper" hidden>&#xd;
+              &lt;input type="button" value="覆盖" class="button submit" onclick="submitOverrite()">&#xd;
+          &lt;/span>&#xd;
+&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;div id="c7n-rename-comfirm" hidden>&#xd;
+    &lt;div id="c7n-rename-comfirm-title">&#xd;
+      &lt;span>重命名/移动&lt;/span>&#xd;
+    &lt;/div>&#xd;
+    &lt;div id="c7n-rename-comfirm-content">&#xd;
+        &lt;span>是否重命名/移动&lt;/span>&#xd;
+    &lt;/div>&#xd;
+    &lt;div hidden>&#xd;
+        &lt;input type="text" id="c7n-comfirm-renameId">&#xd;
+        &lt;input type="hidden" id="c7n-comfirm-token" name="form_token" value="$!{services.csrf.getToken()}" />&#xd;
+    &lt;/div>&#xd;
+    &lt;div id="c7n-rename-comfirm-button" >&#xd;
+        &lt;div class="buttons">&#xd;
+            &lt;span class="buttonwrapper">&#xd;
+              &lt;input type="button" value="取消" class="secondary button cancel" onclick="comfirmCancel()" >&#xd;
+           &lt;/span>&#xd;
+            &lt;span class="buttonwrapper">&#xd;
+              &lt;input type="button" value="确认" class="button submit" onclick="comfirmOk()" >&#xd;
+          &lt;/span>&#xd;
+&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+</content>
+    </property>
+    <property>
+      <path>renameStep1.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>5</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>d85fff92-43ec-42dd-a24a-9064329e8362</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>###&#xd;
+### Rename document template&#xd;
+###&#xd;
+#if (!$xwiki.checkAccess($doc.fullName, 'delete') &amp;&amp; "$!request.renameId" == '')&#xd;
+  #template("accessdenied.vm")&#xd;
+#elseif ($xcontext.action == 'get' &amp;&amp; "$!request.renameId" != '')&#xd;
+  ## AJAX request for rename status update.&#xd;
+  #template("renameStatus.vm")&#xd;
+#else&#xd;
+  #template("startpage.vm")&#xd;
+  #if ("$!step" == '')&#xd;
+    #set ($step = "$!request.step")&#xd;
+    #if ("$!step" == '')&#xd;
+      #set ($step = '1')&#xd;
+    #end&#xd;
+  #end&#xd;
+  &lt;div class="main layoutsubsection">&#xd;
+  &lt;div id="mainContentArea">&#xd;
+    #if ("$!request.renameId" != '')&#xd;
+      ## Display the rename status&#xd;
+      #template("renameStatus.vm")&#xd;
+    #elseif ($doc.isNew())&#xd;
+      $response.setStatus(404)&#xd;
+      #error($services.localization.render('core.rename.nonexistingDocument'))&#xd;
+    #elseif ($step == 1)&#xd;
+      ## Display the rename form&#xd;
+      #template("renameStep1.vm")&#xd;
+    #elseif (!$services.csrf.isTokenValid($request.form_token))&#xd;
+      ## CSRF protection&#xd;
+      $response.sendRedirect("$!services.csrf.resubmissionURL")&#xd;
+    #else&#xd;
+      ## Do the rename. It's the form in renameStep1.vm page that calls this page with step=2.&#xd;
+      #if ("$!request.newPageName.trim()" == '')&#xd;
+        $response.setStatus(400)&#xd;
+        #error($services.localization.render('core.rename.emptyName'))&#xd;
+        #template("renameStep1.vm")&#xd;
+      #else&#xd;
+        #template('refactoring_macros.vm')&#xd;
+        ## Determine if the new document should be terminal.&#xd;
+        #isTargetDocumentTerminal($doc.name)&#xd;
+        #getNestedDocumentReference($request.newWikiName $request.newSpaceName $request.newPageName $NULL $terminal&#xd;
+          $newDocReference)&#xd;
+        #set ($newDocReferenceAsString = $services.model.serialize($newDocReference))&#xd;
+        ## Allow users to overwrite existing documents if they are redirect placeholders.&#xd;
+        #if ($xwiki.exists($newDocReference) &amp;&amp; !$xwiki.getDocument($newDocReference).getObject('XWiki.RedirectClass'))&#xd;
+&#xd;
+##          #error($services.localization.render('core.rename.alreadyExists', [${escapetool.xml($newDocReferenceAsString)},&#xd;
+##            $xwiki.getURL($newDocReference)]))&#xd;
+          $response.addHeader("exists", true)&#xd;
+          $response.setStatus(409)&#xd;
+          #template("renameStep1.vm")&#xd;
+        #elseif (!$xwiki.hasAccessLevel('edit', $xcontext.user, $newDocReferenceAsString))&#xd;
+          $response.setStatus(403)&#xd;
+          #error($services.localization.render('core.rename.targetNotWritable',&#xd;
+            [${escapetool.xml($newDocReferenceAsString)}]))&#xd;
+          #template('renameStep1.vm')&#xd;
+        #else&#xd;
+          #set ($renameRequest = $services.refactoring.createRenameRequest($doc.documentReference, $newDocReference))&#xd;
+          ## We can't rename the children if the new page is terminal.&#xd;
+          #set ($deep = $request.deep == 'true' &amp;&amp; !$terminal)&#xd;
+          #set ($discard = $renameRequest.setDeep($deep))&#xd;
+          #set ($updateLinks = $request.updateLinks == 'true')&#xd;
+          #set ($discard = $renameRequest.setUpdateLinks($updateLinks))&#xd;
+          #set ($autoRedirect = $request.autoRedirect == 'true')&#xd;
+          #set ($discard = $renameRequest.setAutoRedirect($autoRedirect))&#xd;
+          ## Rename operation relies on copy.&#xd;
+          #maybeUpdateTitleAfterCopy($renameRequest $doc.documentReference 'newPageTitle')&#xd;
+          #if ($request.async == 'true')&#xd;
+            ## We may be asked a question (we assume that async also imply we want it interactive)&#xd;
+            #set ($discard = $renameRequest.setInteractive(true))&#xd;
+          #end&#xd;
+          #set ($renameJob = $services.refactoring.rename($renameRequest))&#xd;
+          #if ($request.async != 'true')&#xd;
+            #try()&#xd;
+              #set ($discard = $renameJob.join())&#xd;
+            #end&#xd;
+          #end&#xd;
+        $response.addHeader("renameId", $renameRequest.id.get($mathtool.sub($renameRequest.id.size(), 1)))&#xd;
+##          $response.sendRedirect($doc.getURL($xcontext.action, $escapetool.url({&#xd;
+##            'xpage': 'rename',&#xd;
+##            'renameId': $renameRequest.id.get($mathtool.sub($renameRequest.id.size(), 1))&#xd;
+##          })))&#xd;
+        #end&#xd;
+      #end&#xd;
+    #end&#xd;
+    &lt;div class="clearfloats">&lt;/div>&#xd;
+  &lt;/div>## mainContentArea&#xd;
+  &lt;/div>## main&#xd;
+  #template("endpage.vm")&#xd;
+#end&#xd;
+</content>
+    </property>
+    <property>
+      <path>rename.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>6</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>bd9f2174-c4cb-4cd9-9a62-59b8920e2d75</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>#######################################################&#xd;
+###              DELETE PAGE ACTION&#xd;
+###              ------------------&#xd;
+###&#xd;
+#######################################################&#xd;
+##&#xd;
+#######################################################&#xd;
+##                     GLOBALS&#xd;
+#######################################################&#xd;
+#set($fullmsg = '')&#xd;
+#set($quote = '"')&#xd;
+#set($hasInlinks = false)&#xd;
+#######################################################&#xd;
+##                     DISPLAY&#xd;
+#######################################################&#xd;
+#template("startpage.vm")&#xd;
+&lt;div class="main">&#xd;
+    &lt;div id="mainContentArea">&#xd;
+        #define($title)&lt;a href="$doc.getURL('view')">$!escapetool.xml($doc.plainTitle)&lt;/a>#end&#xd;
+        #set($titleToDisplay = $services.localization.render('core.delete.title', [$title]))&#xd;
+        &lt;div class="xcontent">&#xd;
+            #template('contentheader.vm')&#xd;
+            #controller()&#xd;
+            &lt;div class="clearfloats">&lt;/div>&#xd;
+        &lt;/div> ## xcontent&#xd;
+    &lt;/div>## mainContentArea&#xd;
+&lt;/div>## main&#xd;
+#template("endpage.vm")&#xd;
+#######################################################&#xd;
+##                    CONTROLLER&#xd;
+#######################################################&#xd;
+#macro(controller)&#xd;
+    #if("$!{request.jobId}" != '')&#xd;
+    ## A delete job is running&#xd;
+        #displayProgressBar()&#xd;
+    #else&#xd;
+        #if("$!{request.id}" != '')&#xd;
+        ## request.id means that we are deleting a document from the recycle bin&#xd;
+            #displayCompletelyDeleteConfirmMessage()&#xd;
+        #else&#xd;
+            #displayConfirmationPage()&#xd;
+        #end&#xd;
+    #end&#xd;
+#end&#xd;
+#######################################################&#xd;
+##            DISPLAY CONFIRMATION PAGE&#xd;
+#######################################################&#xd;
+#macro(displayConfirmationPage)&#xd;
+&lt;script>&#xd;
+    function submitDelete() {&#xd;
+        var formData = new FormData(document.getElementById("c7n-delete-form"));&#xd;
+        var data = jQuery('#c7n-delete-form').serialize();&#xd;
+       jQuery('.first-button').css("display","");&#xd;
+       jQuery('#waite').css("display","");&#xd;
+       jQuery('.seccond-button').css("display","none");&#xd;
+        jQuery.ajax({&#xd;
+            type: "get",&#xd;
+            contentType: false,&#xd;
+            processData: false,&#xd;
+            url: "$doc.getURL('delete')",&#xd;
+            data: data,&#xd;
+            success: function (data, textStatus, request) {&#xd;
+                var jobId = request.getResponseHeader("jobId")&#xd;
+                console.log("1",jobId)&#xd;
+                getState(jobId);&#xd;
+            },complete:function(XMLHttpRequest, textStatus){&#xd;
+                var jobId = XMLHttpRequest.getResponseHeader("jobId")&#xd;
+                console.log("2",jobId)&#xd;
+        }&#xd;
+        });&#xd;
+    }&#xd;
+    function getState(jobId) {&#xd;
+        jQuery.ajax({&#xd;
+            type: "get",&#xd;
+            contentType: false,&#xd;
+            processData: false,&#xd;
+            url: "/rest/jobstatus/"+jobId+"?media=json",&#xd;
+            success: function (data, textStatus, request) {&#xd;
+                if (data.state == "FINISHED"){&#xd;
+                    window.location.href = '$doc.getParentURL()';&#xd;
+                } else if (data.state == "RUNNING") {&#xd;
+                    setTimeout(function () {&#xd;
+                        getState(jobId);&#xd;
+                    },1000)&#xd;
+                }&#xd;
+&#xd;
+            }&#xd;
+        });&#xd;
+    }&#xd;
+    function getSearchString(str,key) {&#xd;
+        str = str.substring(1,str.length);&#xd;
+        var arr = str.split("&amp;");&#xd;
+        var obj = new Object();&#xd;
+        for(var i = 0; i &lt; arr.length; i++) {&#xd;
+            var tmp_arr = arr[i].split("=");&#xd;
+            obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);&#xd;
+        }&#xd;
+        return obj[key];&#xd;
+    }&#xd;
+&lt;/script>&#xd;
+&lt;form id="c7n-delete-form" action="#" method="get" onsubmit="return false" >&#xd;
+    #getChildren()&#xd;
+    #getBacklinks()&#xd;
+    #getChildren_legacy()&#xd;
+    #displayConfirmMessage()&#xd;
+&lt;/form>&#xd;
+&lt;div id="waite" style="height: 18px;width: 18px;position: absolute;margin: 20px 0 0 30px;display: none">&#xd;
+    &lt;svg viewBox="0 0 50 50" style="stroke: #fff;">&#xd;
+        &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
+                      -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      stroke-dasharray: 80px 200px;&#xd;
+                      stroke-dashoffset: 0;&#xd;
+                      stroke: #fff;&#xd;
+                      ">&lt;/circle>&#xd;
+    &lt;/svg>&#xd;
+&lt;/div>&#xd;
+&lt;button class="btn btn-danger confirm first-button"  style="width: 65px;text-align: right;display: none;">$services.localization.render('delete')&lt;/button>&#xd;
+&lt;button class="btn btn-danger confirm seccond-button" onclick="submitDelete()">$services.localization.render('delete')&lt;/button>&#xd;
+    #if("$!{request.xredirect}" != '')&#xd;
+        #set($cancelUrl = "$request.xredirect")&#xd;
+    #else&#xd;
+        #set($cancelUrl = $doc.getURL())&#xd;
+    #end&#xd;
+&lt;a class="btn btn-default cancel" href="$!{escapetool.xml(${cancelUrl})}">$services.localization.render('cancel')&lt;/a>&#xd;
+#end&#xd;
+#######################################################&#xd;
+##              DISPLAY PROGRESS BAR&#xd;
+#######################################################&#xd;
+#macro(displayProgressBar)&#xd;
+    #set($discard = $xwiki.jsfx.use("delete${jsExtension}", true))&#xd;
+    #set($discard = $xwiki.ssfx.use('uicomponents/job/job.css', true))&#xd;
+    #set($jobId = $request.jobId)&#xd;
+    $response.addHeader("jobId", $jobId)&#xd;
+&lt;div class="ui-progress" id="delete-progress-bar-container">&#xd;
+    &lt;p>$services.localization.render('core.delete.waitmessage')&lt;/p>&#xd;
+    &lt;div class="ui-progress-background">&#xd;
+        &lt;div class="ui-progress-bar green" id="delete-progress-bar" data-job-id="$!escapetool.xml($jobId)" data-progress="0" style="width: 0">&lt;/div>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;p class="successmessage hidden" id="successMessage">$services.localization.render('core.delete.success')&lt;/p>&#xd;
+&lt;p class="errormessage hidden" id="errorMessage">$services.localization.render('core.delete.error')&lt;/p>&#xd;
+#end&#xd;
+#######################################################&#xd;
+##                  DISPLAY PANEL&#xd;
+#######################################################&#xd;
+#macro(displayPanel $panelId $panelClass $heading $body)&#xd;
+&lt;div class="panel $!panelClass">&#xd;
+    &lt;div class="panel-heading">&#xd;
+        $heading&#xd;
+        &lt;div class="pull-right">&lt;a class="panel-collapse-carret" role="button" data-toggle="collapse" href="#$panelId" aria-expanded="false" aria-controls="$panelId">&lt;span class="caret">&lt;/span>&lt;/a>&lt;/div>&#xd;
+    &lt;/div>&#xd;
+    &lt;div class="panel-body collapse" id="$panelId">&#xd;
+        $body&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+#######################################################&#xd;
+##                    CHILDREN&#xd;
+#######################################################&#xd;
+#macro(getChildren)&#xd;
+    #if ($doc.name == 'WebHome') ## terminal documents have no child&#xd;
+        #set($childCountXWQL = "WHERE doc.fullName LIKE :space AND doc.fullName &lt;&gt; :fullName")&#xd;
+        #set ($query = $services.query.xwql($childCountXWQL))&#xd;
+        #set ($query = $query.bindValue('space').literal("${doc.space}.").anyChars().query())&#xd;
+        #set ($query = $query.bindValue('fullName', $doc.fullName))&#xd;
+        #set($childCount = $query.addFilter('unique').count())&#xd;
+        #if ($childCount > 0)&#xd;
+        ## Check if we should propose by default to affect children when the only remaining children (after the delete) would be the WebPreferences document.&#xd;
+            #set ($webPreferencesDocumentReference = $services.model.createDocumentReference('WebPreferences', $doc.documentReference.lastSpaceReference))&#xd;
+            #if ($childCount == 1 &amp;&amp; $xwiki.exists($webPreferencesDocumentReference))&#xd;
+                #set ($forceAffectChildren = " checked='checked'")&#xd;
+            #end&#xd;
+            #define($heading)&#xd;
+            &lt;input name="affectChildren" id="affectChildren" type="checkbox" $!{forceAffectChildren}/>&lt;label for="affectChildren">Affect children&lt;/label> ($childCount)&#xd;
+            #end&#xd;
+            #define($body)&#xd;
+            ##&#xd;
+            ## List the documents to be deleted using a livetable&#xd;
+            ##&#xd;
+                #set ($collist = ['doc.title', 'doc.location', 'doc.date', 'doc.author'])&#xd;
+                #set ($colprops = {&#xd;
+                    'doc.title'    : { 'link' : 'view' },&#xd;
+                    'doc.location' : { 'type': 'text', 'filterable': true, 'html': true},&#xd;
+                    'doc.author'   : { 'link' : 'author' }&#xd;
+                })&#xd;
+                #set ($urlParameters = "xpage=getdocuments&amp;childrenOf=$escapetool.url($doc.space)&amp;queryFilters=unique")&#xd;
+                #set ($options = {&#xd;
+                    'url' : "$doc.getURL('get', $urlParameters)",&#xd;
+                    'translationPrefix' : 'platform.index.',&#xd;
+                    'outputOnlyHtml' : true&#xd;
+                })&#xd;
+                #livetable('deleteSpaceIndex' $collist $colprops $options)&#xd;
+            #end&#xd;
+            #displayPanel('panel-children', 'panel-default', $heading, $body)&#xd;
+        #end&#xd;
+    #end&#xd;
+#end&#xd;
+#######################################################&#xd;
+##                 LEGACY CHILDREN&#xd;
+##&#xd;
+## Get the children document based on the legacy&#xd;
+## parent/child relationship.&#xd;
+#######################################################&#xd;
+#macro(getChildren_legacy)&#xd;
+    #if($services.parentchild.isParentChildMechanismEnabled())&#xd;
+        #set($childrenStatement = 'where doc.fullName &lt;&gt; :parentFullName and (doc.parent = :parentFullName or (doc.parent = :parentName and doc.space = :parentSpace))')&#xd;
+        #set($childrenQuery = $services.query.xwql($childrenStatement))&#xd;
+        #set($discard = $childrenQuery.bindValue('parentFullName', $doc.fullName).bindValue('parentName', $doc.name).bindValue('parentSpace', $doc.space))&#xd;
+        #set($children = $childrenQuery.addFilter('unique').execute())&#xd;
+        #if($children &amp;&amp; $children.size() > 0)&#xd;
+            #define($heading)&#xd;
+            &lt;strong>Orphans&lt;/strong> ($children.size())&#xd;
+            #end&#xd;
+            #define($message)&#xd;
+            &lt;ul>&#xd;
+                #foreach($docname in $children)&#xd;
+                    #set($rdoc = $xwiki.getDocument($docname).getTranslatedDocument())&#xd;
+                    &lt;li>&lt;a href="$doc.getURL('view')">$escapetool.xml($rdoc.getPlainTitle())&lt;/a>&lt;/li>&#xd;
+                #end&#xd;
+            &lt;/ul>&#xd;
+            #end&#xd;
+            #set($body = $services.localization.render('core.delete.orphansWarning', [$message]))&#xd;
+            #displayPanel('panel-legacy-children', 'panel-default', $heading, $body)&#xd;
+        #end&#xd;
+    #end&#xd;
+#end&#xd;
+#######################################################&#xd;
+##                 GET BACKLINKS&#xd;
+##&#xd;
+## Get the documents having some links to the current &#xd;
+## one.&#xd;
+#######################################################&#xd;
+#macro(getBacklinks)&#xd;
+    #set($links = $doc.getBacklinks())&#xd;
+    #if($links &amp;&amp; $links.size() > 0)&#xd;
+        #define($heading)&#xd;
+        &lt;strong>Backlinks&lt;/strong> ($links.size())&#xd;
+        #end&#xd;
+        #define($message)&#xd;
+        &lt;ul>&#xd;
+            #foreach($docname in $links)&#xd;
+                #set($rdoc = $xwiki.getDocument($docname).getTranslatedDocument())&#xd;
+                &lt;li>&lt;a href="$rdoc.getURL('view')">$escapetool.xml($rdoc.getPlainTitle())&lt;/a>&lt;/li>&#xd;
+            #end&#xd;
+        &lt;/ul>&#xd;
+        #end&#xd;
+        #set($body = $services.localization.render('core.delete.backlinksWarning', [$message]))&#xd;
+        #displayPanel('panel-backlinks', 'panel-default', $heading, $body)&#xd;
+        #set($hasInlinks = true)&#xd;
+    #end&#xd;
+#end&#xd;
+#######################################################&#xd;
+##              DISPLAY CONFIRM MESSAGE&#xd;
+#######################################################&#xd;
+#macro(displayConfirmMessage)&#xd;
+    #if($xwiki.hasRecycleBin())&#xd;
+        #if($hasInlinks)&#xd;
+        &lt;p>&lt;strong>$services.localization.render('core.recyclebin.confirmWithInlinks')&lt;/strong>&lt;/p>&#xd;
+        #else&#xd;
+        &lt;p>$services.localization.render('core.recyclebin.confirm')&lt;/p>&#xd;
+        #end&#xd;
+    #else&#xd;
+        #if($hasInlinks)&#xd;
+        &lt;p>&lt;strong>$services.localization.render('core.delete.confirmWithInlinks')&lt;/strong>&lt;/p>&#xd;
+        #else&#xd;
+        &lt;p>$services.localization.render('core.delete.confirm')&lt;/p>&#xd;
+        #end&#xd;
+    #end&#xd;
+&lt;div class="hidden">&#xd;
+    &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />&#xd;
+    &lt;input type="hidden" name="confirm" value="1"/>&#xd;
+    &lt;input type="hidden" name="async" value="true"/>&#xd;
+    #if("$!{request.xredirect}" != '')&#xd;
+        &lt;input type="hidden" name="xredirect" value="$!{escapetool.xml($request.xredirect)}"/>&#xd;
+    #end&#xd;
+&lt;/div>&#xd;
+&#xd;
+#end&#xd;
+#######################################################&#xd;
+##      DISPLAY DELETE COMPLETELY CONFIRM MESSAGE&#xd;
+##&#xd;
+## Display a confirmation message when the user wants &#xd;
+## to delete a page from the recycle bin.&#xd;
+#######################################################&#xd;
+#macro(displayCompletelyDeleteConfirmMessage)&#xd;
+    #xwikimessageboxstart($services.localization.render('core.delete') $services.localization.render('core.recyclebin.completelyDeleteConfirm'))&#xd;
+&lt;form action="$xwiki.relativeRequestURL" method="post">&#xd;
+    &lt;div class="hidden">&#xd;
+    ## CSRF prevention&#xd;
+        &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />&#xd;
+        &lt;input type="hidden" name="confirm" value="1"/>&#xd;
+        &lt;input type="hidden" name="id" value="$!{escapetool.xml($request.id)}"/>&#xd;
+        #if("$!{request.xredirect}" != '')&#xd;
+            &lt;input type="hidden" name="xredirect" value="$!{escapetool.xml($request.xredirect)}"/>&#xd;
+        #end&#xd;
+    &lt;/div>&#xd;
+    &lt;input type="submit" class="btn btn-primary" value="$services.localization.render('yes')"/>&#xd;
+    #if("$!{request.xredirect}" != '')&#xd;
+        #set($cancelUrl = "$request.xredirect")&#xd;
+    #else&#xd;
+        #set($cancelUrl = $doc.getURL())&#xd;
+    #end&#xd;
+    &lt;a class="btn btn-default" href="$!{escapetool.xml(${cancelUrl})}">$services.localization.render('no')&lt;/a>&#xd;
+&lt;/form>&#xd;
+    #xwikimessageboxend()&#xd;
+#end&#xd;
+</content>
+    </property>
+    <property>
+      <path>delete.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>7</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>fe14811a-7435-4097-900c-d4a016500c95</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>###修改403页面样式&#xd;
+### Access denied message&#xd;
+###&#xd;
+###&#xd;
+#if(!$response.containsHeader('WWW-Authenticate'))&#xd;
+  $response.setStatus(403)&#xd;
+  ## Otherwise, unauthenticated user with Basic authentication, a 401 status has been set in Java.&#xd;
+#end&#xd;
+#if ("$!request.ajax" != '')&#xd;
+$services.localization.render('notallowed')&#xd;
+#else&#xd;
+#template("startpage.vm")&#xd;
+&lt;div class="main layoutsubsection">&#xd;
+&lt;div id="mainContentArea" style="height: 600px;">&#xd;
+#if ($xwiki.exists("XWiki.AccessDenied"))&#xd;
+  $xwiki.includeForm("XWiki.AccessDenied", false)&#xd;
+#else&#xd;
+&lt;div class="c7n-403-page">&#xd;
+&lt;div class="c7n-403-page-banner">&lt;/div>&#xd;
+&lt;div>&#xd;
+&lt;span style="font-size: 24px;color: #000000;margin-left: 120px;">抱歉，您没有权限访问！&lt;/span>&#xd;
+&lt;a style="margin-left:20px;" href="/bin/view/Main">&lt;button type="button" style="background-color: #3f51b5;&#xd;
+    border-color: #3f51b5;&#xd;
+    background: #3f51b5;&#xd;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.20), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);&#xd;
+    border-radius: 2px;&#xd;
+    font-family: PingFangSC-Medium;&#xd;
+    font-size: 13px;&#xd;
+    color: #fff;&#xd;
+    text-align: center;&#xd;
+    line-height: 15px;&#xd;
+    border: 0;&#xd;
+    width: 76px;&#xd;
+    height: 32px;">&lt;span style="display: inline-block;">返回首页&lt;/span>&lt;div class="ant-ripple-wrapper">&lt;/div>&lt;/button>&lt;/a>&lt;/div>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&lt;div class="clearfloats">&lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;/div>&#xd;
+#template("endpage.vm")&#xd;
+#end&#xd;
+</content>
+    </property>
+    <property>
+      <path>accessdenied.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>8</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>9f5b6c91-3101-4b28-bbb9-524e390b7d46</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>### 修改404页面布局&#xd;
+### Document does not exist message&#xd;
+###&#xd;
+###&#xd;
+#if ($services.distribution.jobStatus &amp;&amp; $services.distribution.jobStatus.state.name() != 'FINISHED' &amp;&amp; $services.distribution.canDisplayDistributionWizard())&#xd;
+  $response.sendRedirect($xwiki.getURL('XWiki.Distribution', 'distribution', "xredirect=$escapetool.url($xwiki.relativeRequestURL)"))&#xd;
+#else&#xd;
+  $response.setStatus(404)&#xd;
+  #template("startpage.vm")&#xd;
+  &lt;div class="main">&#xd;
+  &lt;div id="mainContentArea">&#xd;
+&lt;div id="c7n-404-page">&#xd;
+   &lt;div class="c7n-404-page-head">&#xd;
+     &lt;div class="c7n-404-page-banner">&lt;/div>&#xd;
+   &lt;/div>&#xd;
+&#xd;
+  #if($xwiki.exists("XWiki.DocumentDoesNotExist"))&#xd;
+    $xwiki.includeForm("XWiki.DocumentDoesNotExist",false)&#xd;
+  #else&#xd;
+    #xwikimessageboxstart($services.localization.render('notice') $services.localization.render('thispagedoesnotexist'))&#xd;
+    ## Create link&#xd;
+    #if($hasEdit)&#xd;
+      #set($url = $doc.getURL("create", $editparams))&#xd;
+      $services.localization.render('core.viewers.content.doesnotexists.edittocreate', [$url])&#xd;
+    #end&#xd;
+    ## UI Extensions, if any.&#xd;
+    #showExtensions()&#xd;
+    ## Recycle bin&#xd;
+    #template("recyclebinlist.vm")&#xd;
+    #xwikimessageboxend()&#xd;
+  #end&#xd;
+&#xd;
+  &lt;div class="clearfloats">&lt;/div>&#xd;
+&lt;/div>&#xd;
+  &lt;/div>## mainContentArea&#xd;
+  &lt;/div>## main&#xd;
+  #template("endpage.vm")&#xd;
+#end&#xd;
+##&#xd;
+## Display any existing UI Extensions, sorted by order.&#xd;
+##&#xd;
+#macro (showExtensions)&#xd;
+  #foreach ($extension in $services.uix.getExtensions('org.xwiki.platform.docdoesnotexist', {'sortByParameter' : 'order'}))&#xd;
+    $services.rendering.render($extension.execute(), 'html/5.0')&#xd;
+  #end&#xd;
+#end&#xd;
+</content>
+    </property>
+    <property>
+      <path>docdoesnotexist.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>9</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>eefeec37-7143-48b8-9f7c-5ae0878710b3</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>#*&#xd;
+ *修改评论样式&#xd;
+ *&#xd;
+ * commentsinline.vm Shows document comments and gives the user an opportunity to add a comment.&#xd;
+ * To include this template in a document you may specify:&#xd;
+ *&#xd;
+ * $replyTo (Integer) - If set then the comment form will appear ready to make a reply to the comment with the id number given.&#xd;
+ *                      If not set and request parameter 'replyto' is set then $replyTo is set to parameter 'replyto', if&#xd;
+ *                      no replyto request parameter and $replyTo isn't set, and $fillInFields is true and &#xd;
+ *                      'XWiki.XWikiComments_replyto' is set then $replyTo is set to that.&#xd;
+ *&#xd;
+ * $hideCaptcha (boolean) - If true then the captcha is hidden and then shown by javascript when the user focuses on the comment&#xd;
+ *                          textarea. If not set and $captchaAnswerWrong is true or 'X-Requested-With' equals 'XMLHttpRequest' then &#xd;
+ *                          it is set true.&#xd;
+ *&#xd;
+ * $captchaAnswerWrong (boolean) - If true then a message is displayed next to the captcha window telling the user that the captcha &#xd;
+ *                                 answer is incorrect. If not set then this template will check for a request parameter by the same&#xd;
+ *                                 name and sets this true if that equals 1.&#xd;
+ *&#xd;
+ * $fillInFields (boolean) - If true then author, and comment fields are filled in from request parameters of the same names &#xd;
+ *                           as the fields, also if $replyTo is set the form appears under the comment corresponding to the $replyTo&#xd;
+ *                           number. If not set and $captchaAnswerWrong is true then this is set to true.&#xd;
+ *&#xd;
+ * $offerGuestsCaptcha (boolean) - If true then users who are not logged in are offered a captcha image to solve, if undefined then&#xd;
+ *                                 $xwiki.getSpacePreference('guest_comment_requires_captcha') NOTE: this template doesn't have the power&#xd;
+ *                                 to require the captcha (that is the commentAdd action) only offer it.&#xd;
+ *&#xd;
+ *###&#xd;
+##&#xd;
+## These are used when this page is accessed directly but are useless when the page is pulled in with ajax using &#xd;
+## bin/view/Space/Page?xpage=xpart&amp;vm=commentsinline.vm&#xd;
+$xwiki.jsfx.use('uicomponents/viewers/comments.js', {'forceSkinAction': true, 'language': ${xcontext.locale}})&#xd;
+$xwiki.ssfx.use('uicomponents/viewers/comments.css', true)&#xd;
+##&#xd;
+##---------------------------------------------------------------------&#xd;
+## Set some 'global' variables&#xd;
+##---------------------------------------------------------------------&#xd;
+##&#xd;
+#set($xCommentClass = 'XWiki.XWikiComments')&#xd;
+##&#xd;
+#if(!$replyTo)&#xd;
+  #set($replyTo = $escapetool.xml($!request.get('replyto')))&#xd;
+#end&#xd;
+##&#xd;
+#set($requestedByAjax = ($request.getHeader('X-Requested-With') == 'XMLHttpRequest'))&#xd;
+##&#xd;
+#if("$!captchaAnswerWrong" == '')&#xd;
+  #set($captchaAnswerWrong = ($request.get('captchaAnswerWrong') == '1'))&#xd;
+#end&#xd;
+##&#xd;
+#if("$!hideCaptcha" == '')&#xd;
+  #set($hideCaptcha = ($captchaAnswerWrong != true &amp;&amp; $requestedByAjax))&#xd;
+#end&#xd;
+##&#xd;
+#if("$!fillInFields" == '')&#xd;
+  #set($fillInFields = ($captchaAnswerWrong == true))&#xd;
+#end&#xd;
+##&#xd;
+## If $fillInFields, then set variables for each field.&#xd;
+#if($fillInFields)&#xd;
+  #set($author = $!escapetool.xml($request.get("${xCommentClass}_author")))&#xd;
+  #set($comment = $!escapetool.xml($request.get("${xCommentClass}_comment")))&#xd;
+  #if("$!replyTo" == '')&#xd;
+    #set($replyTo = $escapetool.xml($!request.get("${xCommentClass}_replyto")))&#xd;
+  #end&#xd;
+#end&#xd;
+##&#xd;
+#if("$!author" == '')&#xd;
+  #set($author = $services.localization.render('core.viewers.comments.add.guestName.default'))&#xd;
+#end&#xd;
+##&#xd;
+#set($xredirect = $!escapetool.xml($request.get("xredirect")))&#xd;
+#if("$!xredirect" == '')&#xd;
+  #set($xredirect = "$doc.getURL('view')?$request.getQueryString()")&#xd;
+#end&#xd;
+##&#xd;
+#if("$!offerGuestsCaptcha" == '')&#xd;
+  #set($offerGuestsCaptcha = $xwiki.getSpacePreferenceAsInt('guest_comment_requires_captcha', 0) == 1)&#xd;
+#end&#xd;
+##&#xd;
+##---------------------------------------------------------------------&#xd;
+## Macros&#xd;
+##---------------------------------------------------------------------&#xd;
+##&#xd;
+## If we are viewing this page through the commentAdd or save actions then we should redirect to view&#xd;
+## This doesn't apply if it is being viewed through javascript.&#xd;
+#macro(redirectIfActionNotView)&#xd;
+  #if(!$requestedByAjax &amp;&amp; $xcontext.getAction() != 'view' &amp;&amp; $xcontext.getAction() != 'get')&#xd;
+    #if(!$captchaAnswerWrong)&#xd;
+      $response.sendRedirect("$doc.getURL('view')?viewer=comments");&#xd;
+    #else&#xd;
+      #foreach($name in $request.getParameterNames())&#xd;
+        #set($queryString = "$!queryString&amp;$name=$escapetool.url($request.get($name))")&#xd;
+      #end&#xd;
+      $response.sendRedirect($doc.getURL('view', "captchaAnswerWrong=1&amp;$queryString"));&#xd;
+    #end&#xd;
+    $response.setContentLength(0)&#xd;
+    #stop&#xd;
+  #end&#xd;
+#end&#xd;
+##&#xd;
+##&#xd;
+##&#xd;
+#macro(addCommentToThreads $comment $commentThreads $rootKey)&#xd;
+  #set($thread = $commentThreads.get("$!{comment.replyto}"))&#xd;
+  #if("$!{thread}" == '')&#xd;
+    #set($thread = $commentThreads.get($rootKey))&#xd;
+  #end&#xd;
+  #set($discard = $thread.add($comment.number))&#xd;
+  #set($thread = '')&#xd;
+#end&#xd;
+##&#xd;
+##&#xd;
+##&#xd;
+#macro(displayThread $key $commentThreads, $commentDoc)&#xd;
+  ## If request parameter replyto is specified then we show the form under that comment.&#xd;
+  #if($replyTo == "$key")&#xd;
+    #displayCommentForm()&#xd;
+    #set($replied = true)&#xd;
+  #end&#xd;
+  ##&#xd;
+  #set($thread = $commentThreads.get("$!key"))&#xd;
+  #if($thread.size() > 0)&#xd;
+    &lt;ul class="commentreplies">&#xd;
+    #foreach($commentID in $thread)&#xd;
+      &lt;li class="reply">&#xd;
+      #displayComment($doc.getObject($xCommentClass, $commentID))&#xd;
+      &lt;div class="commentthread">&#xd;
+        #displayThread($commentID, $commentThreads)&#xd;
+      &lt;/div>&#xd;
+      &lt;/li>&#xd;
+    #end&#xd;
+    &lt;/ul>&#xd;
+  #end&#xd;
+#end&#xd;
+##&#xd;
+##&#xd;
+##&#xd;
+#macro(displayComment $comment, $commentDoc)&#xd;
+  ## if the current comment is an annotation (i.e. has selection) set a flag to display selection, and add a few classes&#xd;
+  #set($commentSelection = $comment.getProperty('selection').value)&#xd;
+  #set($isAnnotation = false)&#xd;
+  #if ("$!commentSelection" != "")&#xd;
+    #set($isAnnotation = true)&#xd;
+  #end&#xd;
+  &lt;div id="xwikicomment_${comment.number}" class="xwikicomment  #if($comment.getProperty('author').value == $doc.creator) commentByCreator#end#if($isAnnotation) annotation#end">&#xd;
+    &lt;div class="commentavatar">#if("$!comment.replyto" == '')#largeUserAvatar($comment.author)#{else}#mediumUserAvatar($comment.author)#end&lt;/div>&#xd;
+    &lt;div class="commentheader">&#xd;
+      &lt;div>&#xd;
+      &lt;span class="commentauthor">$!xwiki.getUserName($doc.display('author', 'view', $comment))&lt;/span>##&#xd;
+      #set($date = $comment.getProperty('date').value)&#xd;
+## Don't indent, otherwise the comma will be misplaced&#xd;
+#if($date), &lt;span class="commentdate">$!xwiki.formatDate($date)&lt;/span>#end&#xd;
+      &lt;/div>&#xd;
+      &lt;div class="btn-group commenttools">&#xd;
+      #if($xwiki.hasAccessLevel('comment'))&#xd;
+        &lt;a class="commentreply btn btn-default btn-xs" rel="nofollow" href="$xredirect.replaceAll('&amp;?replyto=\d++', '')&amp;amp;replyto=${comment.number}#xwikicomment_${comment.number}" title="$services.localization.render('core.viewers.comments.reply')"#if("$!replyTo" == "${comment.number}") style="display: none;"#end>&lt;span style="color: #000;" class="icon icon-question_answer">&lt;/span>&lt;/a>&lt;/span>&#xd;
+        #if($services.model.resolveDocument($comment.author, 'current') == $xcontext.userReference || $hasAdmin)&#xd;
+          &lt;a class="edit btn btn-default btn-xs" rel="nofollow" href="$doc.getURL('view', "viewer=comments&amp;amp;number=${comment.number}&amp;amp;xredirect=$doc.getURL('view')")" title="$services.localization.render('core.viewers.comments.edit')">&lt;span style="color: #000;" class="icon icon-mode_edit">&lt;/span>&lt;/a>&#xd;
+        #end&#xd;
+      #end&#xd;
+      &lt;a class="permalink btn btn-default btn-xs" rel="nofollow" href="$doc.getURL('view', 'viewer=comments')#xwikicomment_${comment.number}" title="$services.localization.render('core.viewers.comments.permalink')">&lt;span style="color: #000;" class="icon icon-link2">&lt;/span>&lt;/a>&#xd;
+      #if ($hasAdmin || (!$isGuest &amp;&amp; $hasEdit &amp;&amp; $comment.author == $xcontext.user))&#xd;
+        &lt;a class="delete btn btn-default btn-xs " rel="nofollow" href="$doc.getURL('objectremove', "form_token=$!{services.csrf.getToken()}&amp;amp;classname=${xCommentClass}&amp;amp;classid=${comment.number}&amp;amp;xredirect=$doc.getURL('view')")" title="$services.localization.render('core.viewers.comments.delete')">&lt;span style="color: #000;" class="icon icon-delete_forever">&lt;/span>&lt;/a>&#xd;
+      #end&#xd;
+      &lt;/div>## btn-group&#xd;
+    &lt;/div>## commentheader&#xd;
+    #if ($isAnnotation)&#xd;
+      &lt;a href="#ID$comment.number">&lt;blockquote class="annotatedText">$!escapetool.xml($commentSelection)&lt;/blockquote>&lt;/a>&#xd;
+    #end&#xd;
+    &lt;div class="commentcontent#if($isAnnotation) annotationText#end">$commentDoc.getRenderedContentRestricted($comment.getProperty('comment').getValue(), $doc.getSyntax().toIdString())&lt;/div>&#xd;
+  &lt;/div>## xwikicomment&#xd;
+#end&#xd;
+##&#xd;
+##&#xd;
+##&#xd;
+#macro(displayCommentForm)&#xd;
+  #if($xwiki.hasAccessLevel('comment'))&#xd;
+    &lt;form action="$doc.getURL('commentadd', "xpage=view&amp;amp;viewer=comments#commentform")" method="post" id="AddComment">&#xd;
+      &lt;fieldset id="commentform">&#xd;
+        &lt;legend class="sr-only">$services.localization.render('core.viewers.comments.add.title')&lt;/legend>&#xd;
+        &lt;div class="commentavatar">#largeUserAvatar($xcontext.user)&lt;/div>&#xd;
+        #if($xcontext.user != 'XWiki.XWikiGuest')&#xd;
+          &lt;label>$xwiki.getUserName($xcontext.user) $services.localization.render('core.viewers.comments.add.says')&lt;/label>&#xd;
+          &lt;input type="hidden" name="${xCommentClass}_author" value="$xcontext.user"/>&#xd;
+        #else&#xd;
+          &lt;label for="${xCommentClass}_author">&lt;input type="text" id="${xCommentClass}_author" name="${xCommentClass}_author" value="$author" maxlength="255" /> says:&lt;/label>&#xd;
+          &lt;strong>&lt;a href='$xwiki.getURL('XWiki.XWikiLogin', 'login', "xredirect=$escapetool.url($xwiki.relativeRequestURL)")'>$services.localization.render('login')&lt;/a>&lt;/strong>&#xd;
+        #end&#xd;
+        ## CSRF prevention&#xd;
+        &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />&#xd;
+        &lt;input type="hidden" name="${xCommentClass}_date" value=""/>&#xd;
+        &lt;input type="hidden" name="${xCommentClass}_replyto" value="$!replyTo"/>&#xd;
+        &lt;div class="commentcontainer">&#xd;
+           &lt;label for="${xCommentClass}_comment">$services.localization.render('core.viewers.comments.add.comment.label')&lt;/label>&#xd;
+           &lt;textarea id='${xCommentClass}_comment' rows='5' cols="80" name='${xCommentClass}_comment'>$!comment&lt;/textarea>&#xd;
+        &lt;/div>&#xd;
+        #if($xcontext.user == 'XWiki.XWikiGuest' &amp;&amp; $offerGuestsCaptcha)&#xd;
+          #displayCaptcha()&#xd;
+        #end&#xd;
+        &lt;div>&#xd;
+          &lt;input type="submit" value="$services.localization.render('core.viewers.comments.add.submit')" class="btn btn-primary"/>&#xd;
+          &lt;a class="cancel btn btn-default" href="$doc.getURL()">$services.localization.render('core.viewers.comments.add.cancel')&lt;/a>&#xd;
+        &lt;/div>&#xd;
+      &lt;/fieldset>&#xd;
+    &lt;/form>&#xd;
+  #end&#xd;
+#end&#xd;
+##&#xd;
+##&#xd;
+##&#xd;
+#macro(displayCaptcha)&#xd;
+  &lt;div id='commentCaptcha'>&#xd;
+  ## We only want to hide the captcha if we're sure the user has javascript, if this is an ajax call then it's a safe bet.&#xd;
+  #if($hideCaptcha)&#xd;
+    &lt;script type='text/javascript'>&#xd;
+    $('commentCaptcha').style.display = "none";&#xd;
+    var handler = function() {&#xd;
+      var captchaDiv = $('commentCaptcha');&#xd;
+      var image = new Element('img', {'src' : '$doc.getURL("imagecaptcha")?nounce=$datetool.getSystemTime()', 'alt' : '$escapetool.javascript($services.localization.render("core.captcha.image.alternateText"))'});&#xd;
+      captchaDiv.insertBefore(image, captchaDiv.firstChild);&#xd;
+      Event.observe(image, 'load', function() {&#xd;
+        Effect.SlideDown('commentCaptcha', { duration: 0.7 });&#xd;
+      });&#xd;
+      Event.stopObserving($('${xCommentClass}_comment'), 'focus', handler);&#xd;
+    }.bind(this);&#xd;
+    Event.observe($('${xCommentClass}_comment'), 'focus', handler);&#xd;
+    &lt;/script>&#xd;
+  #else&#xd;
+    &lt;img src='$doc.getURL("imagecaptcha")?nounce=$datetool.getSystemTime()' alt='$services.localization.render("core.captcha.image.alternateText")' />&#xd;
+  #end&#xd;
+  &lt;input type='hidden' name='captcha_type' value='image'/>&#xd;
+  &lt;br/>&#xd;
+  &lt;label for='captcha_answer'>$services.localization.render('core.captcha.image.instruction')&lt;/label>&#xd;
+  &lt;br/>&#xd;
+  &lt;input id='captcha_answer' name='captcha_answer' type='text'>&#xd;
+  #if($captchaAnswerWrong)&#xd;
+    &lt;span style="color:#C00; font-weight:bold; margin:0 0 0 5px;">$services.localization.render('core.captcha.captchaAnswerIsWrong')&lt;/span>&#xd;
+  #end&#xd;
+  &lt;div class="wikimodel-emptyline">&lt;/div>&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+##&#xd;
+##&#xd;
+##&#xd;
+#macro(displayEditCommentForm $comment)&#xd;
+  #if($services.model.resolveDocument($comment.author, 'current') == $xcontext.userReference || $hasAdmin)&#xd;
+  &lt;form action="$doc.getURL('commentsave')" method="post" class="edit-xcomment reply">&#xd;
+    &lt;div id="xwikicomment_${comment.number}" class="xwikicomment#if($comment.getProperty('author').value == $doc.creator) commentByCreator#end">&#xd;
+    &lt;div class="commentavatar">#if("$!comment.replyto" == '')#largeUserAvatar($comment.author)#{else}#mediumUserAvatar($comment.author)#end&lt;/div>&#xd;
+    &lt;div class="commentheader">&#xd;
+      &lt;div>&#xd;
+      &lt;span class="commentauthor">$!xwiki.getUserName($doc.display('author', 'view', $comment))&lt;/span>##&#xd;
+## Don't indent, otherwise the comma will be misplaced&#xd;
+#set($date = $comment.getProperty('date').value)##&#xd;
+#if($date), &lt;span class="commentdate">$!xwiki.formatDate($date)&lt;/span>#end&#xd;
+      &lt;/div>&#xd;
+    &lt;/div>## commentheader&#xd;
+    &lt;div class="commentcontent">$doc.display('comment', 'edit', $comment)&lt;/div>&#xd;
+    &lt;div class="hidden">&#xd;
+      ## CSRF prevention&#xd;
+      &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />&#xd;
+      &lt;input type="hidden" name="comment" value="$services.localization.render('core.viewers.comments.edit.versionComment', [${comment.number}])"/>&#xd;
+      &lt;input type="hidden" name="minorEdit" value="true"/>&#xd;
+      &lt;input type="hidden" name="xredirect" value="$xredirect">&#xd;
+    &lt;/div>&#xd;
+    &lt;div>&#xd;
+      &lt;input id="c7n-common-from-submit" type="submit" name="action_commentsave" class="button" value="$services.localization.render('core.viewers.comments.edit.save')"/>&#xd;
+      &lt;a id="c7n-common-from-cancel" class="cancel secondary button" href="$doc.getURL('view', 'viewer=comments')">$services.localization.render('core.viewers.comments.edit.cancel')&lt;/a>&#xd;
+    &lt;/div>&#xd;
+&#xd;
+    &lt;/div>## xwikicomment&#xd;
+  &lt;/form>&#xd;
+  #else&#xd;
+    $response.setStatus(403) ## forbidden&#xd;
+    #error($services.localization.render('core.viewers.comments.edit.notAllowed'))&#xd;
+  #end&#xd;
+#end&#xd;
+##&#xd;
+##---------------------------------------------------------------------&#xd;
+## Code&#xd;
+##---------------------------------------------------------------------&#xd;
+##&#xd;
+#redirectIfActionNotView()&#xd;
+#set($commentNumber = "$!{request.number}")&#xd;
+#if($commentNumber != '')&#xd;
+  #set($commentNumber = $mathtool.toInteger($commentNumber))&#xd;
+  #set($comment = $doc.getObject($xCommentClass, $commentNumber))&#xd;
+  #if("$!{comment}" != '')&#xd;
+    #if ("$!{request.xpage}" == '')&#xd;
+    &lt;div id="commentscontent" class="xwikiintracontent">&#xd;
+    &lt;div id="_comments">&#xd;
+    #end&#xd;
+    #displayEditCommentForm($comment)&#xd;
+    #if ("$!{request.xpage}" == '')&#xd;
+    &lt;/div>&#xd;
+    &lt;/div>&#xd;
+    #end&#xd;
+  #else&#xd;
+    $response.setStatus(404) ## Comment not found&#xd;
+    #error($services.localization.render('core.viewers.comments.edit.notFound'))&#xd;
+  #end&#xd;
+#else&#xd;
+#if($xwiki.getSpacePreferenceAsInt('commentsorder', 1) == 1)&#xd;
+  #set($comments = $doc.getComments())&#xd;
+#else&#xd;
+  #set($comments = $doc.getComments(false))&#xd;
+#end&#xd;
+##&#xd;
+##&#xd;
+&lt;div id="commentscontent" class="xwikiintracontent">&#xd;
+  &lt;div id="_comments">&#xd;
+#if($comments.size() > 0)&#xd;
+  #set($rootKey = "-1")&#xd;
+  #set($commentThreads = {})&#xd;
+  #set($discard = $commentThreads.put($rootKey, []))&#xd;
+  #foreach($comment in $comments)&#xd;
+    #set($discard = $commentThreads.put("${comment.number}", []))&#xd;
+  #end&#xd;
+  #foreach($comment in $comments)&#xd;
+    #addCommentToThreads($comment, $commentThreads, $rootKey)&#xd;
+  #end&#xd;
+  ##&#xd;
+  ## Comments will be rendered in the context of this document.&#xd;
+  #set($commentDoc = $doc)&#xd;
+  ##&#xd;
+  #displayThread($rootKey, $commentThreads, $commentDoc)&#xd;
+#else&#xd;
+  &lt;p class="noitems">$services.localization.render('core.viewers.comments.noComments')&lt;/p>&#xd;
+#end&#xd;
+&#xd;
+##&#xd;
+##&#xd;
+#if(!$replied)&#xd;
+  #displayCommentForm()&#xd;
+#end&#xd;
+  &lt;/div> ## comments&#xd;
+&lt;/div> ## commentscontent&#xd;
+#end ## comment == ''&#xd;
+</content>
+    </property>
+    <property>
+      <path>commentsinline.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>10</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>dfccb69e-41a4-48b5-a21f-3c68e92db507</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>################################&#xd;
+##       COMPANY LOGO&#xd;
+################################&#xd;
+#if("$!{themeDocFullName}" == '')&#xd;
+    #set($themeDocFullName = "$!xwiki.getUserPreference('colorTheme')")&#xd;
+#end&#xd;
+#if($themeDocFullName == '')&#xd;
+    #set($themeDocFullName = 'ColorThemes.DefaultColorTheme')&#xd;
+#end&#xd;
+#set($themeDoc = $xwiki.getDocument($themeDocFullName))&#xd;
+#set($themeObj = $themeDoc.getObject('FlamingoThemesCode.ThemeClass'))&#xd;
+#if($themeObj)&#xd;
+    #set($logoname = $themeObj.getValue('logo'))&#xd;
+    #set($simpleName = $themeObj.getValue('simpleName'))&#xd;
+    #if($logoname == "")&#xd;
+        #set($logoname = $themeObj.getValue('defaultLogo'))&#xd;
+    #end&#xd;
+    #if($simpleName == "")&#xd;
+        #set($simpleName = $themeObj.getValue('defaultSimpleName'))&#xd;
+    #end&#xd;
+#else&#xd;
+    #set($themeObj = $themeDoc.getObject('ColorThemes.ColorThemeClass'))&#xd;
+    #set($logoname = $themeObj.getValue('logoImage'))&#xd;
+#end&#xd;
+#if("$!{logoname}" != '')&#xd;
+    #set($logourl = $themeDoc.getAttachmentURL($logoname))&#xd;
+#else&#xd;
+    #set($logoname = $xwiki.getSkinPreference('logo', 'logo.svg'))&#xd;
+    #set($logo = $!prefdoc.getAttachment($logoname))&#xd;
+    #if(!$logo)&#xd;
+        #set($logourl = $xwiki.getSkinFile($logoname))&#xd;
+    #else&#xd;
+        #set($logourl = $prefdoc.getAttachmentURL($logo.filename))&#xd;
+    #end&#xd;
+#end&#xd;
+&lt;div id="companylogo">&#xd;
+    &lt;a href="$!xwiki.getURL($services.wiki.currentWikiDescriptor.mainPageReference)" title="Home" rel="home">&#xd;
+        &lt;div class="c7n-boot-header-logo-wrap">&#xd;
+            &lt;div class="c7n-boot-header-logo-icon c7n-boot-header-logo-default-icon" style="background-image: url($!logoname)">&lt;/div>&#xd;
+            &lt;div class="c7n-boot-header-logo">$!simpleName&lt;/div>&#xd;
+        &lt;/div>&#xd;
+    &lt;/a>&#xd;
+&lt;/div>&#xd;
+</content>
+    </property>
+    <property>
+      <path>companylogo.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>11</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>77b17245-cf7d-4ca6-b3dc-fb99c33e5eff</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>## -------------------------------------------------------------------------------------------------------------------&#xd;
+## In non-Servlet mode (in Portlet mode for example) we don't display the &lt;HTML>, &lt;HEAD> and &lt;BODY>&#xd;
+## elements.&#xd;
+## -------------------------------------------------------------------------------------------------------------------&#xd;
+#if($isInServletMode)&#xd;
+## TODO this should be more specific&#xd;
+#if("$!request.noDoctype" != "true")&#xd;
+&lt;!DOCTYPE html>&#xd;
+#end&#xd;
+#macro(xwikiDataAttribute $name $value)&#xd;
+  data-xwiki-${name}="$escapetool.xml($value)"&#xd;
+#end&#xd;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" lang="$xcontext.locale" xml:lang="$xcontext.locale"&#xd;
+  ## NOTE: you should not use these attributes in javascript directly, but via the 'xwiki-meta' module instead:&#xd;
+  ## http://www.xwiki.org/xwiki/bin/view/Documentation/DevGuide/FrontendResources/JavaScriptAPI/#HGetsomeinformationaboutthecurrentdocument&#xd;
+  #xwikiDataAttribute('reference', $services.model.serialize($doc.documentReference, 'default'))&#xd;
+  #xwikiDataAttribute('document', $doc.fullName)##deprecated, use 'reference' instead&#xd;
+  #xwikiDataAttribute('wiki', $doc.wiki)##deprecated, use 'reference' instead&#xd;
+  #xwikiDataAttribute('space', $doc.space)##deprecated, use 'reference' instead&#xd;
+  #xwikiDataAttribute('page', $doc.name)##deprecated, use 'reference' instead&#xd;
+  #xwikiDataAttribute('version', $tdoc.version)&#xd;
+  #xwikiDataAttribute('rest-url', $services.rest.url($tdoc.documentReferenceWithLocale))&#xd;
+  #xwikiDataAttribute('form-token', "$!{services.csrf.token}")&#xd;
+  #xwikiDataAttribute('user-reference', $!services.model.serialize($xcontext.userReference, 'default'))&#xd;
+  #xwikiDataAttribute('locale', $tdoc.locale)>&#xd;
+  &lt;head>&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Ensure that the Content-Type meta directive is the first one in the header.&#xd;
+    ## See http://www.w3.org/International/tutorials/tutorial-char-enc/&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=$xwiki.encoding" />&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Compute the title.&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    #if(!$title)&#xd;
+      #set($title = $!xwiki.getSpacePreference('title'))&#xd;
+      #if($title != '')&#xd;
+        ## Evaluate the title since it can have velocity code.&#xd;
+        #set($title = "#evaluate($title)")&#xd;
+        ## Don`t forget to escape it.&#xd;
+        #set($title = "$escapetool.xml($title)")&#xd;
+      #else&#xd;
+        #set($title = "XWiki - $escapetool.xml($!doc.space) - $escapetool.xml($!tdoc.displayTitle)")&#xd;
+      #end&#xd;
+    #else&#xd;
+      #set($title = $escapetool.xml($title))&#xd;
+    #end&#xd;
+    &lt;title>$title&lt;/title>&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Force Compatibility mode for IE browsers to use the latest rendering mode. In order to work, the declaration &#xd;
+    ## needs to be placed in the &lt;head>, before all other elements except for the &lt;title> and other &lt;meta> elements&#xd;
+    ## See http://msdn.microsoft.com/en-us/library/jj676915(v=vs.85).aspx#SETMODE&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    #set($userAgent = $request.getHeader('User-Agent'))&#xd;
+    #if($userAgent.contains('MSIE') || $userAgent.contains('Trident'))&#xd;
+      ## Add a meta-tag to disable the IE compatibility mode&#xd;
+      &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" />&#xd;
+      ## Add the equivalent HTTP header to disable the compatibility mode (the meta is not enough on intranet sites)&#xd;
+      #set($discard = $response.addHeader('X-UA-Compatible', 'IE=edge'))&#xd;
+    #end&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Enable Responsiveness for phones&#xd;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1" />&#xd;
+&#xd;
+    #if("$!{themeDocFullName}" == '')&#xd;
+      #set($themeDocFullName = "$!xwiki.getUserPreference('colorTheme')")&#xd;
+    #end&#xd;
+    #if($themeDocFullName == '')&#xd;
+      #set($themeDocFullName = 'ColorThemes.DefaultColorTheme')&#xd;
+    #end&#xd;
+    #set($themeDoc = $xwiki.getDocument($themeDocFullName))&#xd;
+    #set($themeObj = $themeDoc.getObject('FlamingoThemesCode.ThemeClass'))&#xd;
+    #if($themeObj)&#xd;
+      #set($favicon = $themeObj.getValue('favicon'))&#xd;
+      #if($favicon == '')&#xd;
+        #set($favicon = $themeObj.getValue('defaultFavicon'))&#xd;
+      #end&#xd;
+    #end&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Favicons&#xd;
+    ## Legacy, for IE&#xd;
+    &lt;link rel="shortcut icon" href="$favicon" />&#xd;
+    ## Present, HTML5&#xd;
+    &lt;link rel="icon" href="$favicon" type="image/png" />&#xd;
+    ## The future, scalable icons&#xd;
+    &lt;link rel="icon" href="$favicon" type="image/svg+xml" />&#xd;
+    ## For smart phones and tablets&#xd;
+    &lt;link rel="apple-touch-icon" href="$favicon" />&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Universal edit button. See http://universaleditbutton.org&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    #if($xcontext.action=="view")&#xd;
+      &lt;link rel="alternate" type="application/x-wiki" title="Edit" href="$doc.getURL("edit")" />&#xd;
+    #end&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Make sure search engine spiders give the plain page instead of ?viewer=comments, ?viewer=code etc.&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------    &#xd;
+    &lt;link rel="canonical" href="$doc.getURL('view')" />&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Add user-defined Meta directives.&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Note: Velocity code, so it needs to be evaluated.&#xd;
+    #evaluate($!xwiki.getSpacePreference("meta"))&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    ## Hook for inserting Link extensions. This will be replaced with the pulled link references.&#xd;
+    ## ---------------------------------------------------------------------------------------------------------------&#xd;
+    &lt;!-- com.xpn.xwiki.plugin.skinx.LinkExtensionPlugin -->&#xd;
+    &lt;link href="$services.webjars.url('drawer', 'css/drawer.min.css')" rel="stylesheet" type="text/css" />&#xd;
+&#xd;
+    #template("stylesheets.vm")&#xd;
+    #template("javascript.vm")&#xd;
+  &lt;/head>&#xd;
+  #set($bodyTagName = 'body')&#xd;
+#else ## Portlet Mode&#xd;
+  #template("stylesheets.vm")&#xd;
+  #template("javascript.vm")&#xd;
+  #set($bodyTagName = 'div')&#xd;
+#end&#xd;
+## TODO: fix this from css&#xd;
+#set($bodyAction = $xcontext.action)&#xd;
+#if($xcontext.action == "admin" || $xcontext.action == "import" || $xcontext.action == "export")&#xd;
+  #set($bodyAction = "view")&#xd;
+#end&#xd;
+## These elements will be closed in the htmlfooter.vm file&#xd;
+&lt;$bodyTagName id="body" class="skin-flamingo wiki-${xcontext.database} space-${escapetool.xml($doc.space.replaceAll(' ', '_'))} ${bodyAction}body #if($showLeftPanels == "0")hideleft#end#if($showRightPanels == "0")hideright#end#if($hidecolumns &amp;&amp; ($!hidecolumns == 1))hidelefthideright#end #if($showLeftPanels != "0" &amp;&amp; $showRightPanels != "0" &amp;&amp; $!hidecolumns != 1)content#end panel-left-width-${leftPanelsWidth} panel-right-width-${rightPanelsWidth} drawer drawer-right drawer-close">&#xd;
+&lt;div id="xwikimaincontainer">&#xd;
+&lt;div id="xwikimaincontainerinner">&#xd;
+</content>
+    </property>
+    <property>
+      <path>htmlheader.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>12</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>6321abbe-cc62-44b7-9d7f-6a6985f44025</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>### 标题栏调整样式，按钮移到左边&#xd;
+&lt;div class="row document-header">&#xd;
+  &lt;div class="document-info col-xs-12">&#xd;
+    ## --------------------------------------------------------&#xd;
+    ## Display UI Extensions before the title element&#xd;
+    ## --------------------------------------------------------&#xd;
+    #foreach ($uix in $services.uix.getExtensions('org.xwiki.platform.template.title.before'))&#xd;
+      $services.rendering.render($uix.execute(), 'xhtml/1.0')&#xd;
+    #end&#xd;
+&#xd;
+    #set($a = $doc.getObject("AppWithinMinutes.LiveTableClass"))&#xd;
+    #if($a)&#xd;
+      &lt;div id="document-title">&lt;h1>$titleToDisplay&lt;/h1>&#xd;
+    #else&#xd;
+      &#xd;
+     #macro(customSplit $fullName $names)&#xd;
+     #set($flag = false)&#xd;
+     #set($names = [])&#xd;
+     #set($name = '')&#xd;
+     #foreach($s in $fullName.split(''))&#xd;
+       #if($flag)&#xd;
+         #set($name = $name + $s)&#xd;
+         #set($flag = false)&#xd;
+       #else&#xd;
+         #if($s.equals('\'))&#xd;
+           #set($flag = true)&#xd;
+         #elseif($s.equals('.'))&#xd;
+           #set($dis = $names.add($name))&#xd;
+           #set($name = '')&#xd;
+           #set($flag = false)&#xd;
+         #else&#xd;
+           #set($name = $name + $s)&#xd;
+           #set($flag = false)&#xd;
+         #end&#xd;
+       #end&#xd;
+     #end&#xd;
+     #set($dis = $names.add($name))&#xd;
+     #end&#xd;
+&#xd;
+     #macro(getOrgOrPro $names $i $spaceName)&#xd;
+     #if($i >= 0)&#xd;
+       #set($n = $names.get($i))&#xd;
+       #if($names.get(0) == $xcontext.getUser().substring(6))&#xd;
+         #set($spaceName = "我的空间")&#xd;
+       #elseif($n.startsWith("O-"))&#xd;
+         #set($name = $n)&#xd;
+         #set($fullname = $n+".WebHome")&#xd;
+         #set($recentDoc = $xwiki.getDocument($fullname))&#xd;
+         #set($spaceName = $recentDoc.title)&#xd;
+       #elseif($n.startsWith("P-"))&#xd;
+         #set($spaceName = $n)&#xd;
+       #else&#xd;
+         #set($i = $i - 1)&#xd;
+         #getOrgOrPro($names, $i)&#xd;
+       #end&#xd;
+     #end&#xd;
+     #end &#xd;
+     #macro(getName $doc $spaceName)&#xd;
+       #customSplit ($doc.fullName, $names)&#xd;
+       #set($i = $names.size() - 1)&#xd;
+       #getOrgOrPro($names, $i, $spaceName)&#xd;
+     #end&#xd;
+     #set($spaceName = $titleToDisplay)&#xd;
+     #getName($doc $spaceName)&#xd;
+&#xd;
+     &lt;div id="document-title">&lt;h1>$spaceName&lt;/h1>&#xd;
+    #end&#xd;
+&#xd;
+  ## 编辑 更多&#xd;
+  #if($displayContentMenu)&#xd;
+    &lt;div class="document-menu col-md-10">&#xd;
+      #template("menus_content.vm")&#xd;
+    &lt;/div>&#xd;
+  #end&#xd;
+&#xd;
+&#xd;
+&#xd;
+&lt;/div>&#xd;
+&#xd;
+&#xd;
+  &lt;/div>&#xd;
+&lt;/div>&#xd;
+&lt;hr/>&#xd;
+</content>
+    </property>
+    <property>
+      <path>contentheader.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>13</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>b143eaba-eb6d-49be-babf-fa7d74349df3</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>#set ($validAttachmentProperties = ['filename', 'filesize', 'mimeType', 'date', 'author', 'version'])&#xd;
+&#xd;
+#macro (sortAttachments $attachments $by)&#xd;
+  #set ($sortAttachmentsBy = $by)&#xd;
+  #if ($validAttachmentProperties.indexOf($by) &lt; 0)&#xd;
+    ## Default to sorting by file name.&#xd;
+    #set ($sortAttachmentsBy = 'filename')&#xd;
+  #end&#xd;
+  ## Set attachment sorting direction.&#xd;
+  #if ($sortAttachmentsBy == 'date')&#xd;
+    ## Sort the dates descending.&#xd;
+    #set ($sortAttachmentsBy = 'date:desc')&#xd;
+  #else&#xd;
+    ## Sort everthing else ascending.&#xd;
+    #set ($sortAttachmentsBy = "$sortAttachmentsBy:asc")&#xd;
+  #end&#xd;
+  #set ($attachments = $sorttool.sort($attachments, $sortAttachmentsBy))&#xd;
+#end&#xd;
+&#xd;
+#macro (filterAttachments $attachments $patterns)&#xd;
+  #set ($filteredAttachments = [])&#xd;
+  #foreach ($attachment in $attachments)&#xd;
+    #set ($mimeType = $attachment.mimeType.toLowerCase())&#xd;
+    #set ($extension = $NULL)&#xd;
+    #set ($extensionIndex = $attachment.filename.lastIndexOf('.'))&#xd;
+    #if ($extensionIndex >= 0)&#xd;
+      #set ($extension = $attachment.filename.substring($mathtool.add($extensionIndex, 1)).toLowerCase())&#xd;
+    #end&#xd;
+    #foreach ($pattern in $patterns)&#xd;
+      #if ($pattern == $extension || $mimeType.startsWith($pattern) || $mimeType.endsWith($pattern))&#xd;
+        #set ($discard = $filteredAttachments.add($attachment))&#xd;
+        #break&#xd;
+      #end&#xd;
+    #end&#xd;
+  #end&#xd;
+  #set ($attachments = $filteredAttachments)&#xd;
+#end&#xd;
+&#xd;
+#macro (displayAttachments $attachments)&#xd;
+  #foreach ($attachment in $attachments)&#xd;
+    ## Determine the redirect.&#xd;
+    #set ($redirect = "$!request.xredirect")&#xd;
+    #if ($redirect == '')&#xd;
+      #if ("$!request.viewer" == 'attachments')&#xd;
+        #set ($redirect = $attachment.document.getURL('view', 'viewer=attachments'))&#xd;
+      #else&#xd;
+        #set ($redirect = "$attachment.document.getURL()#Attachments")&#xd;
+      #end&#xd;
+    #end&#xd;
+    #set ($options = {&#xd;
+      'cssClass': "#if ($foreach.index % 2 == 0)even#{else}odd#end",&#xd;
+      'redirect': $redirect&#xd;
+    })&#xd;
+    #displayAttachment($attachment $options)&#xd;
+  #end&#xd;
+#end&#xd;
+&#xd;
+#macro (displayAttachment $attachment $options)&#xd;
+  ## Compute the attachment reference because there's no getter.&#xd;
+  #set ($attachmentReference = $services.model.createAttachmentReference($attachment.document.documentReference,&#xd;
+    $attachment.filename))&#xd;
+  &lt;div class="attachment $!escapetool.xml($options.cssClass)">&#xd;
+    &lt;span class="mime" data-type="$!escapetool.xml($attachment.mimeType)">&#xd;
+      #if ($attachment.isImage())&#xd;
+        &lt;span title="$escapetool.xml($services.localization.render('core.viewers.attachments.mime.image'))">&#xd;
+          &lt;img src="$xwiki.getURL($attachmentReference, 'download', 'width=48')"&#xd;
+            alt="$escapetool.xml($attachment.filename)"/>&#xd;
+        &lt;/span>&#xd;
+      #else&#xd;
+        #mimetypeimg($attachment.mimeType.toLowerCase() $attachment.filename.toLowerCase())&#xd;
+      #end&#xd;
+    &lt;/span>&#xd;
+    &lt;div class="information">&#xd;
+      &lt;span class="name">&#xd;
+        &lt;a href="$xwiki.getURL($attachmentReference)" title="$escapetool.xml($services.localization.render(&#xd;
+          'core.viewers.attachments.download'))">$escapetool.xml($attachment.filename)&lt;/a>&#xd;
+      &lt;/span>&#xd;
+      &lt;div class="btn-group xwikibuttonlinks">&#xd;
+        #if ($services.officemanager.serverState == "Connected" &amp;&amp;&#xd;
+            $services.officeviewer.isMimeTypeSupported($attachment.mimeType.toLowerCase()))&#xd;
+          ## Link to preview office document.&#xd;
+          &lt;a class="viewlink btn btn-xs btn-default" title="$escapetool.xml($services.localization.render(&#xd;
+            'core.viewers.attachments.officeView.title'))" target="_blank"&#xd;
+            href="$attachment.document.getURL('view', $escapetool.url({&#xd;
+              'xpage': 'office',&#xd;
+              'attachment': $attachment.filename&#xd;
+            }))">$services.icon.renderHTML('eye')&lt;/a>&#xd;
+        #end&#xd;
+        #if ($hasEdit || $hasAdmin)&#xd;
+          ## Delete attachment link&#xd;
+          &lt;a class="deletelink" title="$escapetool.xml($services.localization.render(&#xd;
+            'core.viewers.attachments.delete.title', [$attachment.filename]))"&#xd;
+            href="$xwiki.getURL($attachmentReference, 'delattachment', $escapetool.url({&#xd;
+              'form_token': $services.csrf.token,&#xd;
+              'xredirect': $options.redirect&#xd;
+            }))">&lt;span style="color: #000;" class="icon icon-delete_forever">&lt;/span>&lt;/a>&#xd;
+        #end&#xd;
+      &lt;/div>&#xd;
+      &lt;span class="version">&#xd;
+        &lt;a href="$xwiki.getURL($attachmentReference, 'viewattachrev', $NULL)"&#xd;
+          title="$escapetool.xml($services.localization.render('core.viewers.attachments.showHistory'))"&#xd;
+          >$escapetool.xml($attachment.version)&lt;/a>&#xd;
+      &lt;/span>&#xd;
+      &lt;div class="meta">&#xd;
+        #set ($authorReference = $services.model.resolveDocument($attachment.author, 'user', $attachmentReference))&#xd;
+        &lt;span class="publisher" data-reference="$!escapetool.xml($authorReference)"&#xd;
+          >$services.localization.render('core.viewers.attachments.author',&#xd;
+          [$xwiki.getUserName($attachment.author)])&lt;/span>&#xd;
+        &lt;span class="date" data-timestamp="$!escapetool.xml($attachment.date.time)">$escapetool.xml(&#xd;
+          $services.localization.render('core.viewers.attachments.date',&#xd;
+          [$xwiki.formatDate($attachment.date)]))&lt;/span>&#xd;
+        &lt;span class="size" data-size="$!escapetool.xml($attachment.longSize)"&#xd;
+          >(#dynamicsize($attachment.longSize))&lt;/span>&#xd;
+      &lt;/div>&#xd;
+    &lt;/div>&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+</content>
+    </property>
+    <property>
+      <path>attachment_macros.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>14</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>533fe219-6898-4f98-a732-e5db1aa92ca9</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>#template('hierarchy_macros.vm')&#xd;
+&#xd;
+#set ($displayWikiFields = $xcontext.userReference.wikiReference.name == $xcontext.mainWikiName &amp;&amp; $xwiki.hasSubWikis())&#xd;
+&#xd;
+#macro (locationPicker $options)&#xd;
+  #set ($discard = $xwiki.get('jsfx').use('uicomponents/widgets/validation/livevalidation_prototype.js'))&#xd;
+  #set ($discard = $xwiki.get('ssfx').use('uicomponents/widgets/validation/livevalidation.css', true))&#xd;
+  #set ($discard = $xwiki.get('jsfx').use('uicomponents/widgets/locationPicker.js', true))&#xd;
+  #set ($discard = $xwiki.get('ssfx').use('uicomponents/widgets/locationPicker.css', true))&#xd;
+  &lt;dl class="location-picker">&#xd;
+    ##&#xd;
+    ## ---------------------------------------------------------------------------------------------------------&#xd;
+    ## Title field&#xd;
+    ## ---------------------------------------------------------------------------------------------------------&#xd;
+    ##&#xd;
+    #set ($titleField = $options.title)&#xd;
+    #set ($value = $request.getParameter($titleField.name))&#xd;
+    #if (!$value)&#xd;
+      #set ($value = $titleField.value)&#xd;
+    #end&#xd;
+    #set ($escapedValue = $escapetool.xml($value))&#xd;
+    #if ($titleField.label)&#xd;
+      &lt;dt>&#xd;
+        &lt;label for="$!{options.id}Title">$services.localization.render($titleField.label)&lt;/label>&#xd;
+        &lt;span class="xHint">$!services.localization.render($titleField.hint)&lt;/span>&#xd;
+      &lt;/dt>&#xd;
+      &lt;dd>&#xd;
+        &lt;input type="text" id="$!{options.id}Title" name="$titleField.name" value="$!escapedValue"&#xd;
+          class="location-title-field" placeholder="$!services.localization.render($titleField.placeholder)" />&#xd;
+      &lt;/dd>&#xd;
+    #elseif ($titleField)&#xd;
+      &lt;dt class="hidden">&lt;/dt>&#xd;
+      &lt;dd class="hidden">&#xd;
+        &lt;input type="hidden" name="$titleField.name" value="$!escapedValue"&#xd;
+          class="location-title-field" />&#xd;
+      &lt;/dd>&#xd;
+    #end&#xd;
+    ##&#xd;
+    ## ---------------------------------------------------------------------------------------------------------&#xd;
+    ## Location preview&#xd;
+    ## ---------------------------------------------------------------------------------------------------------&#xd;
+    ##&#xd;
+    &lt;dt>&#xd;
+      &lt;label>$services.localization.render($options.preview.label)&lt;/label>&#xd;
+      &lt;span class="xHint">$services.localization.render($options.preview.hint)&lt;/span>&#xd;
+    &lt;/dt>&#xd;
+    &lt;dd>&#xd;
+      #if ($isDocumentTreeAvailable)&#xd;
+        #documentPickerModal($options)&#xd;
+        #locationPickerActions&#xd;
+      #end&#xd;
+      ## The breadcrumb is updated whenever the user changes the parent page. This causes the breadcrumb element to be&#xd;
+      ## constantly replaced, preventing us from displaying the live validation message after it. In order to overcome&#xd;
+      ## this, we wrap the breadcrumb element in a DIV that remains the same.&#xd;
+      &lt;div class="breadcrumb-container">&#xd;
+        ## Note: We display only the parent reference here. The new document part will be added from JavaScript.&#xd;
+        #hierarchy($options.parent.reference)&#xd;
+      &lt;/div>&#xd;
+      ##&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      ## Location advanced edit&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      ##&#xd;
+      #locationAdvancedEdit($options)&#xd;
+    &lt;/dd>&#xd;
+  &lt;/dl>&#xd;
+#end&#xd;
+&#xd;
+#macro (locationPickerActions)&#xd;
+  &lt;div class="location-actions">&#xd;
+    ## Tree picker toggle&#xd;
+    &lt;a href="#" class="location-action location-action-pick" title="Select a new location">&#xd;
+      $services.icon.renderHTML('chart-organisation')&lt;/a>&#xd;
+    ## Location advanced edit button.&#xd;
+    #if ($isAdvancedUser)&#xd;
+      &lt;a href="#" class="location-action location-action-edit">&#xd;
+        $services.icon.renderHTML('pencil')&#xd;
+      &lt;/a>&#xd;
+    #end&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro (locationAdvancedEdit $options)&#xd;
+  &lt;div class="location-edit#if ($isDocumentTreeAvailable) hidden#end">&#xd;
+    &lt;dl>&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      ## Wiki field&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      #set ($wikiField = $options.wiki)&#xd;
+      #set ($value = $request.getParameter($wikiField.name))&#xd;
+      #if (!$value)&#xd;
+        #set ($value = $wikiField.value)&#xd;
+      #end&#xd;
+      #set ($escapedValue = $escapetool.xml($value))&#xd;
+      #if ($wikiField.label &amp;&amp; $displayWikiFields)&#xd;
+        &lt;dt>&#xd;
+          &lt;label for="$!{options.id}Wiki">$services.localization.render($wikiField.label)&lt;/label>&#xd;
+          &lt;span class="xHint">$!services.localization.render($wikiField.hint)&lt;/span>&#xd;
+        &lt;/dt>&#xd;
+        &lt;dd>&#xd;
+          &lt;select id="$!{options.id}Wiki" name="$wikiField.name" class="location-wiki-field">&#xd;
+            #set ($wikis = $xwiki.wikiNames)&#xd;
+            #foreach ($wiki in $wikis)&#xd;
+              #set ($wikiPrettyName = $services.wiki.getById($wiki).prettyName)&#xd;
+              #if ("$!wikiPrettyName.trim()" == '')&#xd;
+                #set ($wikiPrettyName = $wiki)&#xd;
+              #end&#xd;
+              &lt;option value="$!escapetool.xml($wiki)" #if ($wiki == $value) selected="selected" #end>&#xd;
+                $!escapetool.xml($wikiPrettyName)&#xd;
+              &lt;/option>&#xd;
+            #end&#xd;
+          &lt;/select>&#xd;
+        &lt;/dd>&#xd;
+      #elseif ($wikiField)&#xd;
+        &lt;dt class="hidden">&lt;/dt>&#xd;
+        &lt;dt class="hidden">&#xd;
+          &lt;input type="hidden" name="$wikiField.name" class="location-wiki-field" value="$!escapedValue" />&#xd;
+        &lt;/dt>&#xd;
+      #end&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      ## Parent Reference field&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      ##&#xd;
+      #set ($parentField = $options.parent)&#xd;
+      #set ($value = $request.getParameter($parentField.name))&#xd;
+      #if (!$value)&#xd;
+        #if ("$!parentField.reference" == '')&#xd;
+          ## Default to the current document's space.&#xd;
+          #set ($defaultParentReference = $doc.documentReference.lastSpaceReference)&#xd;
+        #else&#xd;
+          #set ($defaultParentReference = $parentField.reference)&#xd;
+        #end&#xd;
+        ## Make sure to use the local serialized string reference.&#xd;
+        ## Note: If the parent is a wiki reference, an empty value will be set in the input.&#xd;
+        #set ($defaultParentReferenceString = $services.model.serialize($defaultParentReference, 'local'))&#xd;
+        #set ($value = $defaultParentReferenceString)&#xd;
+      #end&#xd;
+      #set ($escapedValue = $escapetool.xml($value))&#xd;
+      &lt;dt>&#xd;
+        &lt;label for="$!{options.id}ParentReference">$services.localization.render($parentField.label)&lt;/label>&#xd;
+        &lt;span class="xHint">$!services.localization.render($parentField.hint)&lt;/span>&#xd;
+      &lt;/dt>&#xd;
+      &lt;dd>&#xd;
+        &lt;input type="text" id="$!{options.id}ParentReference" class="location-parent-field suggestSpaces"&#xd;
+          name="$parentField.name" value="$!escapedValue"&#xd;
+          placeholder="$!services.localization.render($parentField.placeholder)" />&#xd;
+      &lt;/dd>&#xd;
+      ##&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      ## Name field&#xd;
+      ## ---------------------------------------------------------------------------------------------------------&#xd;
+      ##&#xd;
+      #set ($nameField = $options.name)&#xd;
+      #set ($value = $request.getParameter($nameField.name))&#xd;
+      #if (!$value)&#xd;
+        #set ($value = $nameField.value)&#xd;
+      #end&#xd;
+      #set ($escapedValue = $escapetool.xml($value))&#xd;
+      #if ($nameField.label)&#xd;
+        &lt;dt>&#xd;
+          &lt;label for="$!{options.id}Name">$services.localization.render($nameField.label)&lt;/label>&#xd;
+          &lt;span class="xHint">$!services.localization.render($nameField.hint)&lt;/span>&#xd;
+        &lt;/dt>&#xd;
+        &lt;dd>&#xd;
+          &lt;input type="text" id="$!{options.id}Name" name="$nameField.name" class="location-name-field"&#xd;
+            value="$!escapedValue"&#xd;
+            placeholder="$!services.localization.render($nameField.placeholder)" />&#xd;
+        &lt;/dd>&#xd;
+      #elseif ($nameField)&#xd;
+        &lt;dt class="hidden">&lt;/dt>&#xd;
+        &lt;dd class="hidden">&#xd;
+          &lt;input type="hidden" name="$nameField.name" class="location-name-field"&#xd;
+            value="$!escapedValue" />&#xd;
+        &lt;/dd>&#xd;
+      #end&#xd;
+    &lt;/dl>&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro (documentPickerModal $options)&#xd;
+  &lt;div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">&#xd;
+    &lt;div class="modal-dialog" role="document">&#xd;
+      &lt;div class="modal-content">&#xd;
+        &lt;div class="modal-header">&#xd;
+          &lt;button type="button" class="close" data-dismiss="modal" aria-label="Close">&#xd;
+            &lt;span aria-hidden="true">&amp;times;&lt;/span&gt;&#xd;
+          &lt;/button>&#xd;
+          &lt;h4 class="modal-title">$services.localization.render('core.documentPicker.title')&lt;/h4>&#xd;
+        &lt;/div>&#xd;
+        &lt;div class="modal-body">&#xd;
+          #set ($showWikis = $options.wiki &amp;&amp; $displayWikiFields)&#xd;
+          ## If we don't show the wikis then we need to show the root node (the current wiki) in order to be able to&#xd;
+          ## target top level documents (e.g. create a top level document, move a document to the top level, etc.).&#xd;
+          #set ($showRoot = !$showWikis)&#xd;
+          #set ($showTerminalDocuments = false || $options.showTerminalDocuments)&#xd;
+          ## 非管理员看不到所有的空间列表&#xd;
+          #if($hasGlobalAdmin)&#xd;
+            #set($exclusions = [])&#xd;
+          #else&#xd;
+            #set($exclusions = ['document:xwiki:ChoerodonConfig.WebHome', 'document:xwiki:ChoerodonTemplate.WebHome', 'document:xwiki:XWiki.WebHome', 'document:xwiki:Main.WebHome'])&#xd;
+          #end&#xd;
+          #documentTree({&#xd;
+            'class': 'location-tree',&#xd;
+            'finder': true,&#xd;
+            'showAttachments': false,&#xd;
+            'showRoot': $showRoot,&#xd;
+            'showTerminalDocuments': $showTerminalDocuments,&#xd;
+            'showTranslations': false,&#xd;
+            'showWikis': $showWikis,&#xd;
+            'create':'1',&#xd;
+            'exclusions': $exclusions,&#xd;
+            'limit': 999&#xd;
+          })&#xd;
+        &lt;/div>&#xd;
+        &lt;div class="modal-footer">&#xd;
+          &lt;button type="button" class="btn btn-default" data-dismiss="modal">&#xd;
+            $services.localization.render('core.documentPicker.cancel')&#xd;
+          &lt;/button>&#xd;
+          &lt;button type="button" class="btn btn-primary" disabled="disabled">&#xd;
+            $services.localization.render('core.documentPicker.select')&#xd;
+          &lt;/button>&#xd;
+        &lt;/div>&#xd;
+      &lt;/div>&#xd;
+    &lt;/div>&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+</content>
+    </property>
+    <property>
+      <path>locationPicker_macros.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>15</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>c24d91b3-4e9e-475b-bbfa-c147701aa3fe</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>##&#xd;
+## Globals&#xd;
+##&#xd;
+#set ($canView = !$doc.isNew() &amp;&amp; $xwiki.hasAccessLevel('view'))&#xd;
+## Note: Checking only the view right because $hasCreatePage is not yet reliable.&#xd;
+#set ($canCopy = $canView &amp;&amp; !$isGuest)&#xd;
+#set ($canDelete = !$doc.isNew() &amp;&amp; $xwiki.hasAccessLevel('delete'))&#xd;
+#set ($canShare = $canView &amp;&amp; $xwiki.exists('XWiki.SharePage') &amp;&amp; !$isGuest)&#xd;
+#set ($canRename = !$doc.isNew() &amp;&amp; $xwiki.hasAccessLevel('edit') &amp;&amp; !$isGuest)&#xd;
+&#xd;
+##&#xd;
+## Display the main menus&#xd;
+##&#xd;
+#if ($displayContentMenu)&#xd;
+  #template("menus_macros.vm")&#xd;
+  ##&#xd;
+  #set ($topStaticExtensions = [])&#xd;
+  ##&#xd;
+  ## EDIT menu&#xd;
+  ##&#xd;
+  #define ($editMenu)&#xd;
+    #if ($displayEditMenu &amp;&amp; $hasEdit &amp;&amp; !$isReadOnly)&#xd;
+      #displayEditMenu()&#xd;
+    #end&#xd;
+  #end&#xd;
+  #set ($discard = $topStaticExtensions.add( { 'content': "$!editMenu", 'order': 10000}))&#xd;
+  ##&#xd;
+  ## CREATE menu&#xd;
+  ##&#xd;
+  #define ($createMenu)&#xd;
+    ## Display a create menu if the user has the right to create spaces in the current wiki (since the Create UI supports)&#xd;
+    ## creating pages in other places in the hierarchy) or if the user has right to create pages in the current location.&#xd;
+    ## This supports the following 2 use cases for non-admin users:&#xd;
+    ## - I'm on a space where I don't have permissions to create pages but I have the right to create pages in the wiki.&#xd;
+    ##   Example: I'm on my user profile which is located in the XWiki space (in which users don't have Edit rights by&#xd;
+    ##   default). I can see the Create button. See https://jira.xwiki.org/browse/XWIKI-10999&#xd;
+    ## - I don't have the right to create pages in the wiki but I have the right to create pages under a given hierarchy.&#xd;
+    ##   Example: I'm allowed to create pages only in the Sandbox space and I'm there. I can see the Create button.&#xd;
+    ##   See https://jira.xwiki.org/browse/XWIKI-13847&#xd;
+    #if ($displayCreateMenu &amp;&amp; ($hasCreateSpace || $hasCreatePage))&#xd;
+      #displayCreateButton()&#xd;
+    #end&#xd;
+  #end&#xd;
+  #set ($discard = $topStaticExtensions.add( { 'content': "$!createMenu", 'order': 20000}))&#xd;
+  ##&#xd;
+  ## MORE ACTIONS menu&#xd;
+  ##&#xd;
+  #define ($actionsMenu)&#xd;
+    ## Note: Both the admin actions and the more actions menus are now merged into one.&#xd;
+    #if ($displayAdminMenu || $displayMoreActionsMenu)&#xd;
+      #displayOptionsMenu()&#xd;
+      #if ($canView)&#xd;
+        #template("export_modal.vm")&#xd;
+        #exportModal()&#xd;
+      #end&#xd;
+    #end&#xd;
+  #end&#xd;
+  #set ($discard = $topStaticExtensions.add( { 'content': "$!actionsMenu", 'order': 40000}))&#xd;
+  ##&#xd;
+  ## Display all the extensions points, including the static ones&#xd;
+  ##&#xd;
+  #define ($menuContent)&#xd;
+    #displaySecureUIX('org.xwiki.plaftorm.menu.content', $topStaticExtensions)&#xd;
+  #end&#xd;
+  ##&#xd;
+  ## Display the menu&#xd;
+  ##&#xd;
+  &lt;div id="contentmenu" class="pull-right actionmenu">&#xd;
+    $menuContent&#xd;
+&#xd;
+    #if($keyboardShortcutsEnabled)&#xd;
+      #keyboardShortcuts()&#xd;
+    #end&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Display a menu if it has some content.&#xd;
+ *&#xd;
+ * @param $id the id of the menu&#xd;
+ * @param $icon the icon of the menu&#xd;
+ * @param $content the content of the menu&#xd;
+ * @param $titleKey translation key of the link title to use&#xd;
+ * @param $titleAsLabel if the link title should also be used as link label&#xd;
+ * @param $actionUrl the link of the top menu entry. If not provided, the top menu entry will act as an activator for the dropdown&#xd;
+ *&#xd;
+ * @since 7.3M2&#xd;
+ *#&#xd;
+#macro(displayMenu $id $icon $menuContent $titleKey $titleAsLabel $actionUrl)&#xd;
+  &lt;div class="btn-group" id="$id">&#xd;
+    &lt;a class="btn btn-default #if ("$!actionUrl" == '')dropdown-toggle#end" title="$services.localization.render($titleKey)"&#xd;
+    #if ("$!actionUrl" != '')&#xd;
+      href="$actionUrl"&#xd;
+    #else&#xd;
+      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&#xd;
+    #end&#xd;
+    role="button">&#xd;
+      $services.icon.renderHTML($icon)&#xd;
+      #if ($titleAsLabel)&#xd;
+        &lt;span class="btn-label">$services.localization.render($titleKey)&lt;/span>&#xd;
+      #end&#xd;
+    &lt;/a>&#xd;
+    #if ($stringtool.isNotBlank("$!menuContent"))&#xd;
+      #if ("$!actionUrl" != '')&#xd;
+        &lt;button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&#xd;
+          &lt;span class="icon icon-baseline-arrow_drop_down">&lt;/span>&#xd;
+          &lt;span class="sr-only">$services.localization.render('core.menu.toggleDropdown')&lt;/span>&#xd;
+        &lt;/button>&#xd;
+      #end&#xd;
+      &lt;ul class="dropdown-menu #if ("$!actionUrl" == '')dropdown-menu-right#end">&#xd;
+        $menuContent&#xd;
+      &lt;/ul>&#xd;
+    #end&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Display UI extensions if the author of the UIX has the ADMIN right on the current wiki&#xd;
+ *&#xd;
+ * @param $name the name of the UI extension to display&#xd;
+ * @param $staticExtensions (optional) an array of static extensions to display along with the regular uix.&#xd;
+ *         e.g. [ { 'content': 'someHTMLcontent', 'order': 20000, 'separator': true } ]&#xd;
+ * @param $count out parameter containing the number of entries displayed in the menu&#xd;
+ * @since 7.3M1&#xd;
+ *&#xd;
+ * TODO: replace this macro to stop having "static extensions" but a mechanism to have real UI Extensions in templates.&#xd;
+ *#&#xd;
+#macro(displaySecureUIX $name $staticExtensions $count)&#xd;
+  #set ($count = 0)&#xd;
+  ## Add the static UIX to the list of UIX to display&#xd;
+  #set ($extensions = [])&#xd;
+  #set ($discard = $extensions.addAll($staticExtensions))&#xd;
+  ## Add the dynamic UIX to the list of of UIX to display&#xd;
+  #foreach($uix in $services.uix.getExtensions($name))&#xd;
+    #if ($services.security.authorization.hasAccess('admin', $uix.authorReference, $services.wiki.currentWikiDescriptor.reference))&#xd;
+      #set ($separator = ("$!uix.getParameters().separator" == 'true'))&#xd;
+      #set ($order = $mathtool.toInteger($uix.getParameters().order))&#xd;
+      #if ("$!order" == '')&#xd;
+        ## Fallback for incomplete/invalid extension orders to avoid breaking the display.&#xd;
+        #set ($order = 0)&#xd;
+      #end&#xd;
+      #set ($uixMap = { 'content'  : $services.rendering.render($uix.execute(), 'html/5.0'),&#xd;
+                        'order'    : $order,&#xd;
+                        'separator': $separator})&#xd;
+      #set ($discard = $extensions.add($uixMap))&#xd;
+    #end&#xd;
+  #end&#xd;
+  ## Display them, sorted by order&#xd;
+  #set ($canHaveMenuSeparator = false)&#xd;
+  #foreach($uix in $sorttool.sort($extensions, 'order'))&#xd;
+    ## Maybe display a menu separator&#xd;
+    #if ("$!uix.separator" == 'true' &amp;&amp; $canHaveMenuSeparator)&#xd;
+      #submenuseparator()&#xd;
+      #set ($canHaveMenuSeparator = false)&#xd;
+    #end&#xd;
+    #set ($content = $uix.content.toString())&#xd;
+    $content&#xd;
+    #if ($stringtool.isNotBlank($content))&#xd;
+      #set ($canHaveMenuSeparator = true)&#xd;
+      #set ($count = $count + 1)&#xd;
+    #end&#xd;
+  #end&#xd;
+  #setVariable("$count", $count)&#xd;
+#end&#xd;
+&#xd;
+#macro (submenuheader $titleKey)&#xd;
+  &lt;li class="dropdown-header">$services.localization.render($titleKey)&lt;/li>&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Display the create button&#xd;
+ *#&#xd;
+#macro(displayCreateButton)&#xd;
+  #displayMenu('tmCreate', 'add', '', 'core.menu.create', true, $doc.getURL('create'))&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Display the edit menu&#xd;
+ *#&#xd;
+#macro(displayEditMenu)&#xd;
+  #set ($defaultEditURL = $doc.getURL($doc.getDefaultEditMode(), $!languageparams))&#xd;
+  #set ($staticExtensions = [])&#xd;
+  #if ($isAdvancedUser)&#xd;
+    ##&#xd;
+    ## WYSIWYG&#xd;
+    ##&#xd;
+    ## Check if the WYSIWYG supports the current document's syntax and if so add a menu entry to edit the current&#xd;
+    ## document with the WYSIWYG editor.&#xd;
+    #define ($editWYSIWYG)&#xd;
+      #if ($services.wysiwyg.isSyntaxSupported($tdoc.syntax.toIdString()))&#xd;
+        #submenuitem($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;amp;#{end}editor=wysiwyg") $services.localization.render('core.menu.edit.wysiwyg') 'tmEditWysiwyg', '', 'pencil')&#xd;
+      #end&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $editWYSIWYG, 'order': 20000, 'separator': true}))&#xd;
+    ##&#xd;
+    ## WIKI EDITOR&#xd;
+    ##&#xd;
+    #define ($wikiEditor)&#xd;
+      #submenuitem($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;amp;#{end}editor=wiki") $services.localization.render('core.menu.edit.wiki') 'tmEditWiki', '', 'wrench')&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $wikiEditor, 'order': 30000}))&#xd;
+    ##&#xd;
+    ## INLINE EDITOR&#xd;
+    ##&#xd;
+    #define ($inlineEditor)&#xd;
+      #submenuitem($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;amp;#{end}editor=inline") $services.localization.render('core.menu.edit.inline') 'tmEditInline', '', 'list')&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $inlineEditor, 'order': 40000}))&#xd;
+    ##&#xd;
+    ## RIGHTS&#xd;
+    ##&#xd;
+    ## The 'rights' editor is already present in the page administration. So we display it here only if we are not in &#xd;
+    ## a terminal document or if the user has not the admin right on the space (because right now the page &#xd;
+    ## administration is still combined with the space administration).&#xd;
+    ## TODO: create a proprer 'page administration' and stop adding a right editor in this menu&#xd;
+    #define ($rightsEditor)&#xd;
+      #if ($doc.name != 'WebHome' || !$hasSpaceAdmin || !$isAdminAppInstalled)&#xd;
+        #submenuitem($doc.getURL('edit', 'editor=rights') $services.localization.render('core.menu.edit.rights') 'tmEditRights', '', 'lock')&#xd;
+      #end&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $rightsEditor, 'order': 50000, 'separator': true}))&#xd;
+    ##&#xd;
+    ## OBJECTS EDITOR&#xd;
+    ##&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': "#submenuitem($doc.getURL('edit', 'editor=object') $services.localization.render('core.menu.edit.object') 'tmEditObject', '', 'drive')", 'order': 60000}))&#xd;
+    ##&#xd;
+    ## CLASS EDITOR&#xd;
+    ##&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': "#submenuitem($doc.getURL('edit', 'editor=class') $services.localization.render('core.menu.edit.class') 'tmEditClass', '', 'drive')", 'order': 70000}))&#xd;
+  #end&#xd;
+  ##&#xd;
+  ## Display all the extensions points, including the static ones&#xd;
+  ##&#xd;
+  #define ($menuContent)&#xd;
+    #displaySecureUIX('org.xwiki.plaftorm.editactions', $staticExtensions)&#xd;
+  #end&#xd;
+  #displayMenu('tmEdit', 'pencil', $menuContent, 'core.menu.edit', true, $defaultEditURL)&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Display admin actions&#xd;
+ *#&#xd;
+#macro(displayAdminActions)&#xd;
+  #set ($staticExtensions = [])&#xd;
+  ##&#xd;
+  ## COPY&#xd;
+  ##&#xd;
+  #if ($canCopy)&#xd;
+    #define ($copy)&#xd;
+      #submenuitem($xwiki.getURL($doc.documentReference, 'view', 'xpage=copy') $services.localization.render('core.menu.copy') 'tmActionCopy', '' 'copy')&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $copy, 'order': 20000}))&#xd;
+  #end&#xd;
+&#xd;
+  ##&#xd;
+  ## COPY&#xd;
+  ##&#xd;
+  #if ($canRename &amp;&amp; $doc.getObject("AppWithinMinutes.LiveTableClass"))&#xd;
+    #define ($spaceRename)&#xd;
+&#xd;
+        &lt;li class="">&lt;a style="cursor: pointer;" id="spaceRename" title="重命名">重命名&lt;/a>&lt;/li>&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $spaceRename, 'order': 20000}))&#xd;
+  #end&#xd;
+&#xd;
+  ##&#xd;
+  ## DELETE / RENAME&#xd;
+  ##&#xd;
+  #if ($canDelete)&#xd;
+    #define ($rename)&#xd;
+      #submenuitem($xwiki.getURL($doc.documentReference, 'view', 'xpage=rename&amp;amp;step=1') $services.localization.render('core.menu.rename') 'tmActionRename', '' 'move')&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $rename, 'order': 30000}))&#xd;
+    #define ($delete)&#xd;
+      #submenuitem($xwiki.getURL($doc.documentReference, 'delete', $!languageparams) $services.localization.render('core.menu.delete') 'tmActionDelete', '', 'remove')&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $delete, 'order': 40000}))&#xd;
+  #end&#xd;
+  ##&#xd;
+  ## Display all the extensions points, including the static ones&#xd;
+  ##&#xd;
+  #displaySecureUIX('org.xwiki.plaftorm.adminactions', $staticExtensions)&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Display "more actions" entries&#xd;
+ *#&#xd;
+#macro(displayMoreActions)&#xd;
+  #set ($staticExtensions = [])&#xd;
+  ##&#xd;
+  ## EXPORT / PRINT / SOURCE / SHARE&#xd;
+  ##&#xd;
+  #if ($canView)&#xd;
+    ##&#xd;
+    ## EXPORT&#xd;
+    ##&#xd;
+    #define ($export)&#xd;
+      #submenuitem('' $services.localization.render('core.menu.export') 'tmExport', '', 'download', 'data-toggle="modal" data-target="#exportModal"')&#xd;
+    #end&#xd;
+    #set ($discard = $staticExtensions.add( { 'content': $export, 'order': 80000}))&#xd;
+    ##&#xd;
+    ## PRINT&#xd;
+    ##&#xd;
+    ##define ($print)&#xd;
+      ##submenuitem($doc.getURL('view', "xpage=print&amp;amp;$!escapetool.html($request.getQueryString())") $services.localization.render('core.menu.preview') 'tmPrintPreview', '', 'print')&#xd;
+    ##end&#xd;
+    ##set ($discard = $staticExtensions.add( { 'content': $print, 'order': 90000}))&#xd;
+    ##&#xd;
+    ## VIEW SOURCE&#xd;
+    ##&#xd;
+    ##define ($viewSource)&#xd;
+      ##if ("$!request.rev" != '')&#xd;
+        ##set ($revisionParameter = "&amp;rev=$request.rev")&#xd;
+      ##end&#xd;
+      ##submenuitem($doc.getURL('view', "viewer=code$!{revisionParameter}") $services.localization.render('core.menu.view.source') 'tmViewSource', '', 'search')&#xd;
+    ##end&#xd;
+    ##set ($discard = $staticExtensions.add( { 'content': $viewSource, 'order': 100000}))&#xd;
+    ##&#xd;
+    ## SHARE BY EMAIL&#xd;
+    ##&#xd;
+    #if ($canShare)&#xd;
+      #define ($share)&#xd;
+        #submenuitem($xwiki.getURL($doc.documentReference, 'view', 'viewer=share') $services.localization.render('core.menu.share') 'tmActionShare', '', 'envelope')&#xd;
+        #userPicker_import()&#xd;
+      #end&#xd;
+      #set ($discard = $staticExtensions.add( { 'content': $share, 'order': 110000}))&#xd;
+      $xwiki.jsx.use('XWiki.SharePage')&#xd;
+      $xwiki.ssx.use('XWiki.SharePage')&#xd;
+    #end&#xd;
+  #end&#xd;
+  ##&#xd;
+  ## Display all the extensions points, including the static ones&#xd;
+  ##&#xd;
+  #displaySecureUIX('org.xwiki.plaftorm.moreoptions', $staticExtensions)&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Display options menu&#xd;
+ *#&#xd;
+#macro(displayOptionsMenu)&#xd;
+  ##&#xd;
+  ## Display all the extensions points, including the static ones&#xd;
+  ##&#xd;
+  #define ($menuContent)&#xd;
+    #set ($needsSeparator = false)&#xd;
+    ## Admin actions UIXP&#xd;
+    #if ($displayAdminMenu)&#xd;
+      #set ($adminActions = "#displayAdminActions()")&#xd;
+      #if ($stringtool.isNotBlank("$!adminActions"))&#xd;
+##        #submenuheader('core.menu.actions.main')&#xd;
+        $adminActions&#xd;
+        #set ($needsSeparator = true)&#xd;
+      #end&#xd;
+    #end&#xd;
+    ## More actions UIXP&#xd;
+    #if ($displayMoreActionsMenu)&#xd;
+      #set ($moreActions = "#displayMoreActions()")&#xd;
+      #if ($stringtool.isNotBlank("$!moreActions"))&#xd;
+        #if ($needsSeparator)&#xd;
+          #submenuseparator()&#xd;
+        #end&#xd;
+##        #submenuheader('core.menu.actions.others')&#xd;
+        $moreActions&#xd;
+        #set ($needsSeparator = true)&#xd;
+      #end&#xd;
+      ## ----------------------------&#xd;
+      ## Display the shortcuts&#xd;
+      ## ----------------------------&#xd;
+      #if($xwiki.hasAccessLevel('view') &amp;&amp; $displayShortcuts)&#xd;
+        #set ($viewersContent = "#template('shortcuts.vm')")&#xd;
+        ## Only show the Viewers section if it contains something to display.&#xd;
+        #if ($stringtool.isNotBlank("$!viewersContent"))&#xd;
+          ## Only display a separator if at least one menu entry has been displayed before&#xd;
+          #if ($needsSeparator)&#xd;
+            #submenuseparator()&#xd;
+          #end&#xd;
+##          #submenuheader('core.menu.actions.viewers')&#xd;
+          $viewersContent&#xd;
+          #set ($needsSeparator = true)&#xd;
+        #end&#xd;
+      #end&#xd;
+    #end&#xd;
+  #end&#xd;
+  ##&#xd;
+  ## Display the menu if it has some content&#xd;
+  ##&#xd;
+  #displayMenu('tmMoreActions', 'more-vertical', $menuContent, 'core.menu.actions.label', true)&#xd;
+#end&#xd;
+&#xd;
+#**&#xd;
+ * Add keyboard shortcuts&#xd;
+ *#&#xd;
+#macro(keyboardShortcuts)&#xd;
+  &lt;script type="text/javascript">&#xd;
+  //&lt;![CDATA[&#xd;
+    #if ($hasEdit &amp;&amp; !$isReadOnly)&#xd;
+      shortcut.add("$services.localization.render('core.shortcuts.view.edit')",function() { location.href=$('tmEdit').down('a').href; }, { 'disable_in_input':true });&#xd;
+      #if($isAdvancedUser)&#xd;
+        shortcut.add("$services.localization.render('core.shortcuts.view.wiki')",function() { location.href=$('tmEditWiki').href; }, { 'disable_in_input':true });&#xd;
+        shortcut.add("$services.localization.render('core.shortcuts.view.wysiwyg')",function() { location.href=$('tmEditWysiwyg').href; }, { 'disable_in_input':true });&#xd;
+        shortcut.add("$services.localization.render('core.shortcuts.view.inline')",function() { location.href=$('tmEditInline').href; }, { 'disable_in_input':true });&#xd;
+        shortcut.add("$services.localization.render('core.shortcuts.view.rights')",function() { var editRights = $('tmEditRights'); location.href= editRights ? editRights.href : "$xwiki.getURL($spacePreferencesDocumentReference, 'admin', 'category=1')";}, { 'disable_in_input':true });&#xd;
+        shortcut.add("$services.localization.render('core.shortcuts.view.objects')",function() { location.href=$('tmEditObject').href; }, { 'disable_in_input':true });&#xd;
+        #if($hasAdmin)&#xd;
+          shortcut.add("$services.localization.render('core.shortcuts.view.class')",function() { location.href=$('tmEditClass').href; }, { 'disable_in_input':true });&#xd;
+        #end&#xd;
+      #end&#xd;
+    #end&#xd;
+    #if ($canDelete &amp;&amp; $displayAdminMenu)&#xd;
+      shortcut.add("$services.localization.render('core.shortcuts.view.delete')",function() { location.href=$('tmActionDelete').href; }, { 'disable_in_input':true });&#xd;
+      ##shortcut.add("$services.localization.render('core.shortcuts.view.rename')",function() { location.href=$('tmActionRename').href; }, { 'disable_in_input':true });&#xd;
+    #end&#xd;
+    ##if ($canView &amp;&amp; $displayMoreActionsMenu)&#xd;
+      ##shortcut.add("$services.localization.render('core.shortcuts.view.code')", function() { location.href = $('tmViewSource').href; }, { 'disable_in_input': true });&#xd;
+    ##end&#xd;
+  //]]&gt;&#xd;
+  &lt;/script>&#xd;
+#end</content>
+    </property>
+    <property>
+      <path>menus_content.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>17</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>7f22d6ff-75ad-49c8-a6cf-54b20b0e9462</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>###&#xd;
+### 修改复制按钮样式&#xd;
+### Copy document template&#xd;
+###&#xd;
+&#xd;
+#macro (displayCopyForm)&#xd;
+&lt;script>&#xd;
+    function copyPage() {&#xd;
+        jQuery('#c7n-copy-form-button .first-button').css("display","");&#xd;
+        jQuery('#c7n-copy-form-button .second-button').css("display","none");&#xd;
+        jQuery('#c7n-copy-form-button #waite').css("display","");&#xd;
+        jQuery('#c7n-copy-cancel').removeAttr('href');&#xd;
+        jQuery('#c7n-copy-cancel').removeAttr('onclick');&#xd;
+        jQuery('#c7n-copy-cancel').css("cursor","not-allowed");&#xd;
+        var formData = new FormData(document.getElementById("copy"));&#xd;
+        var targetLocal = formData.get("targetSpaceName")+"."+formData.get("targetPageName")&#xd;
+        document.getElementById("page-local").innerText = targetLocal;&#xd;
+        submitCopy(formData);&#xd;
+    }&#xd;
+&#xd;
+    function submitCopy(data) {&#xd;
+        jQuery.ajax({&#xd;
+            type: "POST",&#xd;
+            contentType: false,&#xd;
+            processData: false,&#xd;
+            url: "$xwiki.relativeRequestURL",&#xd;
+            data: data,&#xd;
+            success: function (data, textStatus, request) {&#xd;
+                if(request.getResponseHeader("exists")){&#xd;
+                    jQuery("#c7n-copy-warning").show();&#xd;
+                }else {&#xd;
+                    var targetUrl = request.getResponseHeader("targetUrl");&#xd;
+                    var stateUrl = '$xwiki.getURL($targetDocReference,"get")';&#xd;
+                    getState(stateUrl,request.getResponseHeader("copyId"),targetUrl)&#xd;
+                }&#xd;
+            }&#xd;
+        });&#xd;
+    }&#xd;
+&#xd;
+    function submitOverrite() {&#xd;
+        var formData = new FormData(document.getElementById("copy"));&#xd;
+        formData.append("overwrite",true);&#xd;
+        submitCopy(formData);&#xd;
+    }&#xd;
+    function cancelOverite() {&#xd;
+        jQuery("#c7n-copy-warning").hide();&#xd;
+        jQuery('#c7n-copy-form-button .first-button').css("display","none");&#xd;
+        jQuery('#c7n-copy-form-button .second-button').css("display","");&#xd;
+        jQuery('#c7n-copy-form-button #waite').css("display","none");&#xd;
+        jQuery('#c7n-copy-cancel').css("cursor","pointer");&#xd;
+        jQuery('#c7n-copy-cancel').attr("href",'$doc.getURL()');&#xd;
+        jQuery('#c7n-copy-cancel').addAttr('onclick');&#xd;
+&#xd;
+    }&#xd;
+&#xd;
+&#xd;
+    function getState(stateUrl,copyId,targetUrl) {&#xd;
+        jQuery.ajax({&#xd;
+            url: stateUrl,&#xd;
+            type: "get",&#xd;
+            data: {xpage: "copy", copyId: copyId},&#xd;
+            async: false,&#xd;
+            success: function (data) {&#xd;
+                if (data.state == "FINISHED") {&#xd;
+                    window.location.href = targetUrl;&#xd;
+                } else if (data.state == "RUNNING") {&#xd;
+                    setTimeout(function () {&#xd;
+                        getState(stateUrl,copyId,targetUrl);&#xd;
+                    },1000)&#xd;
+                } else {&#xd;
+                    console.log("error")&#xd;
+                }&#xd;
+            }&#xd;
+        });&#xd;
+    }&#xd;
+&lt;/script>&#xd;
+&lt;form action="#" id="copy" class="xform" onsubmit="return false">&#xd;
+    &lt;div class="hidden">&#xd;
+    ## CSRF prevention&#xd;
+        &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />&#xd;
+        &lt;input type="hidden" name="xpage" value="copy" />&#xd;
+    ## Perform the copy asynchronously.&#xd;
+        &lt;input type="hidden" name="async" value="true" />&#xd;
+    &lt;/div>&#xd;
+    &lt;div class="row">&#xd;
+        &lt;div class="col-xs-12 col-lg-6">&#xd;
+            &lt;dl>&#xd;
+            ##------------&#xd;
+          ## Source Page&#xd;
+          ##------------&#xd;
+          #displaySourceDocument({&#xd;
+                'label': 'core.copy.source.label',&#xd;
+                'hint': 'core.copy.source.hint'&#xd;
+            })&#xd;
+          ##------------------&#xd;
+          ## Translation field&#xd;
+          ##------------------&#xd;
+          #displayTranslationSelector({&#xd;
+                'hint': 'core.copy.language.hint'&#xd;
+            })&#xd;
+          ##---------------&#xd;
+          ## Children field&#xd;
+          ##---------------&#xd;
+          #displayChildrenCheckbox({&#xd;
+                'label': 'core.copy.children.label',&#xd;
+                'hint': 'core.copy.children.hint'&#xd;
+            })&#xd;
+            &lt;/dl>&#xd;
+        &lt;/div>&#xd;
+        &lt;div class="col-xs-12 col-lg-6">&#xd;
+        ##------------&#xd;
+        ## Target Page&#xd;
+        ##------------&#xd;
+        #template('locationPicker_macros.vm')&#xd;
+        #set ($parentReference = $doc.documentReference.parent)&#xd;
+        #set ($name = $doc.name)&#xd;
+        #if ($doc.name == $defaultDocumentName)&#xd;
+            #set ($name = $parentReference.name)&#xd;
+            #set ($parentReference = $parentReference.parent)&#xd;
+        #end&#xd;
+        #locationPicker({&#xd;
+            'id': 'target',&#xd;
+            'title': {&#xd;
+            'label': 'core.copy.target.title.label',&#xd;
+            'hint': 'core.copy.target.title.hint',&#xd;
+            'name': 'targetPageTitle',&#xd;
+            'value': $doc.plainTitle,&#xd;
+            'placeholder': 'core.create.name.placeholder'&#xd;
+        },&#xd;
+            'preview': {&#xd;
+            'label': 'core.copy.target.location.label',&#xd;
+            'hint': 'core.copy.target.location.hint'&#xd;
+        },&#xd;
+            'wiki': {&#xd;
+            'label': 'core.copy.target.wiki.label',&#xd;
+            'hint': 'core.copy.target.wiki.hint',&#xd;
+            'name': 'targetWikiName',&#xd;
+            'value': $doc.wiki&#xd;
+        },&#xd;
+            'parent': {&#xd;
+            'label': 'core.copy.target.parent.label',&#xd;
+            'hint': 'core.copy.target.parent.hint',&#xd;
+            'name': 'targetSpaceName',&#xd;
+            'reference': $parentReference,&#xd;
+            'placeholder': 'core.create.spaceReference.placeholder'&#xd;
+        },&#xd;
+            'name': {&#xd;
+            'label': 'core.copy.target.name.label',&#xd;
+            'hint': 'core.copy.target.name.hint',&#xd;
+            'name': 'targetPageName',&#xd;
+            'value': $name,&#xd;
+            'placeholder': 'core.create.name.placeholder'&#xd;
+        }&#xd;
+        })&#xd;
+        ## -------------------------------------&#xd;
+        ## Target Page Type (for advanced users)&#xd;
+        ## -------------------------------------&#xd;
+        #maybeDisplayTerminalCheckbox({&#xd;
+            'label': 'core.copy.target.terminal.label',&#xd;
+            'hint': 'core.copy.target.terminal.hint'&#xd;
+        })&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+    &lt;div id="c7n-copy-form-button" class="buttons">&#xd;
+      &lt;span class="buttonwrapper">&#xd;
+          &lt;div id="waite" style="height: 18px;width: 18px;position: absolute;margin: 20px 0 0 6px;display: none">&#xd;
+            &lt;svg viewBox="0 0 50 50" style="stroke: #fff;">&#xd;
+                &lt;circle cx="25" cy="25" r="20" fill="none" stroke="#3367d6" stroke-width="4" style="&#xd;
+                      -webkit-animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      animation: ant-progress-loading 1.4s ease-in-out infinite;&#xd;
+                      stroke-dasharray: 80px 200px;&#xd;
+                      stroke-dashoffset: 0;&#xd;
+                      stroke: #fff;&#xd;
+                      ">&lt;/circle>&#xd;
+            &lt;/svg>&#xd;
+        &lt;/div>&#xd;
+        &lt;input type="submit" value="$services.localization.render('core.copy.submit')" class="button first-button" style="width: 67px;text-align: right;display: none;" />&#xd;
+          &lt;input type="button" value="$services.localization.render('core.copy.submit')" class="button second-button" onclick="copyPage()"/>&#xd;
+      &lt;/span>&#xd;
+        &lt;span class="buttonwrapper">&#xd;
+        &lt;a id="c7n-copy-cancel" class="secondary button" href="$doc.getURL()">$services.localization.render('core.copy.cancel')&lt;/a>&#xd;
+      &lt;/span>&#xd;
+    &lt;/div>&#xd;
+&lt;/form>&#xd;
+&lt;div id="c7n-copy-warning" hidden>&#xd;
+    &lt;div id="c7n-copy-warning-title" style="padding: 24px 0 20px 24px;">&#xd;
+        &lt;span>复制警告&lt;/span>&#xd;
+    &lt;/div>&#xd;
+    &lt;div id="c7n-copy-warning-content" style="padding-left: 24px;">&#xd;
+        &lt;span>页面&lt;span id="page-local">&lt;/span>已存在。您确定要覆盖它（它的所有内容都会丢失）吗？&lt;/span>&#xd;
+    &lt;/div>&#xd;
+    &lt;div id="c7n-copy-warning-button" >&#xd;
+        &lt;div class="buttons">&#xd;
+            &lt;span class="buttonwrapper">&#xd;
+              &lt;input type="button" value="取消" class="secondary button cancel" onclick="cancelOverite()">&#xd;
+           &lt;/span>&#xd;
+            &lt;span class="buttonwrapper">&#xd;
+              &lt;input type="button" value="覆盖" class="button submit" onclick="submitOverrite()">&#xd;
+          &lt;/span>&#xd;
+&#xd;
+        &lt;/div>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+&#xd;
+#macro (handleCopyRequest)&#xd;
+&lt;div class="xcontent">&#xd;
+    #set ($titleToDisplay = $services.localization.render('core.copy.title',&#xd;
+    [$escapetool.xml($doc.plainTitle), $doc.getURL()]))&#xd;
+    #template('contentheader.vm')&#xd;
+##------------------------------------------------&#xd;
+## Get source reference&#xd;
+##------------------------------------------------&#xd;
+    #set ($sourcewiki = "$!request.sourceWikiName")&#xd;
+    #set ($sourcespace = "$!request.sourceSpaceName")&#xd;
+    #set ($sourcepage = "$!request.sourcePageName")&#xd;
+##------------------------------------------------&#xd;
+## Get target reference&#xd;
+##------------------------------------------------&#xd;
+    #set ($targetwiki = "$!request.targetWikiName")&#xd;
+    #set ($targetspace = "$!request.targetSpaceName")&#xd;
+    #set ($targetpage = "$!request.targetPageName")&#xd;
+## Determine if the target document should be terminal.&#xd;
+    #isTargetDocumentTerminal($sourcepage)&#xd;
+##------------------------------------------------&#xd;
+## Get which translated pages we need to copy&#xd;
+##------------------------------------------------&#xd;
+    #if ("$!request.language" != "" &amp;&amp; "$!{request.language}" != 'ALL')&#xd;
+        #set ($language = "$!{request.language}")&#xd;
+        #set ($escapedLanguage = "$!{escapetool.xml($request.language)}")&#xd;
+    #end&#xd;
+##------------------------------------------------&#xd;
+## Determine if the child pages should be copied&#xd;
+##------------------------------------------------&#xd;
+## We can't copy the children if the target page is terminal.&#xd;
+    #set ($deep = $request.deep == 'true' &amp;&amp; !$terminal &amp;&amp; !$language)&#xd;
+##-------------------------------------------------------------&#xd;
+## Decide whether to perform the copy or display the copy form&#xd;
+##-------------------------------------------------------------&#xd;
+    #if ($sourcespace != '' &amp;&amp; $sourcepage != '' &amp;&amp; ($targetspace != '' || !$terminal) &amp;&amp; $targetpage != ''&#xd;
+    &amp;&amp; $services.csrf.isTokenValid($request.form_token))&#xd;
+        #set ($locale = $services.localization.toLocale($language))&#xd;
+    ## We use terminal=true here because $sourcepage has the real page name (e.g. WebHome)&#xd;
+        #getNestedDocumentReference($sourcewiki $sourcespace $sourcepage $locale true $sourceDocReference)&#xd;
+        #getNestedDocumentReference($targetwiki $targetspace $targetpage $locale $terminal $targetDocReference)&#xd;
+    ##-----------------------------------------------------------&#xd;
+    ## If the target document already exists and is not a redirect placeholder, warn the user.&#xd;
+    ##-----------------------------------------------------------&#xd;
+        #if ($xwiki.exists($targetDocReference) &amp;&amp; "$!request.overwrite" != 'true'&#xd;
+        &amp;&amp; !$xwiki.getDocument($targetDocReference).getObject('XWiki.RedirectClass'))&#xd;
+            #warning($services.localization.render('core.copy.alreadyExists',&#xd;
+            [$services.model.serialize($targetDocReference, 'compactwiki')]))&#xd;
+&#xd;
+            &lt;form action="$xwiki.relativeRequestURL" id="copy" class="xform third" method="post">&#xd;
+            ## The field values are specified in the URL. We use POST to append the "overwrite" value.&#xd;
+                &lt;input type="hidden" name="overwrite" value="true" />&#xd;
+                &lt;div class="buttons">&#xd;
+            &lt;span class="buttonwrapper">&#xd;
+              &lt;input type="submit" value="$services.localization.render('core.copy.submit')" class="button"/>&#xd;
+            &lt;/span>&#xd;
+                    &lt;span class="buttonwrapper">&#xd;
+              &lt;a class="secondary button" href="$doc.getURL('view', 'xpage=copy')">&#xd;
+                  $services.localization.render('core.copy.changeTarget')&#xd;
+              &lt;/a>&#xd;
+            &lt;/span>&#xd;
+                    &lt;span class="buttonwrapper">&#xd;
+              &lt;a class="secondary button" href="$doc.getURL()">$services.localization.render('core.copy.cancel')&lt;/a>&#xd;
+            &lt;/span>&#xd;
+                &lt;/div>&#xd;
+            &lt;/form>&#xd;
+            $response.addHeader("exists", $xwiki.exists($targetDocReference))&#xd;
+        #else&#xd;
+            #set ($copyAsRequest = $services.refactoring.createCopyAsRequest($sourceDocReference, $targetDocReference))&#xd;
+            #set ($discard = $copyAsRequest.setDeep($deep))&#xd;
+            #maybeUpdateTitleAfterCopy($copyAsRequest $sourceDocReference 'targetPageTitle')&#xd;
+            #set ($copyAsJob = $services.refactoring.copyAs($copyAsRequest))&#xd;
+            #if ($request.async != 'true')&#xd;
+                #try()&#xd;
+                #set ($discard = $copyAsJob.join())&#xd;
+            #end&#xd;
+&#xd;
+        #end&#xd;
+        $response.addHeader("copyId", $copyAsRequest.id.get($mathtool.sub($copyAsRequest.id.size(), 1)))&#xd;
+    ##        $response.sendRedirect($doc.getURL($xcontext.action, $escapetool.url({&#xd;
+    ##          'xpage': 'copy',&#xd;
+    ##          'copyId': $copyAsRequest.id.get($mathtool.sub($copyAsRequest.id.size(), 1))&#xd;
+    ##        })))&#xd;
+&#xd;
+    ##        $response.getOutputStream().println($copyAsRequest.id.get($mathtool.sub($copyAsRequest.id.size(), 1)))&#xd;
+    ##        $response.getOutputStream().println($response.class.name) $xwiki.getURL($targetDocReference)&#xd;
+&#xd;
+&#xd;
+        $response.addHeader("targetUrl", $xwiki.getURL($targetDocReference,"view"))&#xd;
+    ##$jsontool.serialize($copyAsRequest.id.get($mathtool.sub($copyAsRequest.id.size(), 1)))&#xd;
+    #end&#xd;
+#else&#xd;
+    #displayCopyForm&#xd;
+#end&#xd;
+&lt;/div>&#xd;
+&lt;div class="clearfloats">&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro (displayCopyJobFinishedMessage $copyJobStatus)&#xd;
+    #displayRefactoringJobFinishedMessage($copyJobStatus 'core.rename.status.success' 'core.rename.status.failure')&#xd;
+#end&#xd;
+&#xd;
+#macro (outputCopyJobStatusJSON $copyJobStatus)&#xd;
+    #getJobStatusJSON($copyJobStatus $json)&#xd;
+    #set ($json.message = "#displayCopyJobFinishedMessage($copyJobStatus)")&#xd;
+    $response.setContentType('application/json')&#xd;
+    $jsontool.serialize($json)&#xd;
+#end&#xd;
+&#xd;
+#macro (displayCopyJobRequest $copyJobRequest)&#xd;
+&lt;div class="refactoring-job-request row xform">&#xd;
+    &lt;div class="col-xs-12 col-lg-6">&#xd;
+        &lt;dl>&#xd;
+            #displayLocations('core.copy.source.label' 'core.copy.source.hint' $copyJobRequest.entityReferences)&#xd;
+        #displayBooleanConfigParam('core.rename.children.label', 'core.copy.children.hintWithoutParams'&#xd;
+            $copyJobRequest.isDeep())&#xd;
+        &lt;/dl>&#xd;
+    &lt;/div>&#xd;
+    &lt;div class="col-xs-12 col-lg-6">&#xd;
+        &lt;dl>&#xd;
+            #displayLocations('core.copy.target.location.label' 'core.copy.target.location.hint'&#xd;
+            [$copyJobRequest.destination])&#xd;
+        #if ($isAdvancedUser || $isSuperAdmin)&#xd;
+            #set ($defaultDocumentName = $services.model.getEntityReference('DOCUMENT', 'default').name)&#xd;
+            #set ($terminal = $copyJobRequest.destination.type == 'DOCUMENT'&#xd;
+            &amp;&amp; $copyJobRequest.destination.name != $defaultDocumentName)&#xd;
+            #displayBooleanConfigParam('core.copy.target.terminal.label', 'core.copy.target.terminal.hint' $terminal)&#xd;
+        #end&#xd;
+        &lt;/dl>&#xd;
+    &lt;/div>&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro (displayCopyJobStatus $copyJobStatus)&#xd;
+    #set ($discard = $xwiki.jsfx.use('uicomponents/job/job.js', true))&#xd;
+    #set ($copyJobState = $copyJobStatus.state)&#xd;
+    #set ($finished = $copyJobState == 'FINISHED')&#xd;
+    #set ($copyJobRequest = $copyJobStatus.request)&#xd;
+    #set ($jobStatusURL = $doc.getURL('get', $escapetool.url({&#xd;
+        'xpage': 'copy',&#xd;
+        'outputSyntax': 'plain',&#xd;
+        'copyId': $copyJobRequest.id.get($mathtool.sub($copyJobRequest.id.size(), 1))&#xd;
+    })))&#xd;
+&lt;div class="xcontent job-status" data-url="$jobStatusURL">&#xd;
+    &lt;h2>$services.localization.render('core.copy.status.label')&lt;/h2>&#xd;
+    &lt;p class="text-muted small">$services.localization.render('core.copy.status.hint',&#xd;
+    [$xwiki.getUserName($copyJobRequest.userReference), $xwiki.formatDate($copyJobStatus.startDate)])&lt;/p>&#xd;
+    #displayCopyJobRequest($copyJobRequest)&#xd;
+    #if (!$finished)&#xd;
+        #displayJobProgressBar($copyJobStatus)&#xd;
+    #else&#xd;
+        #displayCopyJobFinishedMessage($copyJobStatus)&#xd;
+    #end&#xd;
+    #if ($isAdvancedUser || $isSuperAdmin)&#xd;
+        #displayJobStatusLog($copyJobStatus true)&#xd;
+    #end&#xd;
+&lt;/div>&#xd;
+#end&#xd;
+&#xd;
+#macro (handleCopyStatusRequest)&#xd;
+    #template('refactoringStatus_macros.vm')&#xd;
+    #set ($copyJobStatus = $services.job.getJobStatus(['refactoring', 'copyAs', $request.copyId]))&#xd;
+    #if ($copyJobStatus)&#xd;
+        #if ($xcontext.action == 'get')&#xd;
+            #outputCopyJobStatusJSON($copyJobStatus)&#xd;
+        #else&#xd;
+            #displayCopyJobStatus($copyJobStatus)&#xd;
+        #end&#xd;
+    #else&#xd;
+        $response.setStatus(404)&#xd;
+    &lt;div class="box errormessage">&#xd;
+        $services.localization.render('core.copy.status.notFound')&#xd;
+    &lt;/div>&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+#template('xwikivars.vm')&#xd;
+## Note: Checking only the view right because $hasCreatePage is not yet reliable.&#xd;
+#if (!$xwiki.hasAccessLevel('view'))&#xd;
+    #template('accessdenied.vm')&#xd;
+#elseif ($xcontext.action == 'get' &amp;&amp; "$!request.copyId" != '')&#xd;
+## AJAX request for copy status update.&#xd;
+#handleCopyStatusRequest&#xd;
+#else&#xd;
+    #template('startpage.vm')&#xd;
+    #template('refactoring_macros.vm')&#xd;
+&lt;div class="main layoutsubsection">&#xd;
+    &lt;div id="mainContentArea">&#xd;
+        #if ("$!request.copyId" != '')&#xd;
+        ## Display the copy status&#xd;
+            #handleCopyStatusRequest&#xd;
+        #elseif ($doc.isNew())&#xd;
+            $response.setStatus(404)&#xd;
+            #error($services.localization.render('core.rename.nonexistingDocument'))&#xd;
+        #else&#xd;
+            #handleCopyRequest&#xd;
+        #end&#xd;
+    &lt;/div>## mainContentArea&#xd;
+&lt;/div>## main&#xd;
+    #template('endpage.vm')&#xd;
+#end&#xd;
+</content>
+    </property>
+    <property>
+      <path>copy.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>18</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>47a8d86b-c1fd-42b7-8b08-0e753a48d9c0</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>####&#xd;
+####&#xd;
+#### Build the list of documents extras to display, if it does not exist (default).&#xd;
+#### List format : ["ExtraAnchor",  "ExtraTabText", numberOfItems]&#xd;
+####&#xd;
+###if (!$docextralinks)&#xd;
+##    #set($docextralinks = [])&#xd;
+#### Children &amp; Siblings (show it even if the document doesn't exist since there can be children or siblings)&#xd;
+##    #if ($services.parentchild.isParentChildMechanismEnabled())&#xd;
+##        #set ($discard = $docextralinks.add(['children', $services.localization.render('docextra.children'), -1, 'folder', {'hierarchy': 'parentchild'}]))&#xd;
+##    #else&#xd;
+##        #if ($doc.name == 'WebHome')&#xd;
+##            #set ($discard = $docextralinks.add(['children', $services.localization.render('docextra.children'), -1, 'folder', '', 'tmChildren']))&#xd;
+##        #else&#xd;
+##        ## Terminal document&#xd;
+##            #set ($discard = $docextralinks.add(['siblings', $services.localization.render('docextra.siblings'), -1, 'folder', '', 'tmSiblings']))&#xd;
+##        #end&#xd;
+##    #end&#xd;
+##    #if($xcontext.action == 'view' &amp;&amp; $viewer != 'content' &amp;&amp; !$doc.isNew())&#xd;
+##        #set ($discard = $docextralinks.add(['content', $services.localization.render('core.links.content'), -1, 'file']))&#xd;
+##    #end&#xd;
+##    #if($viewer != 'comments' &amp;&amp; $showcomments &amp;&amp; !$doc.isNew())&#xd;
+##        #set ($discard = $docextralinks.add(['comments', $services.localization.render('docextra.comments'), $doc.getObjects('XWiki.XWikiComments').size(), 'comment', '', 'tmComment']))&#xd;
+##    #end&#xd;
+##    #if($showannotations &amp;&amp; !$doc.isNew())&#xd;
+##        #if(!$annotationCount)&#xd;
+##        ## Annotation count is supposed to be defined in xwikivars.vm. If for a reason or another it is not&#xd;
+##        ## defined at this point, we tap into the standard annotation class, and do not load again the&#xd;
+##        ## config document. This however should not happen.&#xd;
+##            #set ($annotationCount = $services.annotations.getAnnotations($doc).size())&#xd;
+##        #end&#xd;
+##        #set ($discard = $docextralinks.add(['annotations', $services.localization.render('docextra.annotations'), $annotationCount, 'pushpin']))&#xd;
+##    #end&#xd;
+##    #if($viewer != 'attachments' &amp;&amp; $showattachments &amp;&amp; !$doc.isNew())&#xd;
+##        #set ($discard = $docextralinks.add(['attachments', $services.localization.render('docextra.attachments'), $doc.getAttachmentList().size(), 'attach', '', 'tmAttachments']))&#xd;
+##    #end&#xd;
+##    #if($viewer != 'history' &amp;&amp; $showhistory &amp;&amp; !$doc.isNew())&#xd;
+##        #set ($discard = $docextralinks.add(['history', $services.localization.render('docextra.history'), -1, 'time', '', 'tmHistory']))&#xd;
+##    #end&#xd;
+####if($viewer != 'information' &amp;&amp; $showinformation &amp;&amp; !$doc.isNew())&#xd;
+####set ($discard = $docextralinks.add(['information', $services.localization.render('docextra.information'), -1, 'information', '', 'tmInformation']))&#xd;
+####end&#xd;
+###end&#xd;
+##&#xd;
+###foreach($docextralink in $docextralinks)&#xd;
+##    #set ($idHref = '')&#xd;
+##    #set ($extraAnchor = $docextralink.get(0))&#xd;
+##    #set ($extraText = $docextralink.get(1))&#xd;
+##    #set ($extraCount = $docextralink.get(2))&#xd;
+##    #set ($glyphIcon = '')&#xd;
+##    #if ($docextralink.size()>3)&#xd;
+##        #set ($glyphIcon = $docextralink.get(3))&#xd;
+##    #end&#xd;
+##    #set ($extraParams = '')&#xd;
+##    #if ($docextralink.size() > 4)&#xd;
+##        #set ($extraParams = $docextralink.get(4))&#xd;
+##    #end&#xd;
+##    #if ($docextralink.size() > 5)&#xd;
+##        #set ($idHref = $docextralink.get(5))&#xd;
+##    #end&#xd;
+##    #if ($extraCount > 0)&#xd;
+##        #set ($extraText = "$extraText ($extraCount)")&#xd;
+##    #end&#xd;
+##    #if ("$!extraParams" != '')&#xd;
+##        #set ($discard = $extraParams.put('viewer', $extraAnchor))&#xd;
+##        #set ($url = $doc.getURL('view', $escapetool.url($extraParams)))&#xd;
+##    #else&#xd;
+##        #set ($url = $doc.getURL('view', "viewer=$escapetool.url($extraAnchor)"))&#xd;
+##    #end&#xd;
+##&#xd;
+##    #submenuitem($url, $escapetool.xml($extraText), $idHref, '', $glyphIcon)&#xd;
+###end&#xd;
+##&#xd;
+#############################################&#xd;
+####        ADD KEYBOARD SHORTCUTS&#xd;
+#############################################&#xd;
+##&lt;script type="text/javascript">&#xd;
+##        #if($!xcontext.user != 'XWiki.XWikiGuest')&#xd;
+##        //&lt;![CDATA[&#xd;
+##        /**&#xd;
+##         * Perform a PUT on the given REST API. If the request is successful, reload the page.&#xd;
+##         *&#xd;
+##         * We use this function in order to quickly edit the user properties for developer shortcuts.&#xd;
+##         * Also note that JQuery is not supported here, so we use a starndard XMLHttpRequest.&#xd;
+##         *&#xd;
+##         * @param restUrl the URL to use&#xd;
+##         * @param errorMessage the message to display if an error ocurred in the request&#xd;
+##         */&#xd;
+##        var developerShortcutsRestCall = function(restUrl, errorMessage) {&#xd;
+##            const req = new XMLHttpRequest();&#xd;
+##            var notification = new XWiki.widgets.Notification(&#xd;
+##                    "$escapetool.javascript($services.localization.render('core.shortcuts.developer.user.ajax.inprogress'))",&#xd;
+##                    'inprogress');&#xd;
+##&#xd;
+##            req.onreadystatechange = function(event) {&#xd;
+##                if (this.readyState === XMLHttpRequest.DONE) {&#xd;
+##                    if (this.status >= 200 &amp;&amp; this.status &lt; 300) {&#xd;
+##                        // Reload the page to apply the user modifications&#xd;
+##                        notification.replace(new XWiki.widgets.Notification(&#xd;
+##                                "$escapetool.javascript($services.localization.render(&#xd;
+##                                    'core.shortcuts.developer.user.ajax.success'))", 'done'));&#xd;
+##                        location.reload()&#xd;
+##                    } else if (this.status == 500) {&#xd;
+##                        notification.replace(new XWiki.widgets.Notification(this.data, 'error'));&#xd;
+##                    } else {&#xd;
+##                        notification.replace(new XWiki.widgets.Notification(errorMessage, 'error'));&#xd;
+##                    }&#xd;
+##                }&#xd;
+##            };&#xd;
+##&#xd;
+##            req.open('PUT', restUrl, true);&#xd;
+##            req.send(null);&#xd;
+##        };&#xd;
+##&#xd;
+##        // Append developer shortcuts for toggeling userType and hiddenDocuments in the current user profile&#xd;
+##        shortcut.add("$services.localization.render('core.shortcuts.developer.user.type')", function() {&#xd;
+##            developerShortcutsRestCall("${request.contextPath}/rest/currentuser/properties/usertype/next",&#xd;
+##                    "$escapetool.javascript($services.localization.render('core.shortcuts.developer.user.type.error'))");&#xd;
+##        }, {'type': shortcut.type.SEQUENCE, 'disable_in_input': true });&#xd;
+##&#xd;
+##        shortcut.add("$services.localization.render('core.shortcuts.developer.user.displayHiddenDocs')", function () {&#xd;
+##            developerShortcutsRestCall("${request.contextPath}/rest/currentuser/properties/displayHiddenDocuments/next",&#xd;
+##                    "$escapetool.javascript($services.localization.render('core.shortcuts.developer.user.displayHiddenDocs.error'))");&#xd;
+##        }, {'type': shortcut.type.SEQUENCE, 'disable_in_input': true });&#xd;
+##        //]]&gt;&#xd;
+##        #end&#xd;
+##&lt;/script></content>
+    </property>
+    <property>
+      <path>shortcuts.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>19</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>e0400275-8bf7-4793-8e13-88d986359eaf</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>$services.progress.pushLevel(4)&#xd;
+&#xd;
+###&#xd;
+### Display document contents in "view" mode.&#xd;
+###&#xd;
+## -------------------------------&#xd;
+## Compute the content to display&#xd;
+## -------------------------------&#xd;
+$services.progress.startStep('Compute the content to display')&#xd;
+#template("contentvars.vm")&#xd;
+$services.progress.endStep()&#xd;
+&#xd;
+## ----------------------------------------------------------------------------&#xd;
+## Compute title to display and modify rendered content accordingly&#xd;
+## ----------------------------------------------------------------------------&#xd;
+$services.progress.startStep('Compute title to display and modify rendered content accordingly')&#xd;
+#template("titlevars.vm")&#xd;
+$services.progress.endStep()&#xd;
+&#xd;
+## ----------------------------&#xd;
+## Display the title&#xd;
+## ----------------------------&#xd;
+$services.progress.startStep('Display the title and content')&#xd;
+&lt;div class="xcontent">&#xd;
+  #template('contentheader.vm')&#xd;
+  #foreach ($uix in $services.uix.getExtensions('org.xwiki.platform.template.content.header.after'))&#xd;
+    $services.rendering.render($uix.execute(), 'xhtml/1.0')&#xd;
+  #end&#xd;
+  ## --------------------------------------------------------------------------&#xd;
+  ## Drop permissions as they are no longer needed. This allows us not to have&#xd;
+  ## to review the code below for security holes since nothing bad can happen.&#xd;
+  ## --------------------------------------------------------------------------&#xd;
+  $xcontext.dropPermissions()&#xd;
+  ## ----------------------------&#xd;
+  ## Display the rendered content&#xd;
+  ## ----------------------------&#xd;
+#set($a = $doc.getObject("AppWithinMinutes.LiveTableClass"))&#xd;
+#if($a)&#xd;
+&#xd;
+  &lt;div class="row">&#xd;
+    &lt;div id="xwikicontent" class="col-xs-12">&#xd;
+      #if ("$!contentvmexception" != '')&#xd;
+        #displayUnhandledException($contentvmexception)&#xd;
+      #else&#xd;
+        $renderedContent&#xd;
+      #end&#xd;
+    &lt;/div>&#xd;
+  &lt;/div>&#xd;
+&#xd;
+&#xd;
+#else&#xd;
+&#xd;
+&#xd;
+    #set($ismain = false)&#xd;
+    #if($doc == "Main.所有更新.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.最近工作.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.最近访问.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.热门.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #elseif($doc == "Main.收藏夹.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+    #end&#xd;
+&#xd;
+    #if($ismain)&#xd;
+        &lt;div class="row">&#xd;
+         &lt;div id="xwikicontent" class="col-xs-12">&#xd;
+           #if ("$!contentvmexception" != '')&#xd;
+             #displayUnhandledException($contentvmexception)&#xd;
+           #else&#xd;
+             $renderedContent&#xd;
+           #end&#xd;
+        &lt;/div>&#xd;
+        &lt;/div>&#xd;
+    #else&#xd;
+&#xd;
+&#xd;
+&lt;div id="pace-content">&#xd;
+      &lt;div style="overflow: auto;">&#xd;
+      #if ("$!contentvmexception" != '')&#xd;
+        #displayUnhandledException($contentvmexception)&#xd;
+      #else&#xd;
+      &#xd;
+        &lt;h1>$titleToDisplay&lt;/h1>&#xd;
+        &#xd;
+        #if (!$doc.isNew())&#xd;
+        &lt;div class="xdocLastModification" style="clear: both;margin: 20px 0;">&#xd;
+        #if (!$doc.isMostRecent())&#xd;
+          $services.localization.render(&#xd;
+            'core.document.modificationWithVersion',&#xd;
+            ["&lt;a href='$tdoc.getURL('view', ""rev=$tdoc.version"")'>$tdoc.version&lt;/a>",&#xd;
+            $xwiki.getUserName($tdoc.author),&#xd;
+            $xwiki.formatDate($tdoc.date)&#xd;
+          ])&#xd;
+        #else&#xd;
+          $services.localization.render('core.footer.modification', [$xwiki.getUserName($tdoc.author), $xwiki.formatDate($tdoc.date)])&#xd;
+        #end&#xd;
+       &lt;/div>&#xd;
+       #end&#xd;
+       &lt;/div>&#xd;
+&#xd;
+      &lt;div id="xwikicontent">&#xd;
+        $renderedContent&#xd;
+      &lt;/div>&#xd;
+      #end&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+#end&#xd;
+  &#xd;
+&#xd;
+&lt;/div>&#xd;
+$services.progress.endStep()&#xd;
+&#xd;
+## -----------------------------------------------------------------------------------&#xd;
+## Display the footnotes if the document is in 1.0 syntax and if there are any defined&#xd;
+## -----------------------------------------------------------------------------------&#xd;
+## TODO: move that in a place common to old and new rendering footnotes&#xd;
+#if ($doc.syntax.toIdString() == 'xwiki/1.0')&#xd;
+$services.progress.startStep('Display the footnotes')&#xd;
+#set($footnotes = "#putFootnotes()")&#xd;
+$doc.getRenderedContent($footnotes, 'xwiki/1.0')&#xd;
+$services.progress.endStep()&#xd;
+#end&#xd;
+&#xd;
+$services.progress.popLevel()&#xd;
+</content>
+    </property>
+    <property>
+      <path>contentview.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>20</number>
+    <className>XWiki.XWikiSkinFileOverrideClass</className>
+    <guid>f683eca9-6e92-425e-a11d-c96b5eb0d339</guid>
+    <class>
+      <name>XWiki.XWikiSkinFileOverrideClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <content>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>content</name>
+        <number>2</number>
+        <prettyName>Content</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </content>
+      <path>
+        <disabled>0</disabled>
+        <name>path</name>
+        <number>1</number>
+        <prettyName>Path</prettyName>
+        <size>255</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </path>
+    </class>
+    <property>
+      <content>## ---------------------------------------------------------------------------------------------------------&#xd;
+## This template is called by the create action which binds some context variables as it executes, based on&#xd;
+## the request and the current document. These variables can be used in this template:&#xd;
+## * $spaceReference - the space reference of the new document, read from the "spaceReference" parameter&#xd;
+## * $name - the name to use for the new document, read from the "name" parameter&#xd;
+## * $isSpace - true if we are creating a non-terminal document ($name is the space name), false if we are&#xd;
+##              creating a terminal document ($name is the document name). Determined by the create action&#xd;
+## * $availableTemplateProviders - list of template provider documents available from the current space&#xd;
+##&#xd;
+## Note: Make sure to use these bindings instead of directly using the request parameters, as the bindings&#xd;
+## also consider backwards compatibility and convert older "space" and "page" parameters if they are passed.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## This template can be passed a parent document reference in parameter (using the "parent" parameter).&#xd;
+## If a parent parameter is passed, use it to set the parent when creating the new page.&#xd;
+## If no parent parameter was passed, the create action will determine it to be the current document if it&#xd;
+## exists or the Main space's webhome if the current document does not exist.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+#set ($parent = "$!request.getParameter('parent')")&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## This parent can be passed a title for the document to create (using the "title" parameter).&#xd;
+## The title is used to automatically compute a page name, which can then be customized by the user.&#xd;
+## If no title is given, the page name (if set) will be used as title.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+#if ("$!request.title" != '')&#xd;
+  #set ($title = "$!request.title")&#xd;
+#else&#xd;
+  #set ($title = "$!name")&#xd;
+#end&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## Get the passed template provider, if any&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+#set($templateProvider = "$!request.templateprovider")&#xd;
+## Get the template as well, since in case template provider is missing, template should be used, &#xd;
+## to allow creation from template directly, without necessarily going through template provider.&#xd;
+#set($template = "$!request.template")&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## If there was an exception creating the page because of invalid space, notify. &#xd;
+## Should set the other variables only if there is no exception. Otherwise, if there's an exception other than the &#xd;
+## 11016 one, nothing will be displayed, depending on the other passed parameters.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+#set($exception = $createException)&#xd;
+## check if the exception is about the non-allowed spaces for template&#xd;
+#if("$!exception" != '' &amp;&amp; $exception.code == 11016)&#xd;
+  &lt;div class="box errormessage">&#xd;
+    #set($allowedSpaces = $createAllowedSpaces)&#xd;
+    #if ($allowedSpaces.size() == 1)&#xd;
+      $services.localization.render('core.create.template.allowedspace.inline', [$templateProvider, $allowedSpaces.get(0)])&#xd;
+    #else&#xd;
+      $services.localization.render('core.create.template.allowedspaces.inline', [$templateProvider, $allowedSpaces.toString()])&#xd;
+    #end&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+## check if the exception is about the document which already exists&#xd;
+#if("$!exception" != '' &amp;&amp; $exception.code == 11002)&#xd;
+  &lt;div class='box errormessage'>&#xd;
+      ## Use the 'existingDocumentReference' context binding set by the create action for this case.&#xd;
+      $services.localization.render('core.create.page.error.docalreadyexists',&#xd;
+        ["${existingDocumentReference}",&#xd;
+         $xwiki.getURL($existingDocumentReference, 'view', ''),&#xd;
+         $xwiki.getURL($existingDocumentReference, 'edit', '')&#xd;
+        ]&#xd;
+      )&#xd;
+  &lt;/div>&#xd;
+#end&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## Determine if we need to do extra checks for a deprecated, pre-NestedSpaces request to create a space.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+#set ($deprecatedSpaceCreate = "$!request.tocreate" == 'space')&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## Note: The list of available template providers is computed in the action and set on the context under&#xd;
+## the "availableTemplateProviders" binding.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## Macro for displaying the available types and templates and changing target space rules accordingly&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+#macro (displayTypes)&#xd;
+  #if ($template == '')&#xd;
+    #set ($blankTerminalState = !$isSpace)&#xd;
+    #set ($options = [&#xd;
+      { &#xd;
+        'name': $services.localization.render('core.create.type.default'),&#xd;
+        'options': [&#xd;
+          {&#xd;
+            'name': $services.localization.render('core.create.type.blank'),&#xd;
+            'value': 'blank',&#xd;
+            'description': $services.localization.render('core.create.type.blank.description'),&#xd;
+            'icon': 'file-white',&#xd;
+            'data': {&#xd;
+              'type': 'blank',&#xd;
+              'terminal' : "$blankTerminalState"&#xd;
+            }&#xd;
+          }&#xd;
+        ]&#xd;
+      }])&#xd;
+    #if ($xwiki.exists($services.model.createDocumentReference('', 'XWiki', 'OfficeImporter')) &amp;&amp; "$!services.officemanager.serverState" == 'Connected')&#xd;
+      ## TODO: handle this use case with an extension point&#xd;
+      #set ($discard = $options[0].options.add({&#xd;
+        'name': $services.localization.render('office.createForm.type.name'),&#xd;
+        'value': 'office',&#xd;
+        'description': $services.localization.render('office.createForm.type.description'),&#xd;
+        'icon': 'file-word',&#xd;
+        'data': {&#xd;
+          'type':'office'&#xd;
+        }&#xd;
+      }))&#xd;
+    #end&#xd;
+    #if (!$availableTemplateProviders.isEmpty())&#xd;
+      #set ($templateOptions = [])&#xd;
+      #set ($discard = $options.add({'name': $services.localization.render('core.create.type.templates'), 'options': $templateOptions}))&#xd;
+      #foreach($tpdoc in $availableTemplateProviders)&#xd;
+        #set ($tpobj = $tpdoc.getObject('XWiki.TemplateProviderClass'))&#xd;
+        #set ($tpdocRef = $services.model.serialize($tpdoc.documentReference, 'local'))&#xd;
+        ##&#xd;
+        ## Extract and save in data-* attributes list of allowed spaces to be used in the JavaScript validation of the spaceReference input.&#xd;
+        ##&#xd;
+        #set($jsAllowedSpacesArray = '[]')## Reset any previous value&#xd;
+        #set($allowedSpaces = $tpobj.getValue('creationRestrictions'))&#xd;
+        #if($allowedSpaces.size() == 0)&#xd;
+          ## Backwards compatibility for Template Providers created before 8.3M2.&#xd;
+          #set($allowedSpaces = $tpobj.getValue('spaces'))&#xd;
+        #end&#xd;
+        ## Reset to an empty list when no restrictions are set.&#xd;
+        #if ("$!allowedSpaces" == '')&#xd;
+          #set ($allowedSpaces = [])&#xd;
+        #end&#xd;
+        #if($allowedSpaces.size() > 0)&#xd;
+          #set($jsAllowedSpacesArray = $jsontool.serialize($allowedSpaces))&#xd;
+        #end&#xd;
+        ## Compute the error message.&#xd;
+        #set ($templateProviderName = $services.localization.render($tpobj.getValue('name')))&#xd;
+        #if($allowedSpaces.isEmpty())&#xd;
+          #set($message = '')&#xd;
+        #elseif($allowedSpaces.size() == 1)&#xd;
+          #set($message = $services.localization.render('core.create.template.allowedspace.inline', [$templateProviderName, $jsAllowedSpacesArray]))&#xd;
+        #else&#xd;
+          #set($message = $services.localization.render('core.create.template.allowedspaces.inline', [$templateProviderName, $jsAllowedSpacesArray]))&#xd;
+        #end&#xd;
+        ##&#xd;
+        ## Determine if the creation restrictions are just suggestions&#xd;
+        ##&#xd;
+        #set ($restrictionsAreSuggestions = ($tpobj.getValue('creationRestrictionsAreSuggestions') == 1))&#xd;
+        ##&#xd;
+        ## Determine if it's a terminal page template&#xd;
+        ##&#xd;
+        #set ($isTerminalProvider = $tpobj.getValue('terminal'))&#xd;
+        ## Check if this is an old template provider that has not been migrated (the 'type' property has not been&#xd;
+        ## replaced by the 'terminal' property).&#xd;
+        #set ($type = $tpobj.getValue('type'))&#xd;
+        #if ("$!isTerminalProvider" == '' &amp;&amp; ("$!type" != '' || $type == ''))&#xd;
+          ## This must be an old template provider because the 'terminal' property is not set (or it was set to '---'&#xd;
+          ## from the UI) and the 'type' property is still present.&#xd;
+          #if ($type == 'space')&#xd;
+            #set ($isTerminalProvider = false)&#xd;
+          #else&#xd;
+            ## 'page' or '' both resolve to true, for backwards compatibility reasons.&#xd;
+            #set ($isTerminalProvider = true)&#xd;
+          #end&#xd;
+        #else&#xd;
+          #set ($isTerminalProvider = ($isTerminalProvider == 1))&#xd;
+        #end&#xd;
+        ##&#xd;
+        ## Display the template provider field option in the form.&#xd;
+        ##&#xd;
+        #set ($inputId = "xwiki-create-form-${velocityCount}")&#xd;
+        #set ($icon = $tpobj.getValue('icon'))&#xd;
+        #if ("$!icon" == '')&#xd;
+          #set($icon = 'file-white')&#xd;
+        #end&#xd;
+        #set ($discard = $templateOptions.add({&#xd;
+          'name': $services.localization.render($tpobj.getValue('name')),&#xd;
+          'value': "$tpdocRef",&#xd;
+          'description': $services.localization.render($tpobj.getValue('description')),&#xd;
+          'icon': $icon,&#xd;
+          'data': {&#xd;
+            'allowed-spaces': $jsAllowedSpacesArray,&#xd;
+            'allowed-spaces-message': $message,&#xd;
+            'restrictions-are-suggestions': $restrictionsAreSuggestions,&#xd;
+            'type': 'template',&#xd;
+            'terminal' : $isTerminalProvider&#xd;
+          }&#xd;
+        }))&#xd;
+      #end&#xd;
+    #end&#xd;
+    &lt;dt>&#xd;
+      &lt;label>$services.localization.render('core.create.type')&lt;/label>&#xd;
+      &lt;span class="xHint">$escapetool.xml($services.localization.render('core.create.type.hint'))&lt;/span>&#xd;
+    &lt;/dt>&#xd;
+    #set ($defaultValue = $request.type)&#xd;
+    #if ("$!defaultValue" == '')&#xd;
+      #if ($recommendedTemplateProviders.size() > 0)&#xd;
+        #set ($defaultValue = $services.model.serialize($recommendedTemplateProviders[0].documentReference, 'local'))&#xd;
+      #else&#xd;
+        #set ($defaultValue = 'blank')&#xd;
+      #end&#xd;
+    #end&#xd;
+    &lt;dd>#xwikiSelect('type', $options, $defaultValue, false, 'xwiki-select-adaptable-medium', '', true)&lt;/dd>&#xd;
+  #else&#xd;
+    &lt;input type="hidden" name="template" value="$escapetool.xml($template)" />&#xd;
+  #end&#xd;
+#end&#xd;
+#set ($discard = $xwiki.jsfx.use('js/xwiki/create.js', {'forceSkinAction': true}))&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## Macro used to extract a wiki's homepage reference.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+#macro (getWikiHomePageReference $wiki $return)&#xd;
+  #set ($_wikiHomePageReference = $services.wiki.getById($wiki).mainPageReference)&#xd;
+  #if (!$_wikiHomePageReference)&#xd;
+    #set ($wikiReference = $services.model.createWikiReference($wiki))&#xd;
+    #set ($_wikiHomePageReference = $services.model.resolveDocument('', 'default', $wikiReference))&#xd;
+  #end&#xd;
+  #set ($return = $NULL)&#xd;
+  #setVariable("$return" $_wikiHomePageReference)&#xd;
+#end&#xd;
+&#xd;
+#macro(isMain $doc $personal $ismain)&#xd;
+    #set($ismain = false)&#xd;
+    #if($doc == "Main.所有更新.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+        #set($a = $xcontext.getUser().substring(6))&#xd;
+        #set($b = $a+".WebHome")&#xd;
+        #set($personal = $xwiki.getDocument($b))&#xd;
+    #elseif($doc == "Main.最近工作.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+        #set($a = $xcontext.getUser().substring(6))&#xd;
+        #set($b = $a+".WebHome")&#xd;
+        #set($personal = $xwiki.getDocument($b))&#xd;
+    #elseif($doc == "Main.最近访问.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+        #set($a = $xcontext.getUser().substring(6))&#xd;
+        #set($b = $a+".WebHome")&#xd;
+        #set($personal = $xwiki.getDocument($b))&#xd;
+    #elseif($doc == "Main.热门.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+        #set($a = $xcontext.getUser().substring(6))&#xd;
+        #set($b = $a+".WebHome")&#xd;
+        #set($personal = $xwiki.getDocument($b))&#xd;
+    #elseif($doc == "Main.收藏夹.WebHome")&#xd;
+        #set($ismain = true)&#xd;
+        #set($a = $xcontext.getUser().substring(6))&#xd;
+        #set($b = $a+".WebHome")&#xd;
+        #set($personal = $xwiki.getDocument($b))&#xd;
+    #end&#xd;
+#end&#xd;
+&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## Display the form.&#xd;
+## ---------------------------------------------------------------------------------------------------------&#xd;
+## FIXME: Using the 'container' class when displayed in an ajax call by clicking on a Wanted Link so that it looks good (proper margins) in the popup.&#xd;
+&lt;form action="$doc.getURL('create')" method="post" id="create" class="xform #if($request.ajax)container#end">&#xd;
+&#xd;
+  ## Deprecated: Pass along any received page parent.&#xd;
+  #isMain($doc $personal $ismain)&#xd;
+  #if($ismain)&#xd;
+    &lt;input type='hidden' name='parent' value="$!{escapetool.xml($personal.fullName)}"/>&#xd;
+  #else&#xd;
+    &lt;input type='hidden' name='parent' value="$!{escapetool.xml($parent)}"/>&#xd;
+  #end&#xd;
+  &#xd;
+  ## The "templateprovider" field is needed by the CreateAction, even empty.&#xd;
+  ## By the past, it was "xwiki/create.js" which created this field, but it was causing problems when the user sent the&#xd;
+  ## form before the JavaScript code was executed.&#xd;
+  &lt;input type="hidden" name="templateprovider" id="templateprovider" value="" />&#xd;
+&#xd;
+  &lt;div class='row'>&#xd;
+    ## Hide the first column when displayed in an AJAX call by clicking on a Wanted Link (because we know the target&#xd;
+    ## location from the link reference) or when the current document is new (because the create action uses the location&#xd;
+    ## of the current document as target in this case).&#xd;
+    #if (!$request.ajax &amp;&amp; !$doc.isNew())&#xd;
+      ## Determine the parent reference for the new document.&#xd;
+      #set ($parentReference = $spaceReference)&#xd;
+      #if (!$parentReference)&#xd;
+        ## No parent reference specified.&#xd;
+        ## We keep this code although we tested above that the current document is not new because in the future we may&#xd;
+        ## want to support changing the target location even if the current document is new.&#xd;
+        #if ($doc.isNew())&#xd;
+          ## Encourage the user to create the current document.&#xd;
+          #set ($parentReference = $doc.documentReference.parent)&#xd;
+          #if ($doc.name == 'WebHome')&#xd;
+            #set ($parentReference = $parentReference.parent)&#xd;
+          #end&#xd;
+        #else&#xd;
+          #getWikiHomePageReference($doc.wiki $homeReference)&#xd;
+          #if ($doc.documentReference.equals($homeReference) || $deprecatedSpaceCreate)&#xd;
+            ## Encourage the user to create top level documents from the home page.&#xd;
+            #set ($parentReference = $doc.documentReference.wikiReference)&#xd;
+          #else&#xd;
+            ## Encourage the user to create a child or sibling of the current document.&#xd;
+            #isMain($doc $personal $ismain)&#xd;
+            #if($ismain)&#xd;
+              #set ($parentReference = $personal.documentReference.lastSpaceReference)&#xd;
+            #else&#xd;
+              #set ($parentReference = $doc.documentReference.lastSpaceReference)&#xd;
+            #end&#xd;
+&#xd;
+          #end&#xd;
+        #end&#xd;
+      #end&#xd;
+&#xd;
+      ## Display the location picker.&#xd;
+      &lt;div class='col-xs-12 col-lg-6'>&#xd;
+        #template('locationPicker_macros.vm')&#xd;
+        #locationPicker({&#xd;
+          'id': 'target',&#xd;
+          'title': {&#xd;
+            'label': 'core.create.title',&#xd;
+            'hint': 'core.create.title.hint',&#xd;
+            'name': 'title',&#xd;
+            'value': $title,&#xd;
+            'placeholder': 'core.create.name.placeholder'&#xd;
+          },&#xd;
+          'preview': {&#xd;
+            'label': 'core.create.locationPreview.label',&#xd;
+            'hint': 'core.create.locationPreview.hint'&#xd;
+          },&#xd;
+          'parent': {&#xd;
+            'label': 'core.create.spaceReference.label',&#xd;
+            'hint': 'core.create.spaceReference.hint',&#xd;
+            'name': 'spaceReference',&#xd;
+            'reference': $parentReference,&#xd;
+            'placeholder': 'core.create.spaceReference.placeholder'&#xd;
+          },&#xd;
+          'name': {&#xd;
+            'label': 'core.create.name.label',&#xd;
+            'hint': 'core.create.name.hint',&#xd;
+            'name': 'name',&#xd;
+            'value': $name,&#xd;
+            'placeholder': 'core.create.name.placeholder'&#xd;
+          }&#xd;
+        })&#xd;
+      &lt;/div>&#xd;
+    #else&#xd;
+      ## First column is hidden.&#xd;
+      ## Pass along the known values as hidden inputs.&#xd;
+      ##&#xd;
+      &lt;input type='hidden' name='title' value="$!{escapetool.xml($title)}"/>&#xd;
+      &lt;input type='hidden' id='name' name='name' value="$!{escapetool.xml($name)}" />&#xd;
+      #set ($spaceReferenceLocalString = $services.model.serialize($spaceReference, 'local'))&#xd;
+      &lt;input type='hidden' id='spaceReference' name='spaceReference' value="$!{escapetool.xml($spaceReferenceLocalString)}" />&#xd;
+    #end&#xd;
+    ## FIXME: When displayed in an ajax call by clicking on a Wanted Link, the responsive classes consider the calling document (large screen)&#xd;
+    ## as the viewport and not the popup (small screen), so we can not use them since they create problems instead of fixing them.&#xd;
+    &lt;div class='#if(!$request.ajax)col-xs-12 col-lg-6#end'>&#xd;
+      &lt;dl>&#xd;
+        ## ---------------------------------------------------------------------------------------------------------&#xd;
+        ## Page type&#xd;
+        ## ---------------------------------------------------------------------------------------------------------&#xd;
+        #displayTypes()&#xd;
+        ## ---------------------------------------------------------------------------------------------------------&#xd;
+        ## Terminal page - Advanced users&#xd;
+        ## ---------------------------------------------------------------------------------------------------------&#xd;
+        #set ($hidden = '')&#xd;
+        #if (!($isAdvancedUser || $isSuperAdmin) || $deprecatedSpaceCreate)&#xd;
+          #set ($hidden = 'hidden')&#xd;
+        #end&#xd;
+        &lt;dt class="$hidden">&#xd;
+          &lt;input type="checkbox" id="terminal" name="tocreate" value="terminal" #if(!$isSpace)checked="checked"#end/>&#xd;
+          &lt;label for="terminal">$services.localization.render('core.create.terminal.label')&lt;/label>&#xd;
+          ## Hidden input used to ensure that an unchecked terminal checkbox means non-terminal and that the default is not used by mistake.&#xd;
+          &lt;input type="hidden" name="tocreate" value="nonterminal" />&#xd;
+        &lt;/dt>&#xd;
+        &lt;dd class="$hidden">&#xd;
+          &lt;span class="xHint">$services.localization.render('core.create.terminal.hint')&lt;/span>&#xd;
+        &lt;/dd>&#xd;
+      &lt;/dl>&#xd;
+    &lt;/div>&#xd;
+  &lt;/div>&#xd;
+&#xd;
+  &lt;div class='buttons'>&#xd;
+    &lt;span class='buttonwrapper'>&#xd;
+      &lt;input type='submit' class='button' value="$services.localization.render('create')"/>&#xd;
+    &lt;/span>&#xd;
+    &lt;span class="buttonwrapper">&#xd;
+      &lt;a class="secondary button" href="$doc.getURL()">$services.localization.render('cancel')&lt;/a>&#xd;
+    &lt;/span>&#xd;
+  &lt;/div>&#xd;
+&#xd;
+&lt;/form>&#xd;
+</content>
+    </property>
+    <property>
+      <path>createinline.vm</path>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.DefaultSkin</name>
+    <number>0</number>
+    <className>XWiki.XWikiSkins</className>
+    <guid>c52655e2-0fae-4b2c-8508-378d1c1fb4ac</guid>
+    <class>
+      <name>XWiki.XWikiSkins</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <baseskin>
+        <disabled>0</disabled>
+        <name>baseskin</name>
+        <number>2</number>
+        <prettyName>Base Skin</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </baseskin>
+      <edit.vm>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>edit.vm</name>
+        <number>10</number>
+        <prettyName>Edit</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </edit.vm>
+      <footer.vm>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>footer.vm</name>
+        <number>7</number>
+        <prettyName>Footer</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </footer.vm>
+      <header.vm>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>header.vm</name>
+        <number>6</number>
+        <prettyName>Header</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </header.vm>
+      <logo>
+        <disabled>0</disabled>
+        <name>logo</name>
+        <number>3</number>
+        <prettyName>Logo</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </logo>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <outputSyntax>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>outputSyntax</name>
+        <number>4</number>
+        <prettyName>Output Syntax</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>html/5.0=HTML 5|xhtml/1.0=XHTML 1.0</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </outputSyntax>
+      <style.css>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>style.css</name>
+        <number>5</number>
+        <prettyName>Style</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </style.css>
+      <view.vm>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>view.vm</name>
+        <number>9</number>
+        <prettyName>View</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </view.vm>
+      <viewheader.vm>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>viewheader.vm</name>
+        <number>8</number>
+        <prettyName>View Header</prettyName>
+        <rows>15</rows>
+        <size>80</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </viewheader.vm>
+    </class>
+    <property>
+      <baseskin>flamingo</baseskin>
+    </property>
+    <property>
+      <edit.vm></edit.vm>
+    </property>
+    <property>
+      <footer.vm></footer.vm>
+    </property>
+    <property>
+      <header.vm></header.vm>
+    </property>
+    <property>
+      <logo>logo.svg</logo>
+    </property>
+    <property>
+      <name>Default XWiki Skin</name>
+    </property>
+    <property>
+      <outputSyntax>html/5.0</outputSyntax>
+    </property>
+    <property>
+      <style.css></style.css>
+    </property>
+    <property>
+      <view.vm></view.vm>
+    </property>
+    <property>
+      <viewheader.vm></viewheader.vm>
+    </property>
+  </object>
+</xwikidoc>

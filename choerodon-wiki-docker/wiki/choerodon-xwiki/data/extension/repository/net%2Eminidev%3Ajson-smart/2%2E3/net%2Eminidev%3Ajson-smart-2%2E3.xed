@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>net.minidev:json-smart</id>
+<version>2.3</version>
+<type>jar</type>
+<name>JSON Small and Fast Parser</name>
+<summary>JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate. It is based on a subset of the JavaScript Programming Language, Standard ECMA-262 3rd Edition - December 1999. JSON is a text format that is completely language independent but uses conventions that are familiar to programmers of the C-family of languages, including C, C++, C#, Java, JavaScript, Perl, Python, and many others. These properties make JSON an ideal data-interchange language.</summary>
+<website>http://www.minidev.net/</website>
+<authors>
+<author>
+<name>Uriel Chemouni</name>
+</author>
+<author>
+<name>Eitan Raviv</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>https://github.com/netplex/json-smart-v2</url>
+<connection>
+<system>git</system>
+<path>https://github.com/netplex/json-smart-v2.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>https://github.com/netplex/json-smart-v2.git</path>
+</developerconnection>
+</scm>
+<dependencies>
+<dependency>
+<id>net.minidev:accessors-smart</id>
+<version>1.2</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<manageddependencies>
+<dependency>
+<id>net.minidev:json-smart</id>
+<version>2.3</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>net.minidev:json-smart-action</id>
+<version>2.3</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>net.minidev:json-smart-mini</id>
+<version>2.3</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+<dependency>
+<id>junit:junit</id>
+<version>4.12</version>
+<optional type="boolean">false</optional>
+<properties/>
+</dependency>
+</manageddependencies>
+<properties>
+<maven.groupid>net.minidev</maven.groupid>
+<maven.artifactid>json-smart</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754727</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

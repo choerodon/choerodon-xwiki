@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.opensaml:opensaml</id>
+<version>2.6.4</version>
+<type>jar</type>
+<name>OpenSAML-J</name>
+<summary>The OpenSAML-J library provides tools to support developers working with the Security Assertion Markup Language
+        (SAML).</summary>
+<website>http://opensaml.org/</website>
+<authors>
+<author>
+<name>Scott Cantor</name>
+</author>
+<author>
+<name>Nate Klingenstein</name>
+</author>
+<author>
+<name>Chad La Joie</name>
+</author>
+<author>
+<name>Brent Putman</name>
+</author>
+<author>
+<name>Rod Widdowson</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>http://svn.middleware.georgetown.edu/view/?root=java-opensaml2</url>
+<connection>
+<system>svn</system>
+<path>https://svn.middleware.georgetown.edu/java-opensaml2/</path>
+</connection>
+<developerconnection>
+<system>svn</system>
+<path>https://svn.middleware.georgetown.edu/java-opensaml2/</path>
+</developerconnection>
+</scm>
+<issuemanagement>
+<system>JIRA</system>
+<url>http://bugs.internet2.edu/</url>
+</issuemanagement>
+<dependencies>
+<dependency>
+<id>org.opensaml:openws</id>
+<version>1.5.4</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-codec:commons-codec</id>
+<version>1.7</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-collections:commons-collections</id>
+<version>3.2.1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-lang:commons-lang</id>
+<version>2.6</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.apache.velocity:velocity</id>
+<version>1.7</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.owasp.esapi:esapi</id>
+<version>2.0.1</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>joda-time:joda-time</id>
+<version>2.2</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.apache.santuario:xmlsec</id>
+<version>1.5.7</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>org.opensaml</maven.groupid>
+<maven.artifactid>opensaml</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407755078</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

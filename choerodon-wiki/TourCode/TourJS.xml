@@ -1,0 +1,313 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="TourCode.TourJS" locale="">
+  <web>TourCode</web>
+  <name>TourJS</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755086000</creationDate>
+  <parent>TourCode.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755086000</date>
+  <contentUpdateDate>1534755086000</contentUpdateDate>
+  <version>1.1</version>
+  <title>TourJS</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content/>
+  <object>
+    <name>TourCode.TourJS</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>b31091c4-0138-41e8-b366-bbc7ca201b61</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>##----------------------------------
+## Manage translations
+##----------------------------------
+#**
+ * Used to display a rendered translation with proper escapes.
+ *#
+#macro(tr $key)$escapetool.javascript($escapetool.xml($services.localization.render($key)))#end
+//----------------------------------
+// RequireJS configuration
+//----------------------------------
+require.config({
+  paths: {
+    #if ("$!request.minify" == 'false')
+      'bootstrap-tour': "$services.webjars.url('bootstrap-tour', 'js/bootstrap-tour.js', {'wiki':$xcontext.database})"
+    #else
+      'bootstrap-tour': "$services.webjars.url('bootstrap-tour', 'js/bootstrap-tour.min.js', {'wiki':$xcontext.database})"
+    #end
+  },
+  shim: {
+    'bootstrap-tour': {
+      deps: ['bootstrap', 'jquery'],
+      exports : 'Tour'
+    }
+  }
+});
+//----------------------------------
+// Display a tour if needed
+//----------------------------------
+require(['jquery', 'xwiki-meta'], function ($, xm) {
+  'use strict';
+  
+  /**
+   * Escape strings so they respect the Tour API constraints.
+   */
+  var escapeTourName = function (tourName) {
+    // The Tour API says tour name must contain only alphanumerics, underscores and hyphens.
+    // So we replace any forbidden character by its ASCII value, surrounded by an underscore (that we forbid too to 
+    // avoid collisions).
+    return tourName.replace(/[^a-zA-Z0-9\-]/g, function(character) {
+      return '_'+character.charCodeAt(0)+'_';
+    });
+  };
+  
+  /**
+   * Add a resume button to start the tour again when it has been closed
+   */
+  var createResumeButton = function (tour, createPopover) {
+    // Create a container when the button will be displayed. This container will also contains the "popover", so the "popover" stay near the button when the page is resized.
+    // (see http://getbootstrap.com/javascript/#popovers-options 'container')
+    var buttonContainer = $('&lt;div id="tourResumeContainer" style="position: fixed; bottom: 0; right: 0; z-index: 2000; width: 300px; text-align: right;">&lt;/div>').appendTo($(document.body));
+    // Create the button that will start the tour again
+    var button = $('&lt;button id="tourResume" class="btn btn-default btn-xs">$services.icon.renderHTML("info") #tr("tour.popover.show")&lt;/button>').appendTo(buttonContainer);
+    buttonContainer.hide();
+    buttonContainer.fadeIn();
+    button.click(function () {
+      if (createPopover) {
+        button.popover('destroy');
+      }
+      tour.start(true);
+      button.remove();
+    });
+    var popoverContent = "#tr('tour.popover.show.hint')";
+    if (createPopover) {
+      // Add a popover to introduce that button
+      button.popover({
+        animation: true,
+        content: popoverContent,
+        placement: 'top',
+        container: '#tourResumeContainer'
+      });
+      // Show it
+      button.popover('show');
+      // Hide it after 7 seconds
+      setTimeout(function() {
+        button.popover('destroy');
+      }, 7000);
+    }
+  }
+  
+  /**
+   * Add a close button on the top right of the tour popover.
+   */
+  var addCloseButton = function (tour) {
+    var button = $('&lt;button class="btn btn-xs btn-default" data-role="end" style="position: absolute; top: 3px; right: 5px;">$escapetool.javascript($services.icon.renderHTML("cross"))&lt;/button>').appendTo($('.tour'));
+    // Avoid having the close button on top of the title
+    $('.tour .popover-title').css('padding-right', button.outerWidth() + 10 + 'px');
+  }
+  
+  /**
+   * The template to display a step.
+   */
+  var getTemplate = function (index, step) {
+    var template = '&lt;div class="popover tour" style="min-width: 300px;">\n'
+                 + '  &lt;div class="arrow">&lt;/div>\n'
+                 + '  &lt;h3 class="popover-title">&lt;/h3>\n'
+                 + '  &lt;div class="popover-content">&lt;/div>\n'
+                 + '  &lt;div class="popover-navigation row">\n'
+                 + '    &lt;div class="col-xs-6 text-left">\n';
+    if (step.prev > -1) {
+      template  += '      &lt;button class="btn btn-default btn-sm" data-role="prev">#tr("tour.popover.previous")&lt;/button>\n';
+    }
+    template    += '    &lt;/div>\n'
+                 + '    &lt;div class="col-xs-6 text-right">\n';
+    if (step.next > -1) {
+      template  += '      &lt;button class="btn btn-primary btn-sm" data-role="next">#tr("tour.popover.next")&lt;/button>\n';
+    } else {
+      template  += '      &lt;button class="btn btn-success btn-sm" data-role="end">#tr("tour.popover.end")&lt;/button>\n'
+    }
+    template    += '    &lt;/div>\n'
+                 + '  &lt;/div>'
+                 + '&lt;/div>';
+    return template;
+  }
+      
+  /**
+   * Create a tour from a JSON file
+   */
+  var createTour = function (jsonData) {
+    // Add stylesheet only when needed
+    var cssURL = "$services.webjars.url('bootstrap-tour', 'css/bootstrap-tour.min.css', {'wiki':$xcontext.database})";
+    $('&lt;link>').attr('rel', 'stylesheet').attr('type', 'text/css').attr('href', cssURL).appendTo($(document.head));
+    
+    // Require 'bootstrap-tour' only when needed
+    require(['bootstrap-tour'], function(Tour) {
+      
+      // Create the tour
+      var tourName = escapeTourName('tour_' + jsonData.name);
+      var tour     = new Tour({
+        name    : tourName,
+        storage : window.localStorage,
+        onEnd   : function() { createResumeButton(tour, true) },
+        onShown : addCloseButton,
+        orphan  : true,
+        template: getTemplate
+      });
+      
+      // Create the steps
+      for (var i = 0; i &lt; jsonData.steps.length; i++) {
+        // depending on rights, some users may not see all the buttons presented in the tour and we don't need to display the steps is that cases
+        // the target element must exists in the DOM or its value must be empty (placing step in the middle of the page)
+        if ($(jsonData.steps[i].element).length || jsonData.steps[i].element == '') {
+          tour.addStep(jsonData.steps[i]);
+        }
+      }
+      
+      // Look if the tour should be started regardless of its status on the local storage
+      var getQueryStringParameterByName = function (name) {
+        var match = RegExp('[?&amp;]' + name + '=([^&amp;]*)').exec(window.location.search);
+        return match &amp;&amp; decodeURIComponent(match[1].replace(/\+/g, ' '));
+      }
+      var forceStart = getQueryStringParameterByName('startTour') == 'true';
+      
+      // Launch the tour
+      tour.init();
+      if (forceStart) {
+        tour.restart();
+      } else {
+        tour.start();
+      }
+      
+      // Create a resume button if the tour has already been closed by the user in the past
+      if (window.localStorage.getItem(tourName + '_end') == 'yes') {
+        createResumeButton(tour, false);
+      }
+    });
+  };
+  
+  /**
+   * Load asynchronously the list of steps concerning the current page.
+   * It's done asynchronously so it does not improve the page rendering time. It's important since this code is used
+   * everywhere.
+   */ 
+  $(document).ready(function () {
+  
+    /**
+     * The tour is not adapted for little screen sizes like mobile phones have.
+     * The value 768 is taken from bootstrap in order to be consistent with their media queries.
+     */
+    if ($(window).innerWidth() &lt;= 768) {
+      return;
+    }
+  
+    var ajaxOptions = {
+      url         : new XWiki.Document('TourJson', 'TourCode').getURL('get', 'xpage=plain&amp;outputSyntax=plain'),
+      dataType    : 'json',
+      data        : { tourDoc: xm.document }
+    };
+    $.ajax(ajaxOptions).success( function(json) {
+      for (var i = 0; i &lt; json.tours.length; ++i) {
+        var tour = json.tours[i];
+        if (tour.steps.length > 0) {
+          createTour(tour);
+        }
+      }
+    });
+  });
+});
+</code>
+    </property>
+    <property>
+      <name>Definition of a Bootstrap Tour module</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>always</use>
+    </property>
+  </object>
+</xwikidoc>

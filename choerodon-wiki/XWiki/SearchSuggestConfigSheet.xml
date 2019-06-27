@@ -1,0 +1,520 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.SearchSuggestConfigSheet" locale="">
+  <web>XWiki</web>
+  <name>SearchSuggestConfigSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755114000</creationDate>
+  <parent>XWiki.SearchSuggestConfig</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755114000</date>
+  <contentUpdateDate>1534755114000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{include reference="XWiki.SearchCode" /}}
+
+{{velocity output="false"}}
+#macro (displayObjectPropertyValue $propertyName $mode)
+  #set ($output = $doc.display($propertyName, $mode))
+  #set ($output = $stringtool.removeStart($output, '{{html clean="false" wiki="false"}}'))
+  #set ($output = $stringtool.removeEnd($output, '{{/html}}'))
+  $output
+#end
+
+#macro (displaySearchSuggestSource $source)
+  #set ($icon = $source.getProperty('icon').value)
+  #if ($icon.startsWith('icon:'))
+    #set ($icon = $xwiki.getSkinFile("icons/silk/${icon.substring(5)}.png"))
+  #else
+    ## Evaluate the Velocity code for backward compatibility.
+    #set ($icon = "#evaluate($icon)")
+  #end
+  #set ($name = $source.getProperty('name').value)
+  #if ($services.localization.get($name))
+    #set ($name = $services.localization.render($name))
+  #else
+    ## Evaluate the Velocity code for backward compatibility.
+    #set ($name = "#evaluate($name)")
+  #end
+  #set ($style = 'source-header')
+  #if ("$source.getProperty('activated').value" == '1')
+    #set ($style = "$style activated")
+  #end
+  #if ("$source.getProperty('highlight').value" == '1')
+    #set ($style = "$style highlighted")
+  #end
+  &lt;li class="source">
+    &lt;div class="$style">
+      &lt;img class="icon" src="$!icon" alt="" />
+      &lt;span class="limit">$!source.getProperty('resultsNumber').value&lt;/span>
+      &lt;span class="name">$!name&lt;/span>
+      #if ($editing)
+        &lt;div class="actions">
+          &lt;a class="delete" href="$doc.getURL('objectremove', $escapetool.url({
+            'form_token': $services.csrf.token,
+            'classname': $searchSuggestSourceClassName,
+            'classid': $source.number,
+            'xredirect': $doc.getURL('edit')
+          }))">
+            $services.icon.renderHTML('cross')
+          &lt;/a>
+        &lt;/div>
+      #end
+    &lt;/div>
+    &lt;div class="source-body hidden">
+      #set ($object = $source)
+      $sourceSheet.getRenderedContent().replace('{{', '&amp;#123;&amp;#123;')
+    &lt;/div>
+  &lt;/li>
+#end
+{{/velocity}}
+
+{{velocity}}
+{{html clean="false"}}
+#set ($discard = $xwiki.ssx.use('XWiki.SearchSuggestConfigSheet'))
+#set ($discard = $xwiki.jsx.use('XWiki.SearchSuggestConfigSheet'))
+#set ($editing = $xcontext.action == 'admin' || $xcontext.action == 'edit' || $xcontext.action == 'inline')
+#set ($mode = 'view')
+#if ($editing)
+  #set ($mode = 'edit')
+#end
+#set($discard = $doc.use($doc.fullName))
+&lt;div class="xform">
+  &lt;dl>
+    &lt;dt>
+      &lt;label#if ($editing) for="${doc.fullName}_0_activated"#end>
+        $doc.displayPrettyName('activated', false, false)
+      &lt;/label>
+      &lt;span class="xHint">
+        $services.localization.render('XWiki.SearchSuggestConfig_activated.hint')
+      &lt;/span>
+    &lt;/dt>
+    &lt;dd>#displayObjectPropertyValue('activated' $mode)&lt;/dd>
+    &lt;dt>
+      &lt;label>$services.localization.render('platform.search.suggestSources')&lt;/label>
+      &lt;span class="xHint">$services.localization.render('platform.search.suggestSources.hint')&lt;/span>
+    &lt;/dt>
+    &lt;dd>
+#set ($searchSuggestSourceClassName = 'XWiki.SearchSuggestSourceClass')
+## Group sources by search engine.
+#set ($sources = {})
+#foreach ($source in $doc.getObjects($searchSuggestSourceClassName))
+  #set ($engine = $source.getProperty('engine').value)
+  #if ("$!engine" == '')
+    #set ($engine = 'solr')
+  #end
+  #set ($sourcesForEngine = $sources.get($engine))
+  #if (!$sourcesForEngine)
+    #set ($sourcesForEngine = [])
+    #set ($discard = $sources.put($engine, $sourcesForEngine))
+  #end
+  #set ($discard = $sourcesForEngine.add($source))
+#end
+## Display the list of search engines.
+#if ($sources.size() > 0)
+  &lt;ul class="nav nav-tabs searchEngines" role="tablist">
+  #foreach ($engine in $sorttool.sort($sources.keySet()))
+    &lt;li#if ($engine == $searchEngine) class="active"#end role="presentation">
+      &lt;a href="#${engine}SearchSuggestSources" aria-controls="${engine}SearchSuggestSources"
+        role="tab" data-toggle="tab">$engine&lt;/a>
+    &lt;/li>
+  #end
+  &lt;/ul>
+#end
+## Display sources by search engine.
+#set ($sourceSheet = $xwiki.getDocument('XWiki.SearchSuggestSourceSheet'))
+&lt;div class="tab-content">
+  #foreach ($engine in $sources.keySet())
+    ## We can't use the UL element as tab panel because we break the HTML validation tests: "Bad value 'tabpanel' for
+    ## attribute 'role' on element 'ul'". I don't understand the reason as there's no constraint on
+    ## https://www.w3.org/TR/2010/WD-wai-aria-20100916/roles#tabpanel .
+    &lt;div class="tab-pane#if ($engine == $searchEngine) active#end" role="tabpanel" id="${engine}SearchSuggestSources">
+      &lt;ul class="searchSuggestSources">
+      #foreach ($source in $sources.get($engine))
+        #displaySearchSuggestSource($source)
+      #end
+      &lt;/ul>
+    &lt;/div>
+  #end
+&lt;/div>
+#if ($editing)
+  &lt;ul class="searchSuggestSourceTemplate hidden">
+    #displaySearchSuggestSource({})
+  &lt;/ul>
+  &lt;a class="addSearchSuggestSource" href="$doc.getURL('objectadd', $escapetool.url({
+    'form_token': $services.csrf.token,
+    'classname': $searchSuggestSourceClassName,
+    'xredirect': $xwiki.relativeRequestURL
+  }))">
+    $services.localization.render('platform.search.suggestAddNewSource')
+  &lt;/a>
+#end
+    &lt;/dd>## Sources
+  &lt;/dl>
+&lt;/div>## xform
+{{/html}}
+{{/velocity}}</content>
+  <object>
+    <name>XWiki.SearchSuggestConfigSheet</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>555f31ab-0e5d-4ed0-84b4-cc96d2085be0</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>require(['jquery'], function($) {
+  // Toggle source details.
+  var sourceHeaderClickHandler = function() {
+    $(this).next('.source-body').toggleClass('hidden');
+  };
+  $('.searchSuggestSources').on('click', '.source-header', sourceHeaderClickHandler);
+
+  //--------------------
+  // Ajax source delete.
+  //--------------------
+  var sourceDeleteHandler = function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    var deleteLink = this;
+    if (deleteLink.disabled) return;
+    new XWiki.widgets.ConfirmedAjaxRequest(
+      /* Ajax request URL */
+      this.href,
+      /* Ajax request parameters */
+      {
+        onCreate : function() {
+          deleteLink.disabled = true;
+        },
+        onSuccess : function() {
+          $(deleteLink).closest('.source').remove();
+        },
+        onComplete : function() {
+          deleteLink.disabled = false;
+        }
+      },
+      /* Interaction parameters */
+      {
+        confirmationText: "$escapetool.javascript($services.localization.render('core.editors.object.delete.confirm'))",
+        progressMessageText : "$escapetool.javascript($services.localization.render('core.editors.object.delete.inProgress'))",
+        successMessageText : "$escapetool.javascript($services.localization.render('core.editors.object.delete.done'))",
+        failureMessageText : "$escapetool.javascript($services.localization.render('core.editors.object.delete.failed'))"
+      }
+    );
+  };
+  $('.searchSuggestSources').on('click', '.source-header .delete', sourceDeleteHandler);
+
+  //-----------------
+  // Ajax source add.
+  //-----------------
+  var targetDocument = new XWiki.Document('SearchSuggestConfig', 'XWiki');
+  var createSourceUI = function(container, sourceFormHTML) {
+    container.find('.name').text("$escapetool.javascript($services.localization.render('platform.search.suggestNewSourceName'))");
+    container.find('.source-body').html(sourceFormHTML);
+    var objectNumber = parseInt(container.find('input[type="text"]')
+      .attr('name').substr('XWiki.SearchSuggestSourceClass_'.length));
+    container.find('.source-header .delete').attr('href', targetDocument.getURL('objectremove', $.param({
+      form_token: $('meta[name="form_token"]').attr('content'),
+      classname: 'XWiki.SearchSuggestSourceClass',
+      classid: objectNumber
+    })));
+    return container;
+  };
+  var insertSource = function(sourceFormHTML) {
+    var searchEngines = $(this).closest('form').find('.searchEngines');
+    if (searchEngines.length == 0) {
+      // There is no search suggest source present. This will be the first one.
+      // TODO: Prepare the search engine tab bar.
+      // TODO: Prepare the search suggest sources container.
+    }
+    var sourceTemplate = $(this).closest('form').find('.searchSuggestSourceTemplate').children().first();
+    var source = createSourceUI(sourceTemplate.clone(), sourceFormHTML);
+    searchEngines.next('.tab-content').find(searchEngines.find('li.active a').attr('href'))
+      .find('ul.searchSuggestSources').append(source);
+  }
+  $('.addSearchSuggestSource').click(function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if ($(this).hasClass('loading')) return;
+    $(this).addClass('loading');
+    var notification = new XWiki.widgets.Notification("$services.localization.render('core.editors.object.add.inProgress')", 'inprogress');
+    var addLink = this;
+    $.get(targetDocument.getURL('objectadd'), {
+      form_token: $(this).closest('form').find('input[name="form_token"]').prop('value'),
+      classname: 'XWiki.SearchSuggestSourceClass',
+      xredirect: targetDocument.getURL('get', $.param({
+        sheet: 'XWiki.SearchSuggestSourceSheet',
+        xobjectNumber: '',
+      }))
+    })
+    .done(function(data) {
+      insertSource.call(addLink, data);
+      notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.add.done')", 'done'));
+    })
+    .fail(function() {
+      notification.replace(new XWiki.widgets.Notification("$services.localization.render('core.editors.object.add.failed')", 'error'));
+    })
+    .always(function() {
+      $(addLink).removeClass('loading');
+    });
+  });
+})</code>
+    </property>
+    <property>
+      <name></name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.SearchSuggestConfigSheet</name>
+    <number>0</number>
+    <className>XWiki.StyleSheetExtension</className>
+    <guid>7423f9d5-620b-40ef-84da-7d88306805ce</guid>
+    <class>
+      <name>XWiki.StyleSheetExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>6</number>
+        <prettyName>Content Type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>CSS|LESS</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>#template('colorThemeInit.vm')
+ul.searchEngines {
+  text-transform: capitalize;
+}
+ul.searchSuggestSources {
+  border: 1px solid $theme.borderColor;
+  list-style-type: none;
+  margin: 0;
+  padding: 1em 0.5em;
+}
+.searchSuggestSources .source-header {
+  border-left: 2px solid $theme.borderColor;
+  cursor: pointer;
+  margin-bottom: 2px;
+  padding: 0.1em 0.1em 0.1em 0.3em;
+  position: relative;
+}
+.searchSuggestSources .source:hover .source-header {
+  background-color: $theme.highlightColor;
+}
+.searchSuggestSources .source-header.activated {
+  border-left-color: $theme.notificationSuccessColor;
+}
+.searchSuggestSources .limit {
+  color: $theme.textSecondaryColor;
+}
+.searchSuggestSources .source-header.highlighted .limit {
+  background-color: yellow;
+}
+.searchSuggestSources .source-header .actions {
+  display: none;
+  position: absolute;
+  right: .2em;
+  top: 0;
+}
+.searchSuggestSources .source:hover .actions {
+  display: block;
+}
+.searchSuggestSources .actions .delete {
+  color: $theme.notificationErrorColor;
+}
+.searchSuggestSources .source-body {
+  border-left: 1px dotted $theme.borderColor;
+  font-size: 85%;
+  margin-bottom: 1.2em;
+  padding-left: 1em;
+  padding-top: 1.2em;
+}
+.searchSuggestSources .source-body .xform dt:first-of-type {
+  margin-top: 0;
+}
+.addSearchSuggestSource {
+  background: url("$xwiki.getSkinFile('icons/silk/add.png')") no-repeat scroll left center transparent;
+  padding-left: 20px;
+}
+.addSearchSuggestSource.loading {
+  background-image: url("$xwiki.getSkinFile('icons/xwiki/spinner.gif')");
+}</code>
+    </property>
+    <property>
+      <name></name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

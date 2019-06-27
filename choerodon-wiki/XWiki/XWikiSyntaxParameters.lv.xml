@@ -1,0 +1,83 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.XWikiSyntaxParameters" locale="lv">
+  <web>XWiki</web>
+  <name>XWikiSyntaxParameters</name>
+  <language>lv</language>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>1</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755142000</creationDate>
+  <parent>XWiki.XWikiSyntax</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755142000</date>
+  <contentUpdateDate>1534755142000</contentUpdateDate>
+  <version>1.1</version>
+  <title>XWikiSyntaxParameters</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>= Papildu =
+
+== Parametri ==
+
+{{comment}}please do not translate the sub headlines{{/comment}}
+=== 1.0 Parameters ===
+
+
+|=XWiki 1.0 sintakse|=Izveidotais XHTML
+|(((
+{{{
+&lt;h1 class="manaKlase" style="mansStils" id="mansId">header&lt;/h1>
+}}}
+)))|(((
+{{{
+&lt;h1 class="manaKlase" style="mansStils" id="mansId">header&lt;/h1>
+}}}
+)))
+
+=== 2.0 Parameters ===
+
+
+|=(% style="width="60%" %)XWiki {{velocity}}$crtSyntaxVer{{/velocity}} sintakse|=Izveidotais XHTML
+|(((
+{{{
+(% class="manaKlase" style="mansStils" id="mansId" %)
+= header =
+}}}
+)))|(((
+{{{
+&lt;h1 class="manaKlase" style="mansStils" id="mansId">header&lt;/h1>
+}}}
+)))
+= Papildu =
+
+== Parameteri ==
+
+=== 1.0 Parameteri ===
+
+XWiki 1.0 sintaksē nav īpaša parametru norādīšanas veida un tā vietā ir jāveido XHTML saturs tā, kā parādīts zemāk.
+
+|=XWiki sintakse 1.0|=Izveidotais XHTML
+|((({{{
+&lt;h1 class="myClass" style="myStyle" id="myId">heading&lt;/h1>
+}}})))|((({{{
+&lt;h1 class="myClass" style="myStyle" id="myId">heading&lt;/h1>
+}}})))
+
+=== 2.0 parameteri ===
+
+XWiki {{velocity}}$crtSyntaxVer{{/velocity}} sintaksē iespējams norādīt parametrus, dažādiem sintakses elementiem un teksta daļām. Piemēram, ar parametriem var mainīt teksta stilu (noformējumu). Iespējams norādīt jebkuru parametru nosaukuma un vērtības pāri. Šie parametri un to vērtības tiek nodoti XHTML dzinējam, kas no tiem izveidos atbilstošus XHTML atribūtus, kas, ievērojot norādīto stilu, tiks ņemti vērā pārlūkprogrammā.
+
+|=(% style="width="60%" %)XWiki sintakse {{velocity}}$crtSyntaxVer{{/velocity}}|=Izveidotais XHTML
+|((({{{
+(% class="myClass" style="myStyle" id="myId" %)
+= heading =
+}}})))|((({{{
+&lt;h1 class="myClass" style="myStyle" id="myId">heading&lt;/h1>
+}}}))) 
+
+
+</content>
+</xwikidoc>

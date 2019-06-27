@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>commons-beanutils:commons-beanutils-core</id>
+<version>1.7.0</version>
+<type>jar</type>
+<dependencies>
+<dependency>
+<id>commons-logging:commons-logging</id>
+<version>1.0</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-collections:commons-collections</id>
+<version>2.0</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>commons-beanutils</maven.groupid>
+<maven.artifactid>commons-beanutils-core</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754923</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

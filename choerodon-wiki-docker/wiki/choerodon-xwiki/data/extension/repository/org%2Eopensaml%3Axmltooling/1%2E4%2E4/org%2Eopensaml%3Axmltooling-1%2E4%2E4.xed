@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>org.opensaml:xmltooling</id>
+<version>1.4.4</version>
+<type>jar</type>
+<name>XMLTooling-J</name>
+<summary>XMLTooling-J is a low-level library that may be used to construct libraries that allow developers to work with XML in a Java beans manner.</summary>
+<website>http://opensaml.org/</website>
+<authors>
+<author>
+<name>Scott Cantor</name>
+</author>
+<author>
+<name>Nate Klingenstein</name>
+</author>
+<author>
+<name>Chad La Joie</name>
+</author>
+<author>
+<name>Brent Putman</name>
+</author>
+<author>
+<name>Rod Widdowson</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>http://svn.middleware.georgetown.edu/view/?root=java-opensaml2</url>
+<connection>
+<system>svn</system>
+<path>https://svn.middleware.georgetown.edu/java-opensaml2/</path>
+</connection>
+<developerconnection>
+<system>svn</system>
+<path>https://svn.middleware.georgetown.edu/java-opensaml2/</path>
+</developerconnection>
+</scm>
+<issuemanagement>
+<system>JIRA</system>
+<url>http://bugs.internet2.edu/</url>
+</issuemanagement>
+<dependencies>
+<dependency>
+<id>org.bouncycastle:bcprov-jdk15on</id>
+<version>1.51</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>commons-codec:commons-codec</id>
+<version>1.7</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>joda-time:joda-time</id>
+<version>2.2</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>ca.juliusdavies:not-yet-commons-ssl</id>
+<version>0.3.9</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+<dependency>
+<id>org.apache.santuario:xmlsec</id>
+<version>1.5.7</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>org.opensaml</maven.groupid>
+<maven.artifactid>xmltooling</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754879</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>

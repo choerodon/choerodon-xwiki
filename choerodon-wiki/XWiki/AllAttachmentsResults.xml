@@ -1,0 +1,224 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.AllAttachmentsResults" locale="">
+  <web>XWiki</web>
+  <name>AllAttachmentsResults</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755099000</creationDate>
+  <parent>XWiki.AllAttachments</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755099000</date>
+  <contentUpdateDate>1534755099000</contentUpdateDate>
+  <version>1.1</version>
+  <title>$services.localization.render('platform.index.attachmentsResults')</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <content>{{template name="hierarchy_macros.vm" /}}
+
+{{velocity output="false"}}
+#macro (maybeApplyStringFilter $fieldName $defaultMatchType $constraints $queryParameters)
+  #if ("$!request.getParameter($fieldName)" != '')
+    #set ($fieldNameWithAlias = $fieldName)
+    #if ($fieldName.indexOf('.') &lt; 0)
+      #set ($fieldNameWithAlias = 'attachment.' + $fieldName)
+    #end
+    #set ($matchType = $request.getParameter("${fieldName}_match"))
+    #if ("$!matchType" == '')
+      #set ($matchType = $defaultMatchType)
+    #end
+    #set ($parameterName = $fieldNameWithAlias.replace('.', '_'))
+    #if ($matchType == 'exact')
+      #set ($discard = $constraints.add("$fieldNameWithAlias = :$parameterName"))
+      #set ($parameterValue = $request.getParameter($fieldName))
+    #else
+      #set ($discard = $constraints.add("lower($fieldNameWithAlias) like lower(:$parameterName)"))
+      #set ($parameterValue = $request.getParameter($fieldName).trim())
+    #end
+    #set ($discard = $queryParameters.add({
+      'name': $parameterName,
+      'match': $matchType,
+      'value': $parameterValue
+    }))
+  #end
+#end
+
+#macro (maybeApplyIntegerRangeFilter $fieldName $constraints $queryParameters)
+  #set ($fieldValue = $request.getParameter($fieldName))
+  #if ("$!fieldValue" != '')
+    #set ($range = $fieldValue.split('-'))
+    #set ($range = [$mathtool.toInteger($range.get(0)), $mathtool.toInteger($range.get(1))])
+    #applyRangeFilter($fieldName $range $constraints $queryParameters)
+  #end
+#end
+
+#macro (maybeApplyDateRangeFilter $fieldName $constraints $queryParameters)
+  #set ($fieldValue = $request.getParameter($fieldName))
+  #if ("$!fieldValue" != '')
+    #set ($range = $fieldValue.split('-'))
+    #set ($range = [
+      $datetool.toDate($mathtool.toNumber($range.get(0))),
+      $datetool.toDate($mathtool.toNumber($range.get(1)))
+    ])
+    #applyRangeFilter($fieldName $range $constraints $queryParameters)
+  #end
+#end
+
+#macro (applyRangeFilter $fieldName $range $constraints $queryParameters)
+  #set ($fieldNameWithAlias = $fieldName)
+  #if ($fieldName.indexOf('.') &lt; 0)
+    #set ($fieldNameWithAlias = 'attachment.' + $fieldName)
+  #end
+  #set ($parameterNamePrefix = $fieldNameWithAlias.replace('.', '_'))
+  #set ($start = $range.get(0))
+  #if ($start)
+    #set ($startParameterName = $parameterNamePrefix + '_start')
+    #set ($discard = $constraints.add("$fieldNameWithAlias >= :$startParameterName"))
+    #set ($discard = $queryParameters.add({
+      'name': $startParameterName,
+      'match': 'exact',
+      'value': $start
+    }))
+  #end
+  #set ($end = $range.get(1))
+  #if ($end)
+    #set ($endParameterName = $parameterNamePrefix + '_end')
+    #set ($discard = $constraints.add("$fieldNameWithAlias &lt; :$endParameterName"))
+    #set ($discard = $queryParameters.add({
+      'name': $endParameterName,
+      'match': 'exact',
+      'value': $end
+    }))
+  #end
+#end
+
+#macro (displayAttachmentMimeType $attachment)
+  &lt;div class="mime" data-type="$!escapetool.xml($attachment.mimeType)">
+    #if ($attachment.isImage())
+      &lt;span title="$escapetool.xml($services.localization.render('core.viewers.attachments.mime.image'))">
+        &lt;img src="$xwiki.getURL($attachmentReference, 'download', 'width=48')"
+          alt="$escapetool.xml($attachment.filename)" />
+      &lt;/span>
+    #else
+      #mimetypeimg($attachment.mimeType.toLowerCase() $attachment.filename.toLowerCase())
+    #end
+  &lt;/div>
+#end
+
+#macro (displayAttachmentSize $attachment)
+  &lt;span class="size" data-size="$!escapetool.xml($attachment.longSize)">#dynamicsize($attachment.longSize)&lt;/span>
+#end
+{{/velocity}}
+
+{{velocity wiki="false"}}
+## ========================================================================================
+## This page is requested asynchronously by the Attachments live table and returns a set of
+## results serialized in JSON format.
+## ========================================================================================
+#if ($xcontext.action == 'get')
+  #set ($offset = $mathtool.toInteger($request.offset))
+  ## The offset sent by the live table starts at 1.
+  #set ($offset = $offset - 1)
+  #if (!$offset || $offset &lt; 0)
+    #set ($offset = 0)
+  #end
+  #set ($limit = $mathtool.toInteger($request.limit))
+  #if (!$limit)
+    #set ($limit = 15)
+  #end
+  ##
+  ## Apply live table filters.
+  ##
+  #set ($constraints = [])
+  #set ($queryParameters = [])
+  #maybeApplyStringFilter('mimeType' 'prefix' $constraints $queryParameters)
+  #maybeApplyStringFilter('filename' 'partial' $constraints $queryParameters)
+  #maybeApplyStringFilter('doc.fullName' 'partial' $constraints $queryParameters)
+  #maybeApplyIntegerRangeFilter('filesize' $constraints $queryParameters)
+  #maybeApplyDateRangeFilter('date' $constraints $queryParameters)
+  #maybeApplyStringFilter('author' 'partial' $constraints $queryParameters)
+  #set ($whereClause = '')
+  #if ($constraints.size() > 0)
+    #set ($whereClause = 'where ' + $stringtool.join($constraints, ' and '))
+  #end
+  ##
+  ## Determine the sort field and direction.
+  ##
+  #set ($validSortFields = ['mimeType', 'filename', 'doc.fullName', 'filesize', 'date', 'author'])
+  #set ($sortField = $request.sort)
+  #if (!$validSortFields.contains($sortField))
+    #set ($sortField = 'filename')
+  #end
+  #set ($caseInsensitiveSort = $sortField != 'date' &amp;&amp; $sortField != 'filesize')
+  #if (!$sortField.startsWith('doc.'))
+    #set ($sortField = "attachment.$sortField")
+  #end
+  #set ($direction = 'asc')
+  #if ("$!request.dir" == 'desc')
+    #set ($direction = 'desc')
+  #end
+  #if ($caseInsensitiveSort)
+    #set ($orderByClause = "order by lower($sortField) $direction, $sortField $direction")
+  #else
+    #set ($orderByClause = "order by $sortField $direction")
+  #end
+  ##
+  ## Compute the final query.
+  ##
+  #set ($query = $services.query.hql("$whereClause $orderByClause"))
+  #set ($discard = $query.addFilter('attachment').addFilter('hidden'))
+  #set ($discard = $query.setLimit($limit).setOffset($offset))
+  #foreach ($queryParameter in $queryParameters)
+    #if ($queryParameter.match == 'exact')
+      #set ($discard = $query.bindValue($queryParameter.name, $queryParameter.value))
+    #elseif ($queryParameter.match == 'prefix')
+      #set ($query = $query.bindValue($queryParameter.name).literal($queryParameter.value).anyChars().query())
+    #else
+      ## Partial match.
+      #set ($query = $query.bindValue($queryParameter.name).anyChars().literal($queryParameter.value).anyChars().query())
+    #end
+  #end
+  #set ($attachmentReferences = $query.execute())
+  #set ($results = {
+    "totalrows": $query.count(),
+    "returnedrows": $mathtool.min($attachmentReferences.size(), $limit),
+    "offset": $mathtool.add($offset, 1),
+    "reqNo": $mathtool.toInteger($request.reqNo),
+    "rows": []
+  })
+  #foreach ($attachmentReference in $attachmentReferences)
+    #set ($hasAccess = $services.security.authorization.hasAccess('view', $attachmentReference))
+    #set ($location = "#hierarchy($attachmentReference.parent, {
+      'limit': 5,
+      'plain': $hasAccess.equals(false),
+      'local': true,
+      'displayTitle': false
+    })")
+    #set ($row = {
+      'acclev': $hasAccess,
+      'fullName': $location,
+      'filename': $attachmentReference.name,
+      'fileurl': $xwiki.getURL($attachmentReference)
+    })
+    #if ($hasAccess)
+      #set ($document = $xwiki.getDocument($attachmentReference.parent))
+      #set ($attachment = $document.getAttachment($attachmentReference.name))
+      #set ($authorReference = $services.model.resolveDocument($attachment.author))
+      #set ($discard = $row.putAll({
+        'mimeType': "#displayAttachmentMimeType($attachment)",
+        'filesize': "#displayAttachmentSize($attachment)",
+        'date': $xwiki.formatDate($attachment.date),
+        'author': $xwiki.getUserName($attachment.author)
+      }))
+    #end
+    #set ($discard = $results.rows.add($row))
+  #end
+  #set ($discard = $response.setContentType('application/json'))
+  $jsontool.serialize($results)
+#end
+{{/velocity}}</content>
+</xwikidoc>

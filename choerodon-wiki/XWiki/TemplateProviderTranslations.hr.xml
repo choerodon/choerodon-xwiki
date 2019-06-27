@@ -1,0 +1,32 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.TemplateProviderTranslations" locale="hr">
+  <web>XWiki</web>
+  <name>TemplateProviderTranslations</name>
+  <language>hr</language>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>1</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755117000</creationDate>
+  <parent>XWiki.TemplateProviderClass</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755117000</date>
+  <contentUpdateDate>1534755117000</contentUpdateDate>
+  <version>1.1</version>
+  <title>TemplateProvider Translations</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>plain/1.0</syntaxId>
+  <hidden>true</hidden>
+  <content>## XWiki Translation for language hr generated from http://www.l10n.xwiki.org
+administration.templateProvider.creationRestrictions=Restrikcije izrade
+administration.templateProvider.creationRestrictions.hint=Lista lokacija (uključujući njihovu djecu) na kojima je ovom predlošku dozvoljeno izrađivati stranice
+administration.templateProvider.creationRestrictions.none=Ovaj predložak može izrađivati stranice bilo gdje
+administration.templateProvider.creationRestrictionsAreSuggestions=Restrikcije izrade kao prijedlozi
+administration.templateProvider.creationRestrictionsAreSuggestions.hint=Omogućava korisniku odabir bilo koje lokacije za izradu stranice s ovim predloškom, koristeći prvu restrikciju izrade kao predpopunjenu pretpostavljenu lokaciju kada se predložak odabere s liste.
+administration.templateProvider.description=Opis
+administration.templateProvider.description.hint=Informacije za prikaz za opskrbljivač predložaka kada se izradi nova stranica.
+administration.templateProvider.icon=Ikona
+administration.templateProvider.icon.hint=Ikona za prikaz za opskrbljivač predložaka kada se izradi nova stranica. Odaberite jednu iz {0}pune liste ikona{1}.
+</content>
+</xwikidoc>

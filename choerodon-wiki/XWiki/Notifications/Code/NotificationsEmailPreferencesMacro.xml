@@ -1,0 +1,442 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.Notifications.Code.NotificationsEmailPreferencesMacro" locale="">
+  <web>XWiki.Notifications.Code</web>
+  <name>NotificationsEmailPreferencesMacro</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755151000</creationDate>
+  <parent>XWiki.Notifications.Code.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755151000</date>
+  <contentUpdateDate>1534755151000</contentUpdateDate>
+  <version>1.1</version>
+  <title>NotificationsEmailPreferencesMacro</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content/>
+  <object>
+    <name>XWiki.Notifications.Code.NotificationsEmailPreferencesMacro</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>9267c736-6acc-410a-9f61-2aeb625de28d</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>'use strict';
+/**
+ * Start the real script.
+ */
+require(['jquery'], function ($) {
+
+  /**
+   * Page initialization
+   */
+  $(document).ready(function() {
+
+    /**
+     * Handle the notification email interval
+     */
+    $('.notificationEmailInterval').change(function () {
+      var intervalSelect = $(this);
+      var notification = new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('notifications.settings.saving'))", 'inprogress');
+      var serviceURL = new XWiki.Document(XWiki.Model.resolve('XWiki.Notifications.Code.NotificationPreferenceService', XWiki.EntityType.DOCUMENT)).getURL('get', 'outputSyntax=plain');
+      $.post(serviceURL, {
+        'interval': intervalSelect.val()
+      }).done(function (data) {
+        notification.hide();
+        new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('notifications.settings.saved'))", 'done');
+      });
+    });
+
+    /**
+     * Handle the include diff in email setting
+     */
+    $('.notificationEmailDiffType').change(function () {
+      var diffTypeSelect = $(this);
+      var notification = new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('notifications.settings.saving'))", 'inprogress');
+      var serviceURL = new XWiki.Document(XWiki.Model.resolve('XWiki.Notifications.Code.NotificationPreferenceService', XWiki.EntityType.DOCUMENT)).getURL('get', 'outputSyntax=plain');
+      $.post(serviceURL, {
+        'diffType': diffTypeSelect.val(),
+        'target': $('.notifEmailPreferences').attr('data-target')
+      }).done(function (data) {
+        notification.hide();
+        new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('notifications.settings.saved'))", 'done');
+      }).fail(function (data) {
+        notification.hide();
+        new XWiki.widgets.Notification("$escapetool.javascript($services.localization.render('notifications.settings.savingfailed'))", 'error');
+      });
+    });
+
+  });
+});
+</code>
+    </property>
+    <property>
+      <name>JS</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>currentPage</use>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.Notifications.Code.NotificationsEmailPreferencesMacro</name>
+    <number>0</number>
+    <className>XWiki.WikiMacroClass</className>
+    <guid>1646274b-9c55-419e-a3d9-f6e1eb1fca31</guid>
+    <class>
+      <name>XWiki.WikiMacroClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <code>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>code</name>
+        <number>9</number>
+        <prettyName>Macro code</prettyName>
+        <rows>20</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentDescription>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>contentDescription</name>
+        <number>8</number>
+        <prettyName>Content description (Not applicable for "No content" type)</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </contentDescription>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>7</number>
+        <prettyName>Macro content type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>|</separator>
+        <separators>|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Optional|Mandatory|No content</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <defaultCategory>
+        <disabled>0</disabled>
+        <name>defaultCategory</name>
+        <number>4</number>
+        <prettyName>Default category</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </defaultCategory>
+      <description>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>description</name>
+        <number>3</number>
+        <prettyName>Macro description</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <id>
+        <disabled>0</disabled>
+        <name>id</name>
+        <number>1</number>
+        <prettyName>Macro id</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </id>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>2</number>
+        <prettyName>Macro name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <supportsInlineMode>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>supportsInlineMode</name>
+        <number>5</number>
+        <prettyName>Supports inline mode</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </supportsInlineMode>
+      <visibility>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>visibility</name>
+        <number>6</number>
+        <prettyName>Macro visibility</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>|</separator>
+        <separators>|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Current User|Current Wiki|Global</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </visibility>
+    </class>
+    <property>
+      <code>{{velocity}}
+#if ($services.notification.areEmailsEnabled() &amp;&amp; $xcontext.userReference &amp;&amp; ($xcontext.macro.params.target == 'user' || $hasAdmin))
+  #set ($discard = $xwiki.jsx.use('XWiki.Notifications.Code.NotificationsEmailPreferencesMacro'))
+  {{html clean="false"}}
+    &lt;div class="notification-top-panel-preferences notifEmailPreferences" data-target="$escapetool.xml($xcontext.macro.params.target)">
+      &lt;div class="xform">
+        ## TODO: handle the interval for the wiki target too
+        #if ($xcontext.macro.params.target == 'user')
+        &lt;dl>
+          &lt;dt>&lt;label>$escapetool.xml($services.localization.render('notifications.settings.email.frequency'))&lt;/label>
+          &lt;p class="xHint">$escapetool.xml($services.localization.render('notifications.settings.email.frequency.hint'))&lt;/p>
+          &lt;/dt>
+          &lt;dd>
+            #set ($interval = 'daily')
+            #set ($objPref = $doc.getObject('XWiki.Notifications.Code.NotificationEmailPreferenceClass'))
+            #if ("$!objPref" != '')
+              #set ($objInterval = $objPref.getValue('interval'))
+              #if ("$!objInterval" != '')
+                #set ($interval = $objInterval)
+              #end
+            #end
+            &lt;select class="notificationEmailInterval">
+              &lt;option value="hourly" #if($interval == 'hourly')selected="selected"#end>$escapetool.xml($services.localization.render('XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_hourly'))&lt;/option>
+              &lt;option value="daily"  #if($interval == 'daily')selected="selected"#end>$escapetool.xml($services.localization.render('XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_daily'))&lt;/option>
+              &lt;option value="weekly" #if($interval == 'weekly')selected="selected"#end>$escapetool.xml($services.localization.render('XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_weekly'))&lt;/option>
+              &lt;option value="live" #if($interval == 'live')selected="selected"#end>$escapetool.xml($services.localization.render('XWiki.Notifications.Code.NotificationEmailPreferenceClass_interval_live'))&lt;/option>
+            &lt;/select>
+          &lt;/dd>
+        &lt;/dl>
+        #end
+        &lt;dl>
+          &lt;dt>&lt;label>$escapetool.xml($services.localization.render('XWiki.Notifications.Code.NotificationEmailPreferenceClass_diffType'))&lt;/label>
+          &lt;p class="xHint">$escapetool.xml($services.localization.render('notifications.settings.email.diffType.hint'))&lt;/p>
+          &lt;/dt>
+          &lt;dd>
+            #set ($diffType = $services.notification.preferences.getDiffType())
+            #set ($objPref = $doc.getObject('XWiki.Notifications.Code.NotificationEmailPreferenceClass'))
+            #if ("$!objPref" != '')
+              #set ($objDiffType = $objPref.getValue('diffType'))
+              #if ("$!objDiffType" != '')
+                #set ($diffType = $objDiffType)
+              #end
+            #end
+            &lt;select class="notificationEmailDiffType">
+              &lt;option value="NOTHING" #if($diffType == 'NOTHING')selected="selected"#end>$escapetool.xml($services.localization.render('XWiki.Notifications.Code.NotificationEmailPreferenceClass_diffType_NOTHING'))&lt;/option>
+              &lt;option value="STANDARD"  #if($diffType == 'STANDARD')selected="selected"#end>$escapetool.xml($services.localization.render('XWiki.Notifications.Code.NotificationEmailPreferenceClass_diffType_STANDARD'))&lt;/option>
+            &lt;/select>
+          &lt;/dd>
+        &lt;/dl>
+      &lt;/div>
+    &lt;/div>
+  {{/html}}
+#elseif($xcontext.macro.params.target == 'wiki' &amp;&amp; !$hasAdmin)
+  {{error}}
+    {{translation key="notifications.settings.error.notAdmin" /}}
+  {{/error}}
+#elseif($xcontext.userReference)
+  {{warning}}
+    {{localization key="notifications.settings.email.disabled" /}}
+  {{warning}}
+#else
+  {{info}}
+    {{translation key="notifications.settings.email.forGuest" /}}
+  {{/info}}
+#end
+{{/velocity}}
+</code>
+    </property>
+    <property>
+      <contentDescription></contentDescription>
+    </property>
+    <property>
+      <contentType>No content</contentType>
+    </property>
+    <property>
+      <defaultCategory>Notifications</defaultCategory>
+    </property>
+    <property>
+      <description>Display the preferences of the current user about notification emails.</description>
+    </property>
+    <property>
+      <id>notificationsEmailPreferences</id>
+    </property>
+    <property>
+      <name>Notifications Email Preferences</name>
+    </property>
+    <property>
+      <supportsInlineMode>0</supportsInlineMode>
+    </property>
+    <property>
+      <visibility>Current Wiki</visibility>
+    </property>
+  </object>
+  <object>
+    <name>XWiki.Notifications.Code.NotificationsEmailPreferencesMacro</name>
+    <number>0</number>
+    <className>XWiki.WikiMacroParameterClass</className>
+    <guid>02bb1d4d-2854-48e0-997e-6462d024d243</guid>
+    <class>
+      <name>XWiki.WikiMacroParameterClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <defaultValue>
+        <disabled>0</disabled>
+        <name>defaultValue</name>
+        <number>4</number>
+        <prettyName>Parameter default value</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </defaultValue>
+      <description>
+        <disabled>0</disabled>
+        <name>description</name>
+        <number>2</number>
+        <prettyName>Parameter description</prettyName>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <mandatory>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>mandatory</name>
+        <number>3</number>
+        <prettyName>Parameter mandatory</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </mandatory>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Parameter name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <defaultValue>user</defaultValue>
+    </property>
+    <property>
+      <description></description>
+    </property>
+    <property>
+      <mandatory>0</mandatory>
+    </property>
+    <property>
+      <name>target</name>
+    </property>
+  </object>
+</xwikidoc>

@@ -1,0 +1,70 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="XWiki.AdminInlineSheet" locale="">
+  <web>XWiki</web>
+  <name>AdminInlineSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755094000</creationDate>
+  <parent>XWiki.AdminSheet</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755094000</date>
+  <contentUpdateDate>1534755094000</contentUpdateDate>
+  <version>1.1</version>
+  <title>AdminInlineSheet</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.0</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}###----------------------------------
+## modified version of editinline.vm
+###----------------------------------
+#if ($doc.fullName != 'XWiki.AdminInlineSheet') ## Prevents infinite loops
+  #set($formname = 'inline')
+  #set($saveaction = 'save')
+  #set($previewenabled = true)
+  #set($xnotification = $!request.getParameter('xnotification'))
+  {{html}}
+  &lt;form id="inline" method="post" action="$doc.getURL('preview')">
+    &lt;div>
+      &lt;div class="hidden">&lt;input type="hidden" name="xcontinue" value="$doc.getURL('admin', "${request.queryString}&amp;editmode=inline").replaceAll('&amp;','&amp;amp;')" />&lt;/div>
+      &lt;input type="hidden" name="xredirect" value="$doc.getURL('admin', "editor=${editor}&amp;section=${section}&amp;space=XWiki").replaceAll('&amp;','&amp;amp;')" />
+      &lt;input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
+      &lt;input type="hidden" name="xnotification" value="$!xnotification" />
+      &lt;input type="hidden" name="template" value="$!request.template" />
+      &lt;input type="hidden" name="language" value="$!doc.locale" />
+      #if("$!request.parent" != '')
+        &lt;input type="hidden" name="parent" value="$!request.parent" />
+      #end
+      #if("$!request.title" != "")
+        &lt;input type="hidden" name="title" value="$!request.title" />
+      #end
+      #set($force = $!request.get('force'))
+      #if(($doc.getLocked() == true) &amp;&amp; (!$force)) ## locking
+        &lt;div>
+        $services.localization.render('doclockedby') $xwiki.getLocalUserName($doc.getLockingUser()). &lt;br />
+        &lt;a href="$doc.getURL('inline', "$!request.getQueryString()&amp;force=1")">$services.localization.render('forcelock')&lt;/a>
+        &lt;/div>
+      #else
+        #foreach($class in $doc.xWikiClasses)
+          #set($nb = $doc.getObjectNumbers("${class.name}"))
+          &lt;input type="hidden" name="${class.name}_nb" value="$nb" />
+        #end
+        $doc.getTranslatedDocument().getRenderedContent()
+        &lt;div class="bottombuttons">
+          &lt;p class="admin-buttons">
+            &lt;span class="buttonwrapper">&lt;input class="button" type="submit" name="formactioncancel" value="$services.localization.render('cancel')" onclick="document.forms.update.action='$doc.getURL('cancel')'; if (document.forms.update.onsubmit) document.forms.update.onsubmit();" />&lt;/span>
+            &lt;span class="buttonwrapper">&lt;input class="button" type="submit" name="formactionsac" value="$services.localization.render('saveandcontinue')" onclick="document.forms.update.action='$doc.getURL('saveandcontinue')'; if (document.forms.update.onsubmit) document.forms.update.onsubmit();if(checkDocumentContent()) document.forms.update.submit(); return false;" />&lt;/span>
+            &lt;span class="buttonwrapper">&lt;input class="button" type="submit" name="formactionsave" value="$services.localization.render('saveandview')" onclick="document.forms.update.action='$doc.getURL('saveandview')'; if (document.forms.update.onsubmit) document.forms.update.onsubmit();if(checkDocumentContent()) document.forms.update.submit(); return false;" />&lt;/span>
+          &lt;/p>
+        &lt;/div> ## bottombuttons
+      #end
+    &lt;/div> ## form
+  &lt;/form>
+  #template('textarea_wysiwyg.vm')
+  {{html}}
+#end
+{{/velocity}}</content>
+</xwikidoc>

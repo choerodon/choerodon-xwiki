@@ -1,0 +1,272 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.3" reference="SyntaxHighlighting.HighlightingModeXwiki21" locale="">
+  <web>SyntaxHighlighting</web>
+  <name>HighlightingModeXwiki21</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>XWiki.admin</creator>
+  <creationDate>1534755083000</creationDate>
+  <parent>SyntaxHighlighting.WebHome</parent>
+  <author>XWiki.admin</author>
+  <contentAuthor>XWiki.admin</contentAuthor>
+  <date>1534755083000</date>
+  <contentUpdateDate>1534755083000</contentUpdateDate>
+  <version>1.1</version>
+  <title>XWiki 2.1 Syntax Highlighting Mode</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>Defines the "xwiki21" [[CodeMirror>>http://codemirror.net/]] mode.
+
+It is a mixed mode that forwards to each of the contained modes (for any script or html macro) or to the "xwiki/2.1tags" mode that handles the XWiki syntax itself.</content>
+  <object>
+    <name>SyntaxHighlighting.HighlightingModeXwiki21</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>40ce82a0-fec7-48bb-9245-fde2b3a3b5a4</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>define(['SyntaxHighlighting_cm/lib/codemirror',
+        new XWiki.Document('HighlightingModeXwiki21tags', 'SyntaxHighlighting').getURL('jsx', "minify=$!{services.debug.minify}"),
+        'SyntaxHighlighting_cm/mode/htmlmixed/htmlmixed',
+        'SyntaxHighlighting_cm/mode/velocity/velocity',
+        'SyntaxHighlighting_cm/mode/groovy/groovy',
+        'SyntaxHighlighting_cm/mode/python/python'
+       ], function (CodeMirror) {
+  CodeMirror.defineMode("xwiki21", function(config, parserConfig) {
+    var xwikitagsMode = CodeMirror.getMode(config, "xwiki21tags");
+    var htmlMode      = CodeMirror.getMode(config, "htmlmixed");
+    var velocityMode  = CodeMirror.getMode(config, "velocity");
+    var groovyMode    = CodeMirror.getMode(config, "groovy");
+    var pythonMode    = CodeMirror.getMode(config, "python");
+
+    function xwikitags(stream, state) {
+      var style = xwikitagsMode.token(stream, state.xwikitagsState);
+      if (style == "tag" &amp;&amp; stream.current() == "}}" &amp;&amp; state.xwikitagsState.context) {
+        if (/^velocity$/i.test(state.xwikitagsState.context.tagName)){
+          state.token = velocity;
+          state.localState = velocityMode.startState(xwikitagsMode.indent(state.xwikitagsState, ""));
+          state.mode = "velocity";
+        } else if (/^groovy$/i.test(state.xwikitagsState.context.tagName)) {
+          state.token = groovy;
+          state.localState = groovyMode.startState(xwikitagsMode.indent(state.xwikitagsState, ""));
+          state.mode = "groovy";
+        } else if (/^html$/i.test(state.xwikitagsState.context.tagName)) {
+          state.token = html;
+          state.localState = htmlMode.startState(xwikitagsMode.indent(state.xwikitagsState, ""));
+          state.mode = "htmlmixed";
+        } else if (/^python$/i.test(state.xwikitagsState.context.tagName)) {
+          state.token = python;
+          state.localState = pythonMode.startState(xwikitagsMode.indent(state.xwikitagsState, ""));
+          state.mode = "python";
+        }
+      }
+      return style;
+    }
+    function maybeBackup(stream, pat, style) {
+      var cur = stream.current();
+      var close = cur.search(pat);
+      if (close > -1) stream.backUp(cur.length - close);
+      return style;
+    }
+
+    function velocity(stream, state) {
+      if (stream.match(/^\{\{\/\s*velocity\s*\}\}/i, false)) {
+        state.token = xwikitags;
+        state.localState = null;
+        state.mode = "xwikitags";
+        return xwikitags(stream, state);
+      }
+      return maybeBackup(stream, /\{\{\/\s*velocity\s*\}\}/, velocityMode.token(stream, state.localState));
+    }
+    function groovy(stream, state) {
+      if (stream.match(/^\{\{\/\s*groovy\s*\}\}/i, false)) {
+        state.token = xwikitags;
+        state.localState = null;
+        state.mode = "xwikitags";
+        return xwikitags(stream, state);
+      }
+      return maybeBackup(stream, /\{\{\/\s*groovy\s*\}\}/, groovyMode.token(stream, state.localState));
+    }
+    function html(stream, state) {
+      if (stream.match(/^\{\{\/\s*html\s*\}\}/i, false)) {
+        state.token = xwikitags;
+        state.localState = null;
+        state.mode = "xwikitags";
+        return xwikitags(stream, state);
+      }
+      return maybeBackup(stream, /\{\{\/\s*html\s*\}\}/, htmlMode.token(stream, state.localState));
+    }
+    function python(stream, state) {
+      if (stream.match(/^\{\{\/\s*python\s*\}\}/i, false)) {
+        state.token = xwikitags;
+        state.localState = null;
+        state.mode = "xwikitags";
+        return xwikitags(stream, state);
+      }
+      return maybeBackup(stream, /\{\{\/\s*python\s*\}\}/, pythonMode.token(stream, state.localState));
+    }
+
+    return {
+      startState: function() {
+        var state = xwikitagsMode.startState();
+        return {token: xwikitags, localState: null, mode: "xwikitags", xwikitagsState: state};
+      },
+
+      copyState: function(state) {
+        if (state.localState)
+          var local = CodeMirror.copyState(state.token == velocity ? velocityMode : (state.token == groovy ? groovyMode : (state.token == html ? htmlMode : pythonMode)), state.localState);
+        return {token: state.token, localState: local, mode: state.mode,
+                xwikitagsState: CodeMirror.copyState(xwikitagsMode, state.xwikitagsState)};
+      },
+
+      token: function(stream, state) {
+        return state.token(stream, state);
+      },
+
+      indent: function(state, textAfter) {
+        var indentMode = null;
+        var indentState = state.localState;
+
+        if (state.token == xwikitags || /^\s*\{\{\//.test(textAfter)) {
+          indentMode = xwikitagsMode;
+          indentState = state.xwikitagsState;
+        } else if (state.token == velocity) {
+          indentMode = velocityMode;
+        } else if (state.token == groovy) {
+          indentMode = groovyMode;
+        } else if (state.token == html) {
+          indentMode = htmlMode;
+        } else if (state.token == python) {
+          indentMode = pythonMode;
+        }
+
+        // If the mode supports indenting, apply it, otherwise pass.
+        if (indentMode &amp;&amp; indentMode.indent) {
+          return indentMode.indent(indentState, textAfter);
+        } else {
+          return CodeMirror.Pass;
+        }
+      },
+
+      electricChars: "/{}:",
+
+      innerMode: function(state) {
+        // FIXME: Check if state.mode is ok to be returned here or if a mode instance is required instead.
+        return {state: state.localState || state.xwikitagsState, mode: state.mode || xwikitagsMode};
+      }
+    }
+  });
+
+  CodeMirror.defineMIME("text/xwiki", "xwiki");
+
+/* Note: Alternative implementation with less code, but less control (over indentation for example). Requires that we import 'addon/mode/multiplex.js'.
+  CodeMirror.defineMode("xwiki", function(config) {
+  return CodeMirror.multiplexingMode(
+    CodeMirror.getMode(config, 'xwikitags'),
+    {open: "{{html}}", close: "{{/html}}",
+     mode: CodeMirror.getMode(config, "htmlmixed"),
+     delimStyle: "tag"},
+    {open: "{{velocity}}", close: "{{/velocity}}",
+     mode: CodeMirror.getMode(config, "velocity"),
+     delimStyle: "tag"},
+    {open: "{{groovy}}", close: "{{/groovy}}",
+     mode: CodeMirror.getMode(config, "groovy"),
+     delimStyle: "tag"},
+    {open: "{{python}}", close: "{{/python}}",
+     mode: CodeMirror.getMode(config, "python"),
+     delimStyle: "tag"}
+    // .. more multiplexed styles can follow here
+  );
+});
+*/
+});</code>
+    </property>
+    <property>
+      <name>xwiki.js - Mixed mode that uses XWiki/Velocity/Groovy/etc. syntaxes based on htmlmixed.js</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+</xwikidoc>

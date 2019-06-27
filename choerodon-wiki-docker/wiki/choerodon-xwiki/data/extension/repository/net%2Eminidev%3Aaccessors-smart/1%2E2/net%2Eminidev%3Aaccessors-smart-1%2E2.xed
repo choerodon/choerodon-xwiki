@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><extension>
+<id>net.minidev:accessors-smart</id>
+<version>1.2</version>
+<type>jar</type>
+<name>ASM based accessors helper used by json-smart</name>
+<summary>Java reflect give poor performance on getter setter an constructor calls, accessors-smart use ASM to speed up those calls.</summary>
+<website>http://www.minidev.net/</website>
+<authors>
+<author>
+<name>Uriel Chemouni</name>
+</author>
+</authors>
+<licenses>
+<license>
+<name>Apache License 2.0</name>
+</license>
+</licenses>
+<scm>
+<url>https://github.com/netplex/json-smart-v2</url>
+<connection>
+<system>git</system>
+<path>https://github.com/netplex/json-smart-v2.git</path>
+</connection>
+<developerconnection>
+<system>git</system>
+<path>https://github.com/netplex/json-smart-v2.git</path>
+</developerconnection>
+</scm>
+<dependencies>
+<dependency>
+<id>org.ow2.asm:asm</id>
+<version>5.0.4</version>
+<optional type="boolean">false</optional>
+<properties>
+<maven.dependency.scope>compile</maven.dependency.scope>
+</properties>
+</dependency>
+</dependencies>
+<properties>
+<maven.groupid>net.minidev</maven.groupid>
+<maven.artifactid>accessors-smart</maven.artifactid>
+<installed.installed type="boolean">true</installed.installed>
+<installed.root type="strinkeygmap">
+<date type="date">1534407754714</date>
+<user.reference>xwiki:XWiki.admin</user.reference>
+</installed.root>
+<installed.dependency type="boolean">true</installed.dependency>
+</properties>
+</extension>
